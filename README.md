@@ -14,6 +14,8 @@ Last updated: December 8, 2022.
 >
 > You should have received a copy of the GNU General Public License along with MATLAB GLTF. If not, see <https://www.gnu.org/licenses/>.
 
+[![View MATLAB-GLTF on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://uk.mathworks.com/matlabcentral/fileexchange/123955-matlab-gltf)
+
 # Table Of Contents
 * [Introduction](#introduction)
     * [Motivation](#motivation)

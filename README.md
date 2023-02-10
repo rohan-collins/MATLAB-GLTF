@@ -577,7 +577,7 @@ One of the most used 3D elements is a sphere. This function creates a spheres of
 
 This function generates regular polytopes given [Schläfli symbol](https://en.wikipedia.org/wiki/Schl%C3%A4fli_symbol) {p,q}.
 
-**Careful**: The function returns faces as regular polygons to facilitate mathematical processing. They need to be converted to triangles before writing to a GLTF file. Passing the `triangulate` parameter as `true` when creating meshes, primitives, or morph targets accomplishes this. Moreover, the convention used while triangulating ensures that the original polygonal information can be reconstructed from triangles. Polygons that cannot be decomposed into a triangle fan (for example, non-convex polygons) must first be cut into ones that can.
+**Careful**: The function returns faces as regular polygons to facilitate mathematical processing. They need to be converted to triangles before writing to a GLTF file. Passing the `triangulate` parameter as `true` when creating meshes, primitives, or morph targets accomplishes this. Polygons that cannot be decomposed into a triangle fan (for example, non-convex polygons) must first be cut into ones that can.
 
 ## `bezier`
 ![bezier](docs/bezier.png)

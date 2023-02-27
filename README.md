@@ -2,7 +2,7 @@
 
 GLTF is a MATLAB class to export 3D graphs and other content into the GL Transmission Format (glTF).
 
-Last updated: December 8, 2022.
+Last updated: February 27, 2022.
 
 > © Copyright 2014-2023 Rohan Chabukswar
 >
@@ -13,6 +13,8 @@ Last updated: December 8, 2022.
 > MATLAB GLTF is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 >
 > You should have received a copy of the GNU General Public License along with MATLAB GLTF. If not, see <https://www.gnu.org/licenses/>.
+>
+> Comic panels with their characters are © [xkcd](https://xkcd.com/) and used under [Creative Commons Attribution-NonCommercial 2.5 License](https://xkcd.com/license.html).
 
 [![View MATLAB-GLTF on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://uk.mathworks.com/matlabcentral/fileexchange/123955-matlab-gltf)
 
@@ -346,7 +348,7 @@ Convert to GLTF:
 `E=sort(E,2); %#ok<UDIM>`  
 `% This enables us to discard duplicate edges.`  
 `E=unique(E,'rows');`  
-`% Get the triangular faces. We will use this to prevent the mesh from being see-through by adding a double-sided black surface.`  
+`% Get the triangular faces. We will use this to prevent the mesh from being see-through by adding a double-sided white surface.`  
 `[F,~,~]=surf2patch(X,Y,Z,'triangles');`  
 `% The colours are based on the height, i.e., the Z value. So we first scale the Z value to be between 0 and 1.`  
 `C0=(V(:,3)-min(V(:,3)))./(max(V(:,3))-min(V(:,3)));`  
@@ -362,7 +364,7 @@ Convert to GLTF:
 `gltf=GLTF();`  
 `% Add a white material which will prevent the mesh from being see-through.`  
 `white_idx=gltf.addMaterial('baseColorFactor',ones(1,3),'doubleSided',true);`  
-`% Add a mesh with the vertices and faces. Use the black material.`  
+`% Add a mesh with the vertices and faces. Use the white material.`  
 `mesh_idx=gltf.addMesh(V,'indices',F,'material',white_idx);`  
 `% Add a second primitive to the same mesh with vertices, edges, and colours. Use mode "LINES".`  
 `gltf.addPrimitiveToMesh(mesh_idx,V,'indices',E,'COLOR',C,'mode',"LINES");`  
@@ -560,6 +562,8 @@ And similar for shaft and handle. (This says that all vertices depend only on on
 ![addAxes](docs/axes.png)
 
 This function adds axes with axis labels, ticks, tick labels, grid lines, back planes, using the properties of the MATLAB axis object. Any or all of the 12 axes, 6 back planes, and 7 grids (back planes as well as space-filling) can be chosen by name. The naming details can be found by typing `help addAxes`.
+
+**Note**: Adding text using this function requires a [Unicode](https://en.wikipedia.org/wiki/Unicode_font) [SVG](https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/SVG_fonts) Font file. Online tools like [`Convertico`](https://convertio.co) and [`Cloud Convert`](https://cloudconvert.com) can be used to convert your favourite Unicode font to SVG. No font file is distributed with this repository to avoid infringing copyright and violating licences.
 
 This function is **experimental**, but should suffice for most purposes. You might have to fiddle around with text size, tick lengths, and text placement.
 

@@ -126,11 +126,9 @@ The [COMSOL Multiphysics](https://www.comsol.com/blogs/how-to-export-and-share-y
 Many times, to understand some implementation details, you might be further redirected to [OpenGL Specifications](https://www.khronos.org/opengl/wiki/). If you cannot find something in the GLTF Specifications and you aren't redirected to the OpenGL ones, try looking directly in the OpenGL specs. If nothing else helps, [StackOverflow](https://stackoverflow.com/questions/tagged/gltf) should have something.
 
 ## Setup
-There is no need for any setup, however, to be able to access the class and helper functions from any folder, it needs to be added to the MATLAB search path. For this, do **ONE** of the following:
-* Run `setup.m` provided in the repository, **OR**
-* Copy the `addpath` line from `setup.m` to your `startup.m` file, more details [here](https://www.mathworks.com/help/matlab/ref/startup.html), **OR**,
-* On the toolstrip in MATLAB, use `Set Path` to select the repository directory (and at least the `functions` subdirectory) and save it permanently to the path.
-![setpath](docs/setpath.png)
+Clone the contents of this repository into a folder called `@GLTF` (yes, the "@" is essential). This folder can be anywhere inside another folder that is already on the MATLAB path, but the `@GLTF` folder itself should not be added to the path.
+
+For more information, please refer to ["Using Class Folders"](https://mathworks.com/help/matlab/matlab_oop/organizing-classes-in-folders.html) in MATLAB documentation.
 
 ## Basics of 3D Models
 Base 3D models are stored as a list of vertices, where sets of three make a triangle. Vertices can be reused between triangles. All that is needed is this N×3 array of vertices (V), and M×3 array of faces (F).

@@ -1,13 +1,17 @@
 function light_idx=addDirectionalLight(gltf,varargin)
     % Add a directional light source.
     %
+    % ADDDIRECTIONALLIGHT(GLTF) adds a white directional light source with
+    % intensity 1 lm/m^2 to GLTF and returns its index. The light is
+    % pointed in the -Z direction.
+    %
     % ADDDIRECTIONALLIGHT(...,'name',NAME) sets the name for the light.
     %
     % ADDDIRECTIONALLIGHT(...,'color',COLOR) sets the colour for the light.
     %
     % ADDDIRECTIONALLIGHT(...,'intensity',INTENSITY) sets the intensity for
-    % the light in lumens per metre squared, or lux (lm/m²).
-    % 
+    % the light in lm/m^2.
+    %
     % © Copyright 2014-2023 Rohan Chabukswar
     %
     % This file is part of MATLAB GLTF.
@@ -38,7 +42,7 @@ function light_idx=addDirectionalLight(gltf,varargin)
     if(~ismissing(name))
         lightstruct.name=name;
     end
-    if(~isempty(isnan(color)))
+    if(~isempty(color))
         lightstruct.color=color;
     end
     if(~isempty(intensity))

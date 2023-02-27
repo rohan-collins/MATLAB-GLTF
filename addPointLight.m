@@ -9,7 +9,7 @@ function light_idx=addPointLight(gltf,varargin)
     % ADDPOINTLIGHT(...,'color',COLOR) sets the colour for the light.
     %
     % ADDPOINTLIGHT(...,'intensity',INTENSITY) sets the intensity for the
-    % light in candela or lumens per steradian (lm/sr).
+    % light in candela.
     %
     % ADDPOINTLIGHT(...,'range',RANGE) sets the distance cut-off at which
     % the light's intensity may be considered to have reached zero.
@@ -46,7 +46,7 @@ function light_idx=addPointLight(gltf,varargin)
     if(~ismissing(name))
         lightstruct.name=name;
     end
-    if(~isempty(isnan(color)))
+    if(~isempty(color))
         lightstruct.color=color;
     end
     if(~isempty(intensity))

@@ -10,7 +10,7 @@ function light_idx=addSpotLight(gltf,varargin)
     % ADDSPOTLIGHT(...,'color',COLOR) sets the colour for the light.
     %
     % ADDSPOTLIGHT(...,'intensity',INTENSITY) sets the intensity for the
-    % light in candela or lumens per steradian (lm/sr).
+    % light in candela.
     %
     % ADDSPOTLIGHT(...,'range',RANGE) sets the distance cut-off at which
     % the light's intensity may be considered to have reached zero.
@@ -42,11 +42,11 @@ function light_idx=addSpotLight(gltf,varargin)
     %
     ips=inputParser;
     ips.addParameter('name',missing,@isstring);
-    ips.addParameter('color',nan,@isnumeric);
-    ips.addParameter('intensity',nan,@isnumeric);
-    ips.addParameter('range',inf,@isnumeric);
-    ips.addParameter('innerConeAngle',nan,@isnumeric);
-    ips.addParameter('outerConeAngle',nan,@isnumeric);
+    ips.addParameter('color',[],@isnumeric);
+    ips.addParameter('intensity',[],@isnumeric);
+    ips.addParameter('range',[],@isnumeric);
+    ips.addParameter('innerConeAngle',[],@isnumeric);
+    ips.addParameter('outerConeAngle',[],@isnumeric);
     ips.parse(varargin{:});
     parameters=ips.Results;
     name=parameters.name;

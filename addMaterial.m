@@ -23,7 +23,7 @@ function material_idx=addMaterial(gltf,varargin)
     % to be JPEG or PNG.
     %
     % ADDMATERIAL(...,'baseColorTextureSet',SET) uses the TEXCOORD SET as
-    % the texture coordintes for the material base colour.
+    % the texture coordinates for the material base colour.
     %
     % ADDMATERIAL(...,'baseColorMagFilter',MAGFILTER) sets the
     % magnification filter for the base colour texture as per OpenGL.
@@ -53,7 +53,7 @@ function material_idx=addMaterial(gltf,varargin)
     % to be JPEG or PNG.
     %
     % ADDMATERIAL(...,'normalTextureSet',SET) uses the TEXCOORD SET as the
-    % texture coordintes for the material normal texture.
+    % texture coordinates for the material normal texture.
     %
     % ADDMATERIAL(...,'normalMagFilter',MAGFILTER) sets the magnification
     % filter for the normal texture as per OpenGL. MAGFILTER should be one
@@ -83,7 +83,7 @@ function material_idx=addMaterial(gltf,varargin)
     % needs to be JPEG or PNG.
     %
     % ADDMATERIAL(...,'occlusionTextureSet',SET) uses the TEXCOORD SET as
-    % the texture coordintes for the material occlusion.
+    % the texture coordinates for the material occlusion.
     %
     % ADDMATERIAL(...,'occlusionMagFilter',MAGFILTER) sets the
     % magnification filter for the occlusion texture as per OpenGL.
@@ -94,7 +94,7 @@ function material_idx=addMaterial(gltf,varargin)
     % ADDMATERIAL(...,'occlusionMinFilter',MINFILTER) sets the minification
     % filter for the occlusion texture as per OpenGL. MINFILTER should be
     % one of "NEAREST", "LINEAR", "NEAREST_MIPMAP_NEAREST",
-    % "LINEAR_MIPMAP_NEAREST", "NEAREST_MIPMAP_LINEAR", or
+    % "LINEAR_MIPMAP_NEAREST",  "NEAREST_MIPMAP_LINEAR", or
     % "LINEAR_MIPMAP_LINEAR".
     %
     % ADDMATERIAL(...,'occlusionWrapS',WRAPS) sets the wrapping of the U
@@ -116,7 +116,7 @@ function material_idx=addMaterial(gltf,varargin)
     % needs to be JPEG or PNG.
     %
     % ADDMATERIAL(...,'emissiveTextureSet',SET) uses the TEXCOORD SET as
-    % the texture coordintes for the material emissive.
+    % the texture coordinates for the material emissive.
     %
     % ADDMATERIAL(...,'emissiveMagFilter',MAGFILTER) sets the magnification
     % filter for the emissive texture as per OpenGL. MAGFILTER should be
@@ -149,7 +149,7 @@ function material_idx=addMaterial(gltf,varargin)
     % material. The image format needs to be JPEG or PNG.
     %
     % ADDMATERIAL(...,'transmissionTextureSet',SET) uses the TEXCOORD SET
-    % as the texture coordintes for the material transmission.
+    % as the texture coordinates for the material transmission.
     %
     % ADDMATERIAL(...,'transmissionMagFilter',MAGFILTER) sets the
     % magnification filter for the transmission texture as per OpenGL.
@@ -176,7 +176,7 @@ function material_idx=addMaterial(gltf,varargin)
     %
     % ADDMATERIAL(...,'ior',IOR) sets the index of refraction for the
     % material. If IOR is an empty array, value is not added, but the
-    % KHR_materials_ior extension is still enabled. The renderer will use
+    % KHR_materials_ior extension is still enabled, the renderer will use
     % default value of 1.5.
     %
     % ADDMATERIAL(...,'thicknessFactor',thickness) sets the base thickness
@@ -190,14 +190,14 @@ function material_idx=addMaterial(gltf,varargin)
     % material. The image format needs to be JPEG or PNG.
     %
     % ADDMATERIAL(...,'thicknessTextureSet',SET) uses the TEXCOORD SET as
-    % the texture coordintes for the material thickness.
+    % the texture coordinates for the material thickness.
     %
     % ADDMATERIAL(...,'thicknessMagFilter',MAGFILTER) sets the
     % magnification filter for the thickness texture as per OpenGL.
     % MAGFILTER should be one of "NEAREST", "LINEAR",
     % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
     % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
-    %
+    % 
     % ADDMATERIAL(...,'thicknessMinFilter',MINFILTER) sets the minification
     % filter for the thickness texture as per OpenGL. MINFILTER should be
     % one of "NEAREST", "LINEAR", "NEAREST_MIPMAP_NEAREST",
@@ -232,7 +232,7 @@ function material_idx=addMaterial(gltf,varargin)
     % format needs to be JPEG or PNG.
     %
     % ADDMATERIAL(...,'clearcoatTextureTextureSet',SET) uses the TEXCOORD
-    % SET as the texture coordintes for the material clearcoat texture.
+    % SET as the texture coordinates for the material clearcoat texture.
     %
     % ADDMATERIAL(...,'clearcoatTextureMagFilter',MAGFILTER) sets the
     % magnification filter for the clearcoat texture as per OpenGL.
@@ -265,7 +265,7 @@ function material_idx=addMaterial(gltf,varargin)
     % image format needs to be JPEG or PNG.
     %
     % ADDMATERIAL(...,'clearcoatRoughnessTextureTextureSet',SET) uses the
-    % TEXCOORD SET as the texture coordintes for the material clearcoat
+    % TEXCOORD SET as the texture coordinates for the material clearcoat
     % roughness texture.
     %
     % ADDMATERIAL(...,'clearcoatRoughnessTextureMagFilter',MAGFILTER) sets
@@ -298,7 +298,7 @@ function material_idx=addMaterial(gltf,varargin)
     % image format needs to be JPEG or PNG.
     %
     % ADDMATERIAL(...,'clearcoatNormalTextureTextureSet',SET) uses the
-    % TEXCOORD SET as the texture coordintes for the material clearcoat
+    % TEXCOORD SET as the texture coordinates for the material clearcoat
     % normal.
     %
     % ADDMATERIAL(...,'clearcoatNormalTextureMagFilter',MAGFILTER) sets the
@@ -334,7 +334,7 @@ function material_idx=addMaterial(gltf,varargin)
     % or PNG.
     %
     % ADDMATERIAL(...,'diffuseTextureSet',SET) uses the TEXCOORD SET as the
-    % texture coordintes for the material diffuse texture.
+    % texture coordinates for the material diffuse texture.
     %
     % ADDMATERIAL(...,'diffuseMagFilter',MAGFILTER) sets the magnification
     % filter for the diffuse texture as per OpenGL. MAGFILTER should be one
@@ -370,7 +370,7 @@ function material_idx=addMaterial(gltf,varargin)
     % format needs to be JPEG or PNG.
     %
     % ADDMATERIAL(...,'specularGlossinessTextureSet',SET) uses the TEXCOORD
-    % SET as the texture coordintes for the material specular glossiness
+    % SET as the texture coordinates for the material specular glossiness
     % texture.
     %
     % ADDMATERIAL(...,'specularGlossinessMagFilter',MAGFILTER) sets the
@@ -404,7 +404,7 @@ function material_idx=addMaterial(gltf,varargin)
     % material. The image format needs to be JPEG or PNG.
     %
     % ADDMATERIAL(...,'sheenColorTextureSet',SET) uses the TEXCOORD SET as
-    % the texture coordintes for the material sheen colour.
+    % the texture coordinates for the material sheen colour.
     %
     % ADDMATERIAL(...,'sheenColorMagFilter',MAGFILTER) sets the
     % magnification filter for the sheen colour texture as per OpenGL.
@@ -437,7 +437,7 @@ function material_idx=addMaterial(gltf,varargin)
     % material. The image format needs to be PNG.
     %
     % ADDMATERIAL(...,'sheenRoughnessTextureSet',SET) uses the TEXCOORD SET
-    % as the texture coordintes for the material sheen roughness.
+    % as the texture coordinates for the material sheen roughness.
     %
     % ADDMATERIAL(...,'sheenRoughnessMagFilter',MAGFILTER) sets the
     % magnification filter for the sheen roughness texture as per OpenGL.
@@ -470,7 +470,7 @@ function material_idx=addMaterial(gltf,varargin)
     % reflection for the material. The image format needs to be PNG.
     %
     % ADDMATERIAL(...,'specularTextureSet',SET) uses the TEXCOORD SET as
-    % the texture coordintes for the material specular texture.
+    % the texture coordinates for the material specular texture.
     %
     % ADDMATERIAL(...,'specularMagFilter',MAGFILTER) sets the magnification
     % filter for the specular texture as per OpenGL. MAGFILTER should be
@@ -503,7 +503,7 @@ function material_idx=addMaterial(gltf,varargin)
     % specular reflection. The image format needs to be JPEG or PNG.
     %
     % ADDMATERIAL(...,'specularColorTextureSet',SET) uses the TEXCOORD SET
-    % as the texture coordintes for the material specular colour.
+    % as the texture coordinates for the material specular colour.
     %
     % ADDMATERIAL(...,'specularColorMagFilter',MAGFILTER) sets the
     % magnification filter for the specular colour texture as per OpenGL.

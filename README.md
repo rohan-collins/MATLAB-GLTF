@@ -2,7 +2,7 @@
 
 GLTF is a MATLAB class to export 3D graphs and other content into the GL Transmission Format (glTF).
 
-Last updated: February 27, 2022.
+Last updated: March 17, 2022.
 
 > © Copyright 2014-2023 Rohan Chabukswar
 >
@@ -128,7 +128,7 @@ The [COMSOL Multiphysics](https://www.comsol.com/blogs/how-to-export-and-share-y
 Many times, to understand some implementation details, you might be further redirected to [OpenGL Specifications](https://www.khronos.org/opengl/wiki/). If you cannot find something in the GLTF Specifications and you aren't redirected to the OpenGL ones, try looking directly in the OpenGL specs. If nothing else helps, [StackOverflow](https://stackoverflow.com/questions/tagged/gltf) should have something.
 
 ## Setup
-Clone the contents of this repository into a folder called `@GLTF` (yes, the "@" is essential). This folder can be anywhere inside another folder that is already on the MATLAB path, but the `@GLTF` folder itself should not be added to the path.
+Clone the contents of this repository into a folder called `@GLTF` (yes, the "@" is essential). This folder can be anywhere inside another folder that is already on the MATLAB path, but the `@GLTF` folder itself should not be added to the path. The `samples` and `functions` folders inside the class folder cannot be added to path. The sample scripts and functions respectively in those folders can be accessed by running them from within the folder. Alternatively, you can copy those folders to somewhere outside the class folder and add them to the MATLAB path.
 
 For more information, please refer to ["Using Class Folders"](https://mathworks.com/help/matlab/matlab_oop/organizing-classes-in-folders.html) in MATLAB documentation.
 

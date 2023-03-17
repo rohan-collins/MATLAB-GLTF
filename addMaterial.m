@@ -15,6 +15,10 @@ function material_idx=addMaterial(gltf,varargin)
     % ADDMATERIAL(...,'doubleSided',TRUE) makes the material double-sided
     % (faces are also visible when facing away from the camera).
     %
+    % ADDMATERIAL(...,'alphaMode',ALPHAMODE) sets the the interpretation of
+    % the alpha value of the base colour or the alpha channel of the base
+    % colour texture.
+    %
     % ADDMATERIAL(...,'baseColorFactor',C) sets the base colour for the
     % material.
     %
@@ -550,12 +554,14 @@ function material_idx=addMaterial(gltf,varargin)
     %
     filter_str_values=["NEAREST","LINEAR","NEAREST_MIPMAP_NEAREST","LINEAR_MIPMAP_NEAREST","NEAREST_MIPMAP_LINEAR","LINEAR_MIPMAP_LINEAR"];
     wrap_str_values=["CLAMP_TO_EDGE","MIRRORED_REPEAT","REPEAT"];
+    alphaMode_str_values=["OPAQUE","MASK","BLEND"];
     ips=inputParser;
     ips.addParameter('name',missing,@isstring);
     ips.addParameter('baseColorFactor',[],@isnumeric);
     ips.addParameter('metallicFactor',[],@isnumeric);
     ips.addParameter('roughnessFactor',[],@isnumeric);
     ips.addParameter('doubleSided',[],@islogical);
+    ips.addParameter('alphaMode',missing,@(x)GLTF.validateString(x,alphaMode_str_values));
     ips.addParameter('baseColorTexture',missing,@isstring);
     ips.addParameter('baseColorTextureSet',nan,@isnumeric);
     ips.addParameter('baseColorMagFilter',missing,@(x)GLTF.validateString(x,filter_str_values));
@@ -683,6 +689,7 @@ function material_idx=addMaterial(gltf,varargin)
     metallicFactor=parameters.metallicFactor;
     roughnessFactor=parameters.roughnessFactor;
     doubleSided=parameters.doubleSided;
+    alphaMode=upper(parameters.alphaMode);
     baseColorFactor=parameters.baseColorFactor;
     baseColorTexture=parameters.baseColorTexture;
     baseColorTextureSet=parameters.baseColorTextureSet;
@@ -810,13 +817,15 @@ function material_idx=addMaterial(gltf,varargin)
         if(numel(baseColorFactor)<4)
             baseColorFactor=[baseColorFactor 1];
         end
-        if(size(baseColorFactor,2)==3)
-            alphaMode="OPAQUE";
-        elseif(size(baseColorFactor,2)==4)
-            if(baseColorFactor(4)<1)
-                alphaMode="BLEND";
-            else
+        if(ismissing(alphaMode))
+            if(size(baseColorFactor,2)==3)
                 alphaMode="OPAQUE";
+            elseif(size(baseColorFactor,2)==4)
+                if(baseColorFactor(4)<1)
+                    alphaMode="BLEND";
+                else
+                    alphaMode="OPAQUE";
+                end
             end
         end
         material.pbrMetallicRoughness.baseColorFactor=baseColorFactor;

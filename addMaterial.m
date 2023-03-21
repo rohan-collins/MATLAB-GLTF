@@ -1,96 +1,93 @@
 function material_idx=addMaterial(gltf,varargin)
     % Add a physically-based rendering material.
     %
-    % ADDMATERIAL(GLTF) adds an empty physically-based rendering
-    % material to GLTF and returns its index.
+    % ADDMATERIAL(GLTF) adds an empty physically-based rendering material
+    % to GLTF and returns its index.
     %
     % ADDMATERIAL(...,'name',NAME) sets the name of the material.
     %
-    % ADDMATERIAL(...,'metallicFactor',M) sets the metallicity of
-    % the material.
+    % ADDMATERIAL(...,'metallicFactor',METALLICFACTOR) sets the metallicity
+    % of the material.
     %
-    % ADDMATERIAL(...,'roughnessFactor',R) sets the roughness of
-    % the material.
+    % ADDMATERIAL(...,'roughnessFactor',ROUGHNESSFACTOR) sets the roughness
+    % of the material.
     %
-    % ADDMATERIAL(...,'doubleSided',TRUE) makes the material
-    % double-sided (faces are also visible when facing away from
-    % the camera).
+    % ADDMATERIAL(...,'doubleSided',TRUE) makes the material double-sided
+    % (faces are also visible when facing away from the camera).
     %
     % ADDMATERIAL(...,'alphaMode',ALPHAMODE) sets the the interpretation of
     % the alpha value of the base colour or the alpha channel of the base
     % colour texture.
     %
-    % ADDMATERIAL(...,'baseColorFactor',C) sets the base colour for
-    % the material.
+    % ADDMATERIAL(...,'baseColorFactor',BASECOLORFACTOR) sets the base
+    % colour for the material.
     %
-    % ADDMATERIAL(...,'baseColorTexture',FILENAME) uses the image
-    % specified by FILENAME as the texture for the material. The
-    % image format needs to be JPEG or PNG.
+    % ADDMATERIAL(...,'baseColorTexture',FILENAME) uses the image specified
+    % by FILENAME as the texture for the material. The image format needs
+    % to be JPEG or PNG.
     %
-    % ADDMATERIAL(...,'baseColorTextureSet',SET) uses the TEXCOORD
-    % SET as the texture coordintes for the material base colour.
+    % ADDMATERIAL(...,'baseColorTextureSet',SET) uses the TEXCOORD SET as
+    % the texture coordintes for the material base colour.
     %
     % ADDMATERIAL(...,'baseColorMagFilter',MAGFILTER) sets the
-    % magnification filter for the base colour texture as per
-    % OpenGL. MAGFILTER should be one of "NEAREST", "LINEAR",
-    % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
-    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
-    %
-    % ADDMATERIAL(...,'baseColorMinFilter',MINFILTER) sets the
-    % minification filter for the base colour texture as per
-    % OpenGL. MINFILTER should be one of "NEAREST", "LINEAR",
-    % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
-    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
-    %
-    % ADDMATERIAL(...,'baseColorWrapS',WRAPS) sets the wrapping of
-    % the U coordinate of base colour texture as per OpenGL. WRAPS
-    % should be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or
-    % "REPEAT".
-    %
-    % ADDMATERIAL(...,'baseColorWrapT',WRAPT) sets the wrapping of
-    % the V coordinate of base colour texture as per OpenGL. WRAPT
-    % should be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or
-    % "REPEAT".
-    %
-    % ADDMATERIAL(...,'baseColorEmbedTexture',FALSE) includes the
-    % base colour texture image as a link inside the GLTF file.
-    %
-    % ADDMATERIAL(...,'normalTexture',FILENAME) uses the image
-    % specified by FILENAME as the normal map for the material. The
-    % image format needs to be JPEG or PNG.
-    %
-    % ADDMATERIAL(...,'normalTextureSet',SET) uses the TEXCOORD SET
-    % as the texture coordintes for the material normal texture.
-    %
-    % ADDMATERIAL(...,'normalMagFilter',MAGFILTER) sets the
-    % magnification filter for the normal texture as per OpenGL.
+    % magnification filter for the base colour texture as per OpenGL.
     % MAGFILTER should be one of "NEAREST", "LINEAR",
     % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
     % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
     %
-    % ADDMATERIAL(...,'normalMinFilter',MINFILTER) sets the
-    % minification filter for the normal texture as per OpenGL.
-    % MINFILTER should be one of "NEAREST", "LINEAR",
-    % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
-    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
+    % ADDMATERIAL(...,'baseColorMinFilter',MINFILTER) sets the minification
+    % filter for the base colour texture as per OpenGL. MINFILTER should be
+    % one of "NEAREST", "LINEAR", "NEAREST_MIPMAP_NEAREST",
+    % "LINEAR_MIPMAP_NEAREST", "NEAREST_MIPMAP_LINEAR", or
+    % "LINEAR_MIPMAP_LINEAR".
     %
-    % ADDMATERIAL(...,'normalWrapS',WRAPS) sets the wrapping of the
-    % U coordinate of normal texture as per OpenGL. WRAPS should be
-    % one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
+    % ADDMATERIAL(...,'baseColorWrapS',WRAPS) sets the wrapping of the U
+    % coordinate of base colour texture as per OpenGL. WRAPS should be one
+    % of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
     %
-    % ADDMATERIAL(...,'normalWrapT',WRAPT) sets the wrapping of the
-    % V coordinate of normal as per OpenGL. WRAPT should be one of
+    % ADDMATERIAL(...,'baseColorWrapT',WRAPT) sets the wrapping of the V
+    % coordinate of base colour texture as per OpenGL. WRAPT should be one
+    % of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
+    %
+    % ADDMATERIAL(...,'baseColorEmbedTexture',FALSE) includes the base
+    % colour texture image as a link inside the GLTF file.
+    %
+    % ADDMATERIAL(...,'normalTexture',FILENAME) uses the image specified by
+    % FILENAME as the normal map for the material. The image format needs
+    % to be JPEG or PNG.
+    %
+    % ADDMATERIAL(...,'normalTextureSet',SET) uses the TEXCOORD SET as the
+    % texture coordintes for the material normal texture.
+    %
+    % ADDMATERIAL(...,'normalMagFilter',MAGFILTER) sets the magnification
+    % filter for the normal texture as per OpenGL. MAGFILTER should be one
+    % of "NEAREST", "LINEAR", "NEAREST_MIPMAP_NEAREST",
+    % "LINEAR_MIPMAP_NEAREST", "NEAREST_MIPMAP_LINEAR", or
+    % "LINEAR_MIPMAP_LINEAR".
+    %
+    % ADDMATERIAL(...,'normalMinFilter',MINFILTER) sets the minification
+    % filter for the normal texture as per OpenGL. MINFILTER should be one
+    % of "NEAREST", "LINEAR", "NEAREST_MIPMAP_NEAREST",
+    % "LINEAR_MIPMAP_NEAREST", "NEAREST_MIPMAP_LINEAR", or
+    % "LINEAR_MIPMAP_LINEAR".
+    %
+    % ADDMATERIAL(...,'normalWrapS',WRAPS) sets the wrapping of the U
+    % coordinate of normal texture as per OpenGL. WRAPS should be one of
     % "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
     %
-    % ADDMATERIAL(...,'normalEmbedTexture',FALSE) includes the
-    % normal texture image as a link inside the GLTF file.
+    % ADDMATERIAL(...,'normalWrapT',WRAPT) sets the wrapping of the V
+    % coordinate of normal as per OpenGL. WRAPT should be one of
+    % "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
     %
-    % ADDMATERIAL(...,'occlusionTexture',FILENAME) uses the image
-    % specified by FILENAME as the occlusion map for the material.
-    % The image format needs to be JPEG or PNG.
+    % ADDMATERIAL(...,'normalEmbedTexture',FALSE) includes the normal
+    % texture image as a link inside the GLTF file.
     %
-    % ADDMATERIAL(...,'occlusionTextureSet',SET) uses the TEXCOORD
-    % SET as the texture coordintes for the material occlusion.
+    % ADDMATERIAL(...,'occlusionTexture',FILENAME) uses the image specified
+    % by FILENAME as the occlusion map for the material. The image format
+    % needs to be JPEG or PNG.
+    %
+    % ADDMATERIAL(...,'occlusionTextureSet',SET) uses the TEXCOORD SET as
+    % the texture coordintes for the material occlusion.
     %
     % ADDMATERIAL(...,'occlusionMagFilter',MAGFILTER) sets the
     % magnification filter for the occlusion texture as per OpenGL.
@@ -98,116 +95,110 @@ function material_idx=addMaterial(gltf,varargin)
     % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
     % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
     %
-    % ADDMATERIAL(...,'occlusionMinFilter',MINFILTER) sets the
-    % minification filter for the occlusion texture as per OpenGL.
-    % MINFILTER should be one of "NEAREST", "LINEAR",
-    % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
-    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
+    % ADDMATERIAL(...,'occlusionMinFilter',MINFILTER) sets the minification
+    % filter for the occlusion texture as per OpenGL. MINFILTER should be
+    % one of "NEAREST", "LINEAR", "NEAREST_MIPMAP_NEAREST",
+    % "LINEAR_MIPMAP_NEAREST", "NEAREST_MIPMAP_LINEAR", or
+    % "LINEAR_MIPMAP_LINEAR".
     %
-    % ADDMATERIAL(...,'occlusionWrapS',WRAPS) sets the wrapping of
-    % the U coordinate of occlusion texture as per OpenGL. WRAPS
-    % should be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or
-    % "REPEAT".
+    % ADDMATERIAL(...,'occlusionWrapS',WRAPS) sets the wrapping of the U
+    % coordinate of occlusion texture as per OpenGL. WRAPS should be one of
+    % "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
     %
-    % ADDMATERIAL(...,'occlusionWrapT',WRAPT) sets the wrapping of
-    % the V coordinate of occlusion texture as per OpenGL. WRAPT
-    % should be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or
-    % "REPEAT".
+    % ADDMATERIAL(...,'occlusionWrapT',WRAPT) sets the wrapping of the V
+    % coordinate of occlusion texture as per OpenGL. WRAPT should be one of
+    % "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
     %
-    % ADDMATERIAL(...,'occlusionEmbedTexture',FALSE) includes the
-    % occlusion texture image as a link inside the GLTF file.
+    % ADDMATERIAL(...,'occlusionEmbedTexture',FALSE) includes the occlusion
+    % texture image as a link inside the GLTF file.
     %
-    % ADDMATERIAL(...,'emissiveFactor',E) sets the base emmisivity
-    % for the material.
+    % ADDMATERIAL(...,'emissiveFactor',EMISSIVEFACTOR) sets the base
+    % emmisivity for the material.
     %
-    % ADDMATERIAL(...,'emissiveTexture',FILENAME) uses the image
-    % specified by FILENAME as the emissive map for the material.
-    % The image format needs to be JPEG or PNG.
+    % ADDMATERIAL(...,'emissiveStrength',EMISSIVESTRENGTH) sets the
+    % strength adjustment to be multiplied with the material's emissive
+    % value.
     %
-    % ADDMATERIAL(...,'emissiveTextureSet',SET) uses the TEXCOORD
-    % SET as the texture coordintes for the material emissive.
+    % ADDMATERIAL(...,'emissiveTexture',FILENAME) uses the image specified
+    % by FILENAME as the emissive map for the material. The image format
+    % needs to be JPEG or PNG.
     %
-    % ADDMATERIAL(...,'emissiveMagFilter',MAGFILTER) sets the
-    % magnification filter for the emissive texture as per OpenGL.
+    % ADDMATERIAL(...,'emissiveTextureSet',SET) uses the TEXCOORD SET as
+    % the texture coordintes for the material emissive.
+    %
+    % ADDMATERIAL(...,'emissiveMagFilter',MAGFILTER) sets the magnification
+    % filter for the emissive texture as per OpenGL. MAGFILTER should be
+    % one of "NEAREST", "LINEAR", "NEAREST_MIPMAP_NEAREST",
+    % "LINEAR_MIPMAP_NEAREST", "NEAREST_MIPMAP_LINEAR", or
+    % "LINEAR_MIPMAP_LINEAR".
+    %
+    % ADDMATERIAL(...,'emissiveMinFilter',MINFILTER) sets the minification
+    % filter for the emissive texture as per OpenGL. MINFILTER should be
+    % one of "NEAREST", "LINEAR", "NEAREST_MIPMAP_NEAREST",
+    % "LINEAR_MIPMAP_NEAREST", "NEAREST_MIPMAP_LINEAR", or
+    % "LINEAR_MIPMAP_LINEAR".
+    %
+    % ADDMATERIAL(...,'emissiveWrapS',WRAPS) sets the wrapping of the U
+    % coordinate of emissive texture as per OpenGL. WRAPS should be one of
+    % "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
+    %
+    % ADDMATERIAL(...,'emissiveWrapT',WRAPT) sets the wrapping of the V
+    % coordinate of emissive texture as per OpenGL. WRAPT should be one of
+    % "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
+    %
+    % ADDMATERIAL(...,'emissiveEmbedTexture',FALSE) includes the emissive
+    % texture image as a link inside the GLTF file.
+    %
+    % ADDMATERIAL(...,'transmissionFactor',TRANSMISSIONFACTOR) sets the
+    % base transmission factor for the material.
+    %
+    % ADDMATERIAL(...,'transmissionTexture',FILENAME) uses the R channel of
+    % the image specified by FILENAME as the transmission map for the
+    % material. The image format needs to be JPEG or PNG.
+    %
+    % ADDMATERIAL(...,'transmissionTextureSet',SET) uses the TEXCOORD SET
+    % as the texture coordintes for the material transmission.
+    %
+    % ADDMATERIAL(...,'transmissionMagFilter',MAGFILTER) sets the
+    % magnification filter for the transmission texture as per OpenGL.
     % MAGFILTER should be one of "NEAREST", "LINEAR",
     % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
     % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
     %
-    % ADDMATERIAL(...,'emissiveMinFilter',MINFILTER) sets the
-    % minification filter for the emissive texture as per OpenGL.
+    % ADDMATERIAL(...,'transmissionMinFilter',MINFILTER) sets the
+    % minification filter for the transmission texture as per OpenGL.
     % MINFILTER should be one of "NEAREST", "LINEAR",
     % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
     % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
     %
-    % ADDMATERIAL(...,'emissiveWrapS',WRAPS) sets the wrapping of
-    % the U coordinate of emissive texture as per OpenGL. WRAPS
-    % should be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or
-    % "REPEAT".
+    % ADDMATERIAL(...,'transmissionWrapS',WRAPS) sets the wrapping of the U
+    % coordinate of transmission texture as per OpenGL. WRAPS should be one
+    % of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
     %
-    % ADDMATERIAL(...,'emissiveWrapT',WRAPT) sets the wrapping of
-    % the V coordinate of emissive texture as per OpenGL. WRAPT
-    % should be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or
-    % "REPEAT".
+    % ADDMATERIAL(...,'transmissionWrapT',WRAPT) sets the wrapping of the V
+    % coordinate of transmission texture as per OpenGL. WRAPT should be one
+    % of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
     %
-    % ADDMATERIAL(...,'emissiveEmbedTexture',FALSE) includes the
-    % emissive texture image as a link inside the GLTF file.
+    % ADDMATERIAL(...,'transmissionEmbedTexture',FALSE) includes the
+    % transmission texture image as a link inside the GLTF file.
     %
-    % ADDMATERIAL(...,'transmissionFactor',T) sets the base
-    % transmission factor for the material.
+    % ADDMATERIAL(...,'ior',IOR) sets the index of refraction for the
+    % material. If IOR is an empty array, value is not added, but the
+    % KHR_materials_ior extension is still enabled, the renderer will use
+    % default value of 1.5.
     %
-    % ADDMATERIAL(...,'transmissionTexture',FILENAME) uses the R
-    % channel of the image specified by FILENAME as the
-    % transmission map for the material. The image format needs to
-    % be JPEG or PNG.
+    % ADDMATERIAL(...,'thicknessFactor',THICKNESS) sets the base thickness
+    % factor for the material. The value is given in the coordinate space
+    % of the mesh. If the value is 0 the material is thin-walled. Otherwise
+    % the material is a volume boundary. The doubleSided property has no
+    % effect on volume boundaries.
     %
-    % ADDMATERIAL(...,'transmissionTextureSet',SET) uses the
-    % TEXCOORD SET as the texture coordintes for the material
-    % transmission.
+    % ADDMATERIAL(...,'thicknessTexture',FILENAME) uses the G channel of
+    % the image specified by FILENAME as the thickness map for the
+    % material. The image format needs to be JPEG or PNG.
     %
-    % ADDMATERIAL(...,'transmissionMagFilter',MAGFILTER) sets the
-    % magnification filter for the transmission texture as per
-    % OpenGL. MAGFILTER should be one of "NEAREST", "LINEAR",
-    % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
-    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
-    %
-    % ADDMATERIAL(...,'transmissionMinFilter',MINFILTER) sets the
-    % minification filter for the transmission texture as per
-    % OpenGL. MINFILTER should be one of "NEAREST", "LINEAR",
-    % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
-    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
-    %
-    % ADDMATERIAL(...,'transmissionWrapS',WRAPS) sets the wrapping
-    % of the U coordinate of transmission texture as per OpenGL.
-    % WRAPS should be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or
-    % "REPEAT".
-    %
-    % ADDMATERIAL(...,'transmissionWrapT',WRAPT) sets the wrapping
-    % of the V coordinate of transmission texture as per OpenGL.
-    % WRAPT should be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or
-    % "REPEAT".
-    %
-    % ADDMATERIAL(...,'transmissionEmbedTexture',FALSE) includes
-    % the transmission texture image as a link inside the GLTF
-    % file.
-    %
-    % ADDMATERIAL(...,'ior',IOR) sets the index of refraction for
-    % the material. If IOR is an empty array, value is not added,
-    % but the KHR_materials_ior extension is still enabled, the
-    % renderer will use default value of 1.5.
-    %
-    % ADDMATERIAL(...,'thicknessFactor',thickness) sets the base
-    % thickness factor for the material. The value is given in the
-    % coordinate space of the mesh. If the value is 0 the material
-    % is thin-walled. Otherwise the material is a volume boundary.
-    % The doubleSided property has no effect on volume boundaries.
-    %
-    % ADDMATERIAL(...,'thicknessTexture',FILENAME) uses the G
-    % channel of the image specified by FILENAME as the thickness
-    % map for the material. The image format needs to be JPEG or
-    % PNG.
-    %
-    % ADDMATERIAL(...,'thicknessTextureSet',SET) uses the TEXCOORD
-    % SET as the texture coordintes for the material thickness.
+    % ADDMATERIAL(...,'thicknessTextureSet',SET) uses the TEXCOORD SET as
+    % the texture coordintes for the material thickness.
     %
     % ADDMATERIAL(...,'thicknessMagFilter',MAGFILTER) sets the
     % magnification filter for the thickness texture as per OpenGL.
@@ -215,368 +206,361 @@ function material_idx=addMaterial(gltf,varargin)
     % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
     % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
     %
-    % ADDMATERIAL(...,'thicknessMinFilter',MINFILTER) sets the
-    % minification filter for the thickness texture as per OpenGL.
-    % MINFILTER should be one of "NEAREST", "LINEAR",
-    % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
-    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
+    % ADDMATERIAL(...,'thicknessMinFilter',MINFILTER) sets the minification
+    % filter for the thickness texture as per OpenGL. MINFILTER should be
+    % one of "NEAREST", "LINEAR", "NEAREST_MIPMAP_NEAREST",
+    % "LINEAR_MIPMAP_NEAREST", "NEAREST_MIPMAP_LINEAR", or
+    % "LINEAR_MIPMAP_LINEAR".
     %
-    % ADDMATERIAL(...,'thicknessWrapS',WRAPS) sets the wrapping of
-    % the U coordinate of thickness texture as per OpenGL. WRAPS
-    % should be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or
-    % "REPEAT".
+    % ADDMATERIAL(...,'thicknessWrapS',WRAPS) sets the wrapping of the U
+    % coordinate of thickness texture as per OpenGL. WRAPS should be one of
+    % "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
     %
-    % ADDMATERIAL(...,'thicknessWrapT',WRAPT) sets the wrapping of
-    % the V coordinate of thickness texture as per OpenGL. WRAPT
-    % should be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or
-    % "REPEAT".
+    % ADDMATERIAL(...,'thicknessWrapT',WRAPT) sets the wrapping of the V
+    % coordinate of thickness texture as per OpenGL. WRAPT should be one of
+    % "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
     %
-    % ADDMATERIAL(...,'thicknessEmbedTexture',FALSE) includes the
-    % thickness texture image as a link inside the GLTF file.
+    % ADDMATERIAL(...,'thicknessEmbedTexture',FALSE) includes the thickness
+    % texture image as a link inside the GLTF file.
     %
-    % ADDMATERIAL(...,'attenuationDistance',a) sets the density of
-    % the medium given as the average distance that light travels
-    % in the medium before interacting with a particle. The value
+    % ADDMATERIAL(...,'attenuationDistance',ATTENUATIONDISTANCE) sets the
+    % density of the medium given as the average distance that light
+    % travels in the medium before interacting with a particle. The value
     % is given in world space.
     %
-    % ADDMATERIAL(...,'attenuationColor',aC) sets the color that
-    % white light turns into due to absorption when reaching the
+    % ADDMATERIAL(...,'attenuationColor',ATTENUATIONCOLOR) sets the color
+    % that white light turns into due to absorption when reaching the
     % attenuation distance.
     %
-    % ADDMATERIAL(...,'clearcoatFactor',clearcoatFactor) sets the
-    % base clearcoat layer intensity.
+    % ADDMATERIAL(...,'clearcoatFactor',CLEARCOATFACTOR) sets the base
+    % clearcoat layer intensity.
     %
-    % ADDMATERIAL(...,'clearcoatTexture',FILENAME) uses the image
-    % specified by FILENAME as the clearcoat layer intensity
-    % texture. The image format needs to be JPEG or PNG.
-    %
-    % ADDMATERIAL(...,'clearcoatTextureTextureSet',SET) uses the
-    % TEXCOORD SET as the texture coordintes for the material
-    % clearcoat texture.
-    %
-    % ADDMATERIAL(...,'clearcoatTextureMagFilter',MAGFILTER) sets
-    % the magnification filter for the clearcoat texture as per
-    % OpenGL. MAGFILTER should be one of "NEAREST", "LINEAR",
-    % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
-    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
-    %
-    % ADDMATERIAL(...,'clearcoatTextureMinFilter',MINFILTER) sets
-    % the minification filter for the clearcoat texture as per
-    % OpenGL. MINFILTER should be one of "NEAREST", "LINEAR",
-    % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
-    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
-    %
-    % ADDMATERIAL(...,'clearcoatTextureWrapS',WRAPS) sets the
-    % wrapping of the U coordinate of clearcoat texture as per
-    % OpenGL. WRAPS should be one of "CLAMP_TO_EDGE",
-    % "MIRRORED_REPEAT", or "REPEAT".
-    %
-    % ADDMATERIAL(...,'clearcoatTextureWrapT',WRAPT) sets the
-    % wrapping of the V coordinate of clearcoat texture as per
-    % OpenGL. WRAPT should be one of "CLAMP_TO_EDGE",
-    % "MIRRORED_REPEAT", or "REPEAT".
-    %
-    % ADDMATERIAL(...,'clearcoatEmbedTexture',FALSE) includes the
-    % clearcoat texture image as a link inside the GLTF file.
-    %
-    % ADDMATERIAL(...,'clearcoatRoughnessFactor',
-    % clearcoatRoughnessFactor) sets the base clearcoat layer
-    % roughness.
-    %
-    % ADDMATERIAL(...,'clearcoatRoughnessTexture',FILENAME) uses
-    % the image specified by FILENAME as the clearcoat layer
-    % roughness texture. The image format needs to be JPEG or PNG.
-    %
-    % ADDMATERIAL(...,'clearcoatRoughnessTextureTextureSet',SET)
-    % uses the TEXCOORD SET as the texture coordintes for the
-    % material clearcoat roughness texture.
-    %
-    % ADDMATERIAL(...,'clearcoatRoughnessTextureMagFilter',MAGFILTER)
-    % sets the magnification filter for the clearcoat roughness
-    % texture as per OpenGL. MAGFILTER should be one of "NEAREST",
-    % "LINEAR", "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
-    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
-    %
-    % ADDMATERIAL(...,'clearcoatRoughnessTextureMinFilter',MINFILTER)
-    % sets the minification filter for the clearcoat roughness
-    % texture as per OpenGL. MINFILTER should be one of "NEAREST",
-    % "LINEAR", "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
-    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
-    %
-    % ADDMATERIAL(...,'clearcoatRoughnessTextureWrapS',WRAPS) sets
-    % the wrapping of the U coordinate of clearcoat roughness
-    % texture as per OpenGL. WRAPS should be one of
-    % "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
-    %
-    % ADDMATERIAL(...,'clearcoatRoughnessTextureWrapT',WRAPT) sets
-    % the wrapping of the V coordinate of clearcoat roughness
-    % texture as per OpenGL. WRAPT should be one of
-    % "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
-    %
-    % ADDMATERIAL(...,'clearcoatRoughnessEmbedTexture',FALSE)
-    % includes the clearcoat roughness texture image as a link
-    % inside the GLTF file.
-    %
-    % ADDMATERIAL(...,'clearcoatNormalTexture',FILENAME) uses the
-    % image specified by FILENAME as the clearcoat layer normal map
-    % texture. The image format needs to be JPEG or PNG.
-    %
-    % ADDMATERIAL(...,'clearcoatNormalTextureTextureSet',SET) uses
-    % the TEXCOORD SET as the texture coordintes for the material
-    % clearcoat normal.
-    %
-    % ADDMATERIAL(...,'clearcoatNormalTextureMagFilter',MAGFILTER)
-    % sets the magnification filter for the clearcoat normal
-    % texture as per OpenGL. MAGFILTER should be one of "NEAREST",
-    % "LINEAR", "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
-    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
-    %
-    % ADDMATERIAL(...,'clearcoatNormalTextureMinFilter',MINFILTER)
-    % sets the minification filter for the clearcoat normal texture
-    % as per OpenGL. MINFILTER should be one of "NEAREST",
-    % "LINEAR", "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
-    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
-    %
-    % ADDMATERIAL(...,'clearcoatNormalTextureWrapS',WRAPS) sets the
-    % wrapping of the U coordinate of clearcoat normal texture as
-    % per OpenGL. WRAPS should be one of "CLAMP_TO_EDGE",
-    % "MIRRORED_REPEAT", or "REPEAT".
-    %
-    % ADDMATERIAL(...,'clearcoatNormalTextureWrapT',WRAPT) sets the
-    % wrapping of the V coordinate of clearcoat normal texture as
-    % per OpenGL. WRAPT should be one of "CLAMP_TO_EDGE",
-    % "MIRRORED_REPEAT", or "REPEAT".
-    %
-    % ADDMATERIAL(...,'clearcoatNormalEmbedTexture',FALSE) includes
-    % the clearcoat normal texture image as a link inside the GLTF
-    % file.
-    %
-    % ADDMATERIAL(...,'diffuseFactor',diffuseFactor) sets reflected
-    % diffuse factor of the material.
-    %
-    % ADDMATERIAL(...,'diffuseTexture',FILENAME) uses the image
-    % specified by FILENAME as the diffuse texture. The image
+    % ADDMATERIAL(...,'clearcoatTexture',FILENAME) uses the image specified
+    % by FILENAME as the clearcoat layer intensity texture. The image
     % format needs to be JPEG or PNG.
     %
-    % ADDMATERIAL(...,'diffuseTextureSet',SET) uses the TEXCOORD
-    % SET as the texture coordintes for the material diffuse
-    % texture.
+    % ADDMATERIAL(...,'clearcoatTextureTextureSet',SET) uses the TEXCOORD
+    % SET as the texture coordintes for the material clearcoat texture.
     %
-    % ADDMATERIAL(...,'diffuseMagFilter',MAGFILTER) sets the
-    % magnification filter for the diffuse texture as per OpenGL.
+    % ADDMATERIAL(...,'clearcoatTextureMagFilter',MAGFILTER) sets the
+    % magnification filter for the clearcoat texture as per OpenGL.
     % MAGFILTER should be one of "NEAREST", "LINEAR",
     % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
     % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
     %
-    % ADDMATERIAL(...,'diffuseMinFilter',MINFILTER) sets the
-    % minification filter for the diffuse texture as per OpenGL.
+    % ADDMATERIAL(...,'clearcoatTextureMinFilter',MINFILTER) sets the
+    % minification filter for the clearcoat texture as per OpenGL.
     % MINFILTER should be one of "NEAREST", "LINEAR",
     % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
     % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
     %
-    % ADDMATERIAL(...,'diffuseWrapS',WRAPS) sets the wrapping of
-    % the U coordinate of diffuse texture as per OpenGL. WRAPS
-    % should be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or
-    % "REPEAT".
+    % ADDMATERIAL(...,'clearcoatTextureWrapS',WRAPS) sets the wrapping of
+    % the U coordinate of clearcoat texture as per OpenGL. WRAPS should be
+    % one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
     %
-    % ADDMATERIAL(...,'diffuseWrapT',WRAPT) sets the wrapping of
-    % the V coordinate of diffuse texture as per OpenGL. WRAPT
-    % should be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or
-    % "REPEAT".
+    % ADDMATERIAL(...,'clearcoatTextureWrapT',WRAPT) sets the wrapping of
+    % the V coordinate of clearcoat texture as per OpenGL. WRAPT should be
+    % one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
     %
-    % ADDMATERIAL(...,'diffuseEmbedTexture',FALSE) includes the
-    % diffuse texture image as a link inside the GLTF file.
+    % ADDMATERIAL(...,'clearcoatEmbedTexture',FALSE) includes the clearcoat
+    % texture image as a link inside the GLTF file.
     %
-    % ADDMATERIAL(...,'pbrSpecularFactor',specularFactor) sets the
-    % base specular RGB color of the material.
+    % ADDMATERIAL(...,'clearcoatRoughnessFactor', CLEARCOATROUGHNESSFACTOR)
+    % sets the base clearcoat layer roughness.
     %
-    % ADDMATERIAL(...,'pbrGlossinessFactor',glossinessFactor) sets
-    % the base glossiness or smoothness of the material.
+    % ADDMATERIAL(...,'clearcoatRoughnessTexture',FILENAME) uses the image
+    % specified by FILENAME as the clearcoat layer roughness texture. The
+    % image format needs to be JPEG or PNG.
     %
-    % ADDMATERIAL(...,'specularGlossinessTexture',FILENAME) uses
-    % the image specified by FILENAME as the specular-glossiness
-    % texture. The image format needs to be JPEG or PNG.
+    % ADDMATERIAL(...,'clearcoatRoughnessTextureTextureSet',SET) uses the
+    % TEXCOORD SET as the texture coordintes for the material clearcoat
+    % roughness texture.
     %
-    % ADDMATERIAL(...,'specularGlossinessTextureSet',SET) uses the
-    % TEXCOORD SET as the texture coordintes for the material
-    % specular glossiness texture.
-    %
-    % ADDMATERIAL(...,'specularGlossinessMagFilter',MAGFILTER) sets
-    % the magnification filter for the specular glossiness texture
-    % as per OpenGL. MAGFILTER should be one of "NEAREST",
-    % "LINEAR", "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
+    % ADDMATERIAL(...,'clearcoatRoughnessTextureMagFilter',MAGFILTER) sets
+    % the magnification filter for the clearcoat roughness texture as per
+    % OpenGL. MAGFILTER should be one of "NEAREST", "LINEAR",
+    % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
     % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
     %
-    % ADDMATERIAL(...,'specularGlossinessMinFilter',MINFILTER) sets
-    % the minification filter for the specular glossiness texture
-    % as per OpenGL. MINFILTER should be one of "NEAREST",
-    % "LINEAR", "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
+    % ADDMATERIAL(...,'clearcoatRoughnessTextureMinFilter',MINFILTER) sets
+    % the minification filter for the clearcoat roughness texture as per
+    % OpenGL. MINFILTER should be one of "NEAREST", "LINEAR",
+    % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
     % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
     %
-    % ADDMATERIAL(...,'specularGlossinessWrapS',WRAPS) sets the
-    % wrapping of the U coordinate of specular glossiness texture
-    % as per OpenGL. WRAPS should be one of "CLAMP_TO_EDGE",
-    % "MIRRORED_REPEAT", or "REPEAT".
+    % ADDMATERIAL(...,'clearcoatRoughnessTextureWrapS',WRAPS) sets the
+    % wrapping of the U coordinate of clearcoat roughness texture as per
+    % OpenGL. WRAPS should be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or
+    % "REPEAT".
     %
-    % ADDMATERIAL(...,'specularGlossinessWrapT',WRAPT) sets the
-    % wrapping of the V coordinate of specular glossiness texture
-    % as per OpenGL. WRAPT should be one of "CLAMP_TO_EDGE",
-    % "MIRRORED_REPEAT", or "REPEAT".
+    % ADDMATERIAL(...,'clearcoatRoughnessTextureWrapT',WRAPT) sets the
+    % wrapping of the V coordinate of clearcoat roughness texture as per
+    % OpenGL. WRAPT should be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or
+    % "REPEAT".
     %
-    % ADDMATERIAL(...,'specularGlossinessEmbedTexture',FALSE)
-    % includes the specularGlossiness texture image as a link
-    % inside the GLTF file.
+    % ADDMATERIAL(...,'clearcoatRoughnessEmbedTexture',FALSE) includes the
+    % clearcoat roughness texture image as a link inside the GLTF file.
     %
-    % ADDMATERIAL(...,'sheenColorFactor',sheenColorFactor) sets the
-    % base sheen color for the material.
+    % ADDMATERIAL(...,'clearcoatNormalTexture',FILENAME) uses the image
+    % specified by FILENAME as the clearcoat layer normal map texture. The
+    % image format needs to be JPEG or PNG.
     %
-    % ADDMATERIAL(...,'sheenColorTexture',FILENAME) uses the RGB
-    % channels of the image specified by FILENAME as the sheen
-    % colour for the material. The image format needs to be JPEG or
-    % PNG.
+    % ADDMATERIAL(...,'clearcoatNormalTextureTextureSet',SET) uses the
+    % TEXCOORD SET as the texture coordintes for the material clearcoat
+    % normal.
     %
-    % ADDMATERIAL(...,'sheenColorTextureSet',SET) uses the TEXCOORD
-    % SET as the texture coordintes for the material sheen colour.
+    % ADDMATERIAL(...,'clearcoatNormalTextureMagFilter',MAGFILTER) sets the
+    % magnification filter for the clearcoat normal texture as per OpenGL.
+    % MAGFILTER should be one of "NEAREST", "LINEAR",
+    % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
+    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
+    %
+    % ADDMATERIAL(...,'clearcoatNormalTextureMinFilter',MINFILTER) sets the
+    % minification filter for the clearcoat normal texture as per OpenGL.
+    % MINFILTER should be one of "NEAREST", "LINEAR",
+    % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
+    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
+    %
+    % ADDMATERIAL(...,'clearcoatNormalTextureWrapS',WRAPS) sets the
+    % wrapping of the U coordinate of clearcoat normal texture as per
+    % OpenGL. WRAPS should be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or
+    % "REPEAT".
+    %
+    % ADDMATERIAL(...,'clearcoatNormalTextureWrapT',WRAPT) sets the
+    % wrapping of the V coordinate of clearcoat normal texture as per
+    % OpenGL. WRAPT should be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or
+    % "REPEAT".
+    %
+    % ADDMATERIAL(...,'clearcoatNormalEmbedTexture',FALSE) includes the
+    % clearcoat normal texture image as a link inside the GLTF file.
+    %
+    % ADDMATERIAL(...,'sheenColorFactor',SHEENCOLORFACTOR) sets the base
+    % sheen color for the material.
+    %
+    % ADDMATERIAL(...,'sheenColorTexture',FILENAME) uses the RGB channels
+    % of the image specified by FILENAME as the sheen colour for the
+    % material. The image format needs to be JPEG or PNG.
+    %
+    % ADDMATERIAL(...,'sheenColorTextureSet',SET) uses the TEXCOORD SET as
+    % the texture coordintes for the material sheen colour.
     %
     % ADDMATERIAL(...,'sheenColorMagFilter',MAGFILTER) sets the
-    % magnification filter for the sheen colour texture as per
-    % OpenGL. MAGFILTER should be one of "NEAREST", "LINEAR",
+    % magnification filter for the sheen colour texture as per OpenGL.
+    % MAGFILTER should be one of "NEAREST", "LINEAR",
     % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
     % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
     %
     % ADDMATERIAL(...,'sheenColorMinFilter',MINFILTER) sets the
-    % minification filter for the sheen colour texture as per
-    % OpenGL. MINFILTER should be one of "NEAREST", "LINEAR",
-    % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
-    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
-    %
-    % ADDMATERIAL(...,'sheenColorWrapS',WRAPS) sets the wrapping of
-    % the U coordinate of sheen colour texture as per OpenGL. WRAPS
-    % should be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or
-    % "REPEAT".
-    %
-    % ADDMATERIAL(...,'sheenColorWrapT',WRAPT) sets the wrapping of
-    % the V coordinate of sheen colour texture as per OpenGL. WRAPT
-    % should be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or
-    % "REPEAT".
-    %
-    % ADDMATERIAL(...,'sheenColorEmbedTexture',FALSE) includes the
-    % sheen color texture image as a link inside the GLTF file.
-    %
-    % ADDMATERIAL(...,'sheenRoughnessFactor',sheenRoughnessFactor)
-    % sets the base sheen roughness for the material.
-    %
-    % ADDMATERIAL(...,'sheenRoughnessTexture',FILENAME) uses the A
-    % channel of the image specified by FILENAME as the sheen
-    % colour for the material. The image format needs to be PNG.
-    %
-    % ADDMATERIAL(...,'sheenRoughnessTextureSet',SET) uses the
-    % TEXCOORD SET as the texture coordintes for the material sheen
-    % roughness.
-    %
-    % ADDMATERIAL(...,'sheenRoughnessMagFilter',MAGFILTER) sets the
-    % magnification filter for the sheen roughness texture as per
-    % OpenGL. MAGFILTER should be one of "NEAREST", "LINEAR",
-    % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
-    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
-    %
-    % ADDMATERIAL(...,'sheenRoughnessMinFilter',MINFILTER) sets the
-    % minification filter for the sheen roughness texture as per
-    % OpenGL. MINFILTER should be one of "NEAREST", "LINEAR",
-    % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
-    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
-    %
-    % ADDMATERIAL(...,'sheenRoughnessWrapS',WRAPS) sets the
-    % wrapping of the U coordinate of sheen roughness texture as
-    % per OpenGL. WRAPS should be one of "CLAMP_TO_EDGE",
-    % "MIRRORED_REPEAT", or "REPEAT".
-    %
-    % ADDMATERIAL(...,'sheenRoughnessWrapT',WRAPT) sets the
-    % wrapping of the V coordinate of sheen roughness texture as
-    % per OpenGL. WRAPT should be one of "CLAMP_TO_EDGE",
-    % "MIRRORED_REPEAT", or "REPEAT".
-    %
-    % ADDMATERIAL(...,'sheenRoughnessEmbedTexture',FALSE) includes
-    % the sheen roughness texture image as a link inside the GLTF
-    % file.
-    %
-    % ADDMATERIAL(...,'specularFactor',specularFactor) sets the
-    % base strength of the specular reflection.
-    %
-    % ADDMATERIAL(...,'specularTexture',FILENAME) uses the A
-    % channel of the image specified by FILENAME as the strength
-    % of the specular reflection for the material. The image format
-    % needs to be PNG.
-    %
-    % ADDMATERIAL(...,'specularTextureSet',SET) uses the TEXCOORD
-    % SET as the texture coordintes for the material specular
-    % texture.
-    %
-    % ADDMATERIAL(...,'specularMagFilter',MAGFILTER) sets the
-    % magnification filter for the specular texture as per OpenGL.
-    % MAGFILTER should be one of "NEAREST", "LINEAR",
-    % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
-    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
-    %
-    % ADDMATERIAL(...,'specularMinFilter',MINFILTER) sets the
-    % minification filter for the specular texture as per OpenGL.
+    % minification filter for the sheen colour texture as per OpenGL.
     % MINFILTER should be one of "NEAREST", "LINEAR",
     % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
     % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
     %
-    % ADDMATERIAL(...,'specularWrapS',WRAPS) sets the wrapping of
-    % the U coordinate of specular texture as per OpenGL. WRAPS
-    % should be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or
-    % "REPEAT".
+    % ADDMATERIAL(...,'sheenColorWrapS',WRAPS) sets the wrapping of the U
+    % coordinate of sheen colour texture as per OpenGL. WRAPS should be one
+    % of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
     %
-    % ADDMATERIAL(...,'specularWrapT',WRAPT) sets the wrapping of
-    % the V coordinate of specular texture as per OpenGL. WRAPT
-    % should be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or
-    % "REPEAT".
+    % ADDMATERIAL(...,'sheenColorWrapT',WRAPT) sets the wrapping of the V
+    % coordinate of sheen colour texture as per OpenGL. WRAPT should be one
+    % of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
     %
-    % ADDMATERIAL(...,'specularEmbedTexture',FALSE) includes the
-    % specular texture image as a link inside the GLTF file.
+    % ADDMATERIAL(...,'sheenColorEmbedTexture',FALSE) includes the sheen
+    % color texture image as a link inside the GLTF file.
     %
-    % ADDMATERIAL(...,'specularColorFactor',specularColorFactor)
-    % sets the base F0 color of the specular reflection.
+    % ADDMATERIAL(...,'sheenRoughnessFactor',SHEENROUGHNESSFACTOR) sets the
+    % base sheen roughness for the material.
+    %
+    % ADDMATERIAL(...,'sheenRoughnessTexture',FILENAME) uses the A channel
+    % of the image specified by FILENAME as the sheen colour for the
+    % material. The image format needs to be PNG.
+    %
+    % ADDMATERIAL(...,'sheenRoughnessTextureSet',SET) uses the TEXCOORD SET
+    % as the texture coordintes for the material sheen roughness.
+    %
+    % ADDMATERIAL(...,'sheenRoughnessMagFilter',MAGFILTER) sets the
+    % magnification filter for the sheen roughness texture as per OpenGL.
+    % MAGFILTER should be one of "NEAREST", "LINEAR",
+    % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
+    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
+    %
+    % ADDMATERIAL(...,'sheenRoughnessMinFilter',MINFILTER) sets the
+    % minification filter for the sheen roughness texture as per OpenGL.
+    % MINFILTER should be one of "NEAREST", "LINEAR",
+    % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
+    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
+    %
+    % ADDMATERIAL(...,'sheenRoughnessWrapS',WRAPS) sets the wrapping of the
+    % U coordinate of sheen roughness texture as per OpenGL. WRAPS should
+    % be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
+    %
+    % ADDMATERIAL(...,'sheenRoughnessWrapT',WRAPT) sets the wrapping of the
+    % V coordinate of sheen roughness texture as per OpenGL. WRAPT should
+    % be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
+    %
+    % ADDMATERIAL(...,'sheenRoughnessEmbedTexture',FALSE) includes the
+    % sheen roughness texture image as a link inside the GLTF file.
+    %
+    % ADDMATERIAL(...,'specularFactor',SPECULARFACTOR) sets the base
+    % strength of the specular reflection.
+    %
+    % ADDMATERIAL(...,'specularTexture',FILENAME) uses the A channel of the
+    % image specified by FILENAME as the strength of the specular
+    % reflection for the material. The image format needs to be PNG.
+    %
+    % ADDMATERIAL(...,'specularTextureSet',SET) uses the TEXCOORD SET as
+    % the texture coordintes for the material specular texture.
+    %
+    % ADDMATERIAL(...,'specularMagFilter',MAGFILTER) sets the magnification
+    % filter for the specular texture as per OpenGL. MAGFILTER should be
+    % one of "NEAREST", "LINEAR", "NEAREST_MIPMAP_NEAREST",
+    % "LINEAR_MIPMAP_NEAREST", "NEAREST_MIPMAP_LINEAR", or
+    % "LINEAR_MIPMAP_LINEAR".
+    %
+    % ADDMATERIAL(...,'specularMinFilter',MINFILTER) sets the minification
+    % filter for the specular texture as per OpenGL. MINFILTER should be
+    % one of "NEAREST", "LINEAR", "NEAREST_MIPMAP_NEAREST",
+    % "LINEAR_MIPMAP_NEAREST", "NEAREST_MIPMAP_LINEAR", or
+    % "LINEAR_MIPMAP_LINEAR".
+    %
+    % ADDMATERIAL(...,'specularWrapS',WRAPS) sets the wrapping of the U
+    % coordinate of specular texture as per OpenGL. WRAPS should be one of
+    % "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
+    %
+    % ADDMATERIAL(...,'specularWrapT',WRAPT) sets the wrapping of the V
+    % coordinate of specular texture as per OpenGL. WRAPT should be one of
+    % "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
+    %
+    % ADDMATERIAL(...,'specularEmbedTexture',FALSE) includes the specular
+    % texture image as a link inside the GLTF file.
+    %
+    % ADDMATERIAL(...,'specularColorFactor',specularColorFactor) sets the
+    % base F0 color of the specular reflection.
     %
     % ADDMATERIAL(...,'specularColorTexture',FILENAME) uses the RGB
-    % channels of the image specified by FILENAME as the F0 color
-    % of the specular reflection. The image format needs to be JPEG
-    % or PNG.
+    % channels of the image specified by FILENAME as the F0 color of the
+    % specular reflection. The image format needs to be JPEG or PNG.
     %
-    % ADDMATERIAL(...,'specularColorTextureSet',SET) uses the
-    % TEXCOORD SET as the texture coordintes for the material
-    % specular colour.
+    % ADDMATERIAL(...,'specularColorTextureSet',SET) uses the TEXCOORD SET
+    % as the texture coordintes for the material specular colour.
     %
     % ADDMATERIAL(...,'specularColorMagFilter',MAGFILTER) sets the
-    % magnification filter for the specular colour texture as per
-    % OpenGL. MAGFILTER should be one of "NEAREST", "LINEAR",
+    % magnification filter for the specular colour texture as per OpenGL.
+    % MAGFILTER should be one of "NEAREST", "LINEAR",
     % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
     % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
     %
     % ADDMATERIAL(...,'specularColorMinFilter',MINFILTER) sets the
-    % minification filter for the specular colour texture as per
-    % OpenGL. MINFILTER should be one of "NEAREST", "LINEAR",
+    % minification filter for the specular colour texture as per OpenGL.
+    % MINFILTER should be one of "NEAREST", "LINEAR",
     % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
     % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
     %
-    % ADDMATERIAL(...,'specularColorWrapS',WRAPS) sets the wrapping
-    % of the U coordinate of specular colour texture as per OpenGL.
-    % WRAPS should be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or
-    % "REPEAT".
+    % ADDMATERIAL(...,'specularColorWrapS',WRAPS) sets the wrapping of the
+    % U coordinate of specular colour texture as per OpenGL. WRAPS should
+    % be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
     %
-    % ADDMATERIAL(...,'specularColorWrapT',WRAPT) sets the wrapping
-    % of the V coordinate of specular colour texture as per OpenGL.
-    % WRAPT should be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or
-    % "REPEAT".
+    % ADDMATERIAL(...,'specularColorWrapT',WRAPT) sets the wrapping of the
+    % V coordinate of specular colour texture as per OpenGL. WRAPT should
+    % be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
     %
-    % ADDMATERIAL(...,'specularColorEmbedTexture',FALSE) includes
-    % the specular colour texture image as a link inside the GLTF
-    % file.
+    % ADDMATERIAL(...,'specularColorEmbedTexture',FALSE) includes the
+    % specular colour texture image as a link inside the GLTF file.
     %
-    % ADDMATERIAL(...,'unlit',TRUE) sets the material as a
-    % constantly shaded surface that is independent of lighting.
+    % ADDMATERIAL(...,'unlit',TRUE) sets the material as a constantly
+    % shaded surface that is independent of lighting.
+    %
+    % ADDMATERIAL(...,'iridescenceFactor',IRIDESCENCeFACTOR) sets the
+    % iridescence intensity factor.
+    %
+    % ADDMATERIAL(...,'iridescenceTexture',FILENAME) uses the image
+    % specified by FILENAME as the iridescence intensity texture for the
+    % material. The image format needs to be JPEG or PNG.
+    %
+    % ADDMATERIAL(...,'iridescenceTextureSet',SET) uses the TEXCOORD SET as
+    % the texture coordintes for the material iridescence intensity.
+    %
+    % ADDMATERIAL(...,'iridescenceIor',IOR) sets the index of refraction of
+    % the dielectric thin-film layer.
+    %
+    % ADDMATERIAL(...,'iridescenceThicknessMinimum',THICKNESSMINIMUM) sets
+    % the minimum thickness of the thin-film layer given in nanometers.
+    %
+    % ADDMATERIAL(...,'iridescenceThicknessMaximum',THICKNESSMAXIMUM) sets
+    % the maximum thickness of the thin-film layer given in nanometers.
+    %
+    % ADDMATERIAL(...,'iridescenceMagFilter',MAGFILTER) sets the
+    % magnification filter for the iridescence intensity texture as per
+    % OpenGL. MAGFILTER should be one of "NEAREST", "LINEAR",
+    % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
+    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR". 
+    %
+    % ADDMATERIAL(...,'iridescenceMinFilter',MINFILTER) sets the
+    % minification filter for the iridescence intensity texture as per
+    % OpenGL. MAGFILTER should be one of "NEAREST", "LINEAR",
+    % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
+    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
+    %
+    % ADDMATERIAL(...,'iridescenceWrapS',WRAPS) sets the wrapping of the U
+    % coordinate of iridescence intensity texture as per OpenGL. WRAPS
+    % should be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
+    %
+    % ADDMATERIAL(...,'iridescenceWrapT',WRAPT) sets the wrapping of the V
+    % coordinate of iridescence intensity texture as per OpenGL. WRAPS
+    % should be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
+    %
+    % ADDMATERIAL(...,'iridescenceEmbedTexture',FALSE) includes the
+    % iridescence intensity texture image as a link inside the GLTF file.
+    %
+    % ADDMATERIAL(...,'iridescenceThicknessTexture',FILENAME) uses the
+    % image specified by FILENAME as the thickness texture of the thin-film
+    % layer for the material. The image format needs to be JPEG or PNG.
+    %
+    % ADDMATERIAL(...,'iridescenceThicknessTextureSet',SET) uses the
+    % TEXCOORD SET as the texture coordintes for the thin-film layer
+    % thickness of the material.
+    %
+    % ADDMATERIAL(...,'iridescenceThicknessMagFilter',MAGFILTER) sets the
+    % magnification filter for the thickness texture of the thin-film layer
+    % as per OpenGL. MAGFILTER should be one of "NEAREST", "LINEAR",
+    % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
+    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
+    %
+    % ADDMATERIAL(...,'iridescenceThicknessMinFilter',MINFILTER) sets the
+    % minification filter for the thickness texture of the thin-film layer
+    % as per OpenGL. MAGFILTER should be one of "NEAREST", "LINEAR",
+    % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
+    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
+    %
+    % ADDMATERIAL(...,'iridescenceThicknessWrapS',WRAPS) sets the wrapping
+    % of the U coordinate of thickness texture of the thin-film layer as
+    % per OpenGL. WRAPS should be one of "CLAMP_TO_EDGE",
+    % "MIRRORED_REPEAT", or "REPEAT".
+    %
+    % ADDMATERIAL(...,'iridescenceThicknessWrapT',WRAPT) sets the wrapping
+    % of the V coordinate of thickness texture of the thin-film layer as
+    % per OpenGL. WRAPS should be one of "CLAMP_TO_EDGE",
+    % "MIRRORED_REPEAT", or "REPEAT".
+    %
+    % ADDMATERIAL(...,'iridescenceThicknessEmbedTexture',FALSE) includes
+    % the thickness texture image of the thin-film layer as a link inside
+    % the GLTF file.
+    %
+    % © Copyright 2014-2023 Rohan Chabukswar
+    %
+    % This file is part of MATLAB GLTF.
+    %
+    % MATLAB GLTF is free software: you can redistribute it and/or modify
+    % it under the terms of the GNU General Public License as published by
+    % the Free Software Foundation, either version 3 of the License, or (at
+    % your option) any later version.
+    %
+    % MATLAB GLTF is distributed in the hope that it will be useful, but
+    % WITHOUT ANY WARRANTY; without even the implied warranty of
+    % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    % General Public License for more details.
+    %
+    % You should have received a copy of the GNU General Public License
+    % along with MATLAB GLTF. If not, see <https://www.gnu.org/licenses/>.
     %
     filter_str_values=["NEAREST","LINEAR","NEAREST_MIPMAP_NEAREST","LINEAR_MIPMAP_NEAREST","NEAREST_MIPMAP_LINEAR","LINEAR_MIPMAP_LINEAR"];
     wrap_str_values=["CLAMP_TO_EDGE","MIRRORED_REPEAT","REPEAT"];
@@ -617,6 +601,7 @@ function material_idx=addMaterial(gltf,varargin)
     ips.addParameter('emissiveWrapS',missing,@(x)GLTF.validateString(x,wrap_str_values));
     ips.addParameter('emissiveWrapT',missing,@(x)GLTF.validateString(x,wrap_str_values));
     ips.addParameter('emissiveEmbedTexture',true,@islogical);
+    ips.addParameter('emissiveStrength',[],@isnumeric);
     ips.addParameter('transmissionFactor',[],@isnumeric);
     ips.addParameter('transmissionTexture',missing,@isstring);
     ips.addParameter('transmissionTextureSet',nan,@isnumeric);
@@ -659,23 +644,6 @@ function material_idx=addMaterial(gltf,varargin)
     ips.addParameter('clearcoatNormalWrapS',missing,@(x)GLTF.validateString(x,wrap_str_values));
     ips.addParameter('clearcoatNormalWrapT',missing,@(x)GLTF.validateString(x,wrap_str_values));
     ips.addParameter('clearcoatNormalEmbedTexture',true,@islogical);
-    ips.addParameter('diffuseFactor',[],@isnumeric);
-    ips.addParameter('diffuseTexture',missing,@isstring);
-    ips.addParameter('diffuseTextureSet',nan,@isnumeric);
-    ips.addParameter('diffuseMagFilter',missing,@(x)GLTF.validateString(x,filter_str_values));
-    ips.addParameter('diffuseMinFilter',missing,@(x)GLTF.validateString(x,filter_str_values));
-    ips.addParameter('diffuseWrapS',missing,@(x)GLTF.validateString(x,wrap_str_values));
-    ips.addParameter('diffuseWrapT',missing,@(x)GLTF.validateString(x,wrap_str_values));
-    ips.addParameter('diffuseEmbedTexture',true,@islogical);
-    ips.addParameter('pbrSpecularFactor',[],@isnumeric);
-    ips.addParameter('pbrGlossinessFactor',[],@isnumeric);
-    ips.addParameter('specularGlossinessTexture',missing,@isstring);
-    ips.addParameter('specularGlossinessTextureSet',nan,@isnumeric);
-    ips.addParameter('specularGlossinessMagFilter',missing,@(x)GLTF.validateString(x,filter_str_values));
-    ips.addParameter('specularGlossinessMinFilter',missing,@(x)GLTF.validateString(x,filter_str_values));
-    ips.addParameter('specularGlossinessWrapS',missing,@(x)GLTF.validateString(x,wrap_str_values));
-    ips.addParameter('specularGlossinessWrapT',missing,@(x)GLTF.validateString(x,wrap_str_values));
-    ips.addParameter('specularGlossinessEmbedTexture',true,@islogical);
     ips.addParameter('sheenColorFactor',[],@isnumeric);
     ips.addParameter('sheenColorTexture',missing,@isstring);
     ips.addParameter('sheenColorTextureSet',nan,@isnumeric);
@@ -709,6 +677,24 @@ function material_idx=addMaterial(gltf,varargin)
     ips.addParameter('specularColorWrapT',missing,@(x)GLTF.validateString(x,wrap_str_values));
     ips.addParameter('specularColorEmbedTexture',true,@islogical);
     ips.addParameter('unlit',false,@islogical);
+    ips.addParameter('iridescenceFactor',[],@isnumeric);
+    ips.addParameter('iridescenceTexture',missing,@isstring);
+    ips.addParameter('iridescenceTextureSet',nan,@isnumeric);
+    ips.addParameter('iridescenceIor',[],@isnumeric);
+    ips.addParameter('iridescenceThicknessMinimum',[],@isnumeric);
+    ips.addParameter('iridescenceThicknessMaximum',[],@isnumeric);
+    ips.addParameter('iridescenceMagFilter',missing,@(x)GLTF.validateString(x,filter_str_values));
+    ips.addParameter('iridescenceMinFilter',missing,@(x)GLTF.validateString(x,filter_str_values));
+    ips.addParameter('iridescenceWrapS',missing,@(x)GLTF.validateString(x,wrap_str_values));
+    ips.addParameter('iridescenceWrapT',missing,@(x)GLTF.validateString(x,wrap_str_values));
+    ips.addParameter('iridescenceEmbedTexture',true,@islogical);
+    ips.addParameter('iridescenceThicknessTexture',missing,@isstring);
+    ips.addParameter('iridescenceThicknessTextureSet',nan,@isnumeric);
+    ips.addParameter('iridescenceThicknessMagFilter',missing,@(x)GLTF.validateString(x,filter_str_values));
+    ips.addParameter('iridescenceThicknessMinFilter',missing,@(x)GLTF.validateString(x,filter_str_values));
+    ips.addParameter('iridescenceThicknessWrapS',missing,@(x)GLTF.validateString(x,wrap_str_values));
+    ips.addParameter('iridescenceThicknessWrapT',missing,@(x)GLTF.validateString(x,wrap_str_values));
+    ips.addParameter('iridescenceThicknessEmbedTexture',true,@islogical);
     ips.parse(varargin{:});
     parameters=ips.Results;
     name=parameters.name;
@@ -746,6 +732,7 @@ function material_idx=addMaterial(gltf,varargin)
     emissiveWrapS=upper(parameters.emissiveWrapS);
     emissiveWrapT=upper(parameters.emissiveWrapS);
     emissiveEmbedTexture=parameters.emissiveEmbedTexture;
+    emissiveStrength=parameters.emissiveStrength;
     transmissionFactor=parameters.transmissionFactor;
     transmissionTexture=parameters.transmissionTexture;
     transmissionTextureSet=parameters.transmissionTextureSet;
@@ -788,23 +775,6 @@ function material_idx=addMaterial(gltf,varargin)
     clearcoatNormalWrapS=upper(parameters.clearcoatNormalWrapS);
     clearcoatNormalWrapT=upper(parameters.clearcoatNormalWrapT);
     clearcoatNormalEmbedTexture=parameters.clearcoatNormalEmbedTexture;
-    diffuseFactor=parameters.diffuseFactor;
-    diffuseTexture=parameters.diffuseTexture;
-    diffuseTextureSet=parameters.diffuseTextureSet;
-    diffuseMagFilter=upper(parameters.diffuseMagFilter);
-    diffuseMinFilter=upper(parameters.diffuseMinFilter);
-    diffuseWrapS=upper(parameters.diffuseWrapS);
-    diffuseWrapT=upper(parameters.diffuseWrapT);
-    diffuseEmbedTexture=parameters.diffuseEmbedTexture;
-    pbrSpecularFactor=parameters.pbrSpecularFactor;
-    pbrGlossinessFactor=parameters.pbrGlossinessFactor;
-    specularGlossinessTexture=parameters.specularGlossinessTexture;
-    specularGlossinessTextureSet=parameters.specularGlossinessTextureSet;
-    specularGlossinessMagFilter=upper(parameters.specularGlossinessMagFilter);
-    specularGlossinessMinFilter=upper(parameters.specularGlossinessMinFilter);
-    specularGlossinessWrapS=upper(parameters.specularGlossinessWrapS);
-    specularGlossinessWrapT=upper(parameters.specularGlossinessWrapT);
-    specularGlossinessEmbedTexture=parameters.specularGlossinessEmbedTexture;
     sheenColorFactor=parameters.sheenColorFactor;
     sheenColorTexture=parameters.sheenColorTexture;
     sheenColorTextureSet=parameters.sheenColorTextureSet;
@@ -837,6 +807,24 @@ function material_idx=addMaterial(gltf,varargin)
     specularColorWrapS=upper(parameters.specularColorWrapS);
     specularColorWrapT=upper(parameters.specularColorWrapT);
     specularColorEmbedTexture=parameters.specularColorEmbedTexture;
+    iridescenceFactor=parameters.iridescenceFactor;
+    iridescenceTexture=parameters.iridescenceTexture;
+    iridescenceTextureSet=parameters.iridescenceTextureSet;
+    iridescenceIor=parameters.iridescenceIor;
+    iridescenceThicknessMinimum=parameters.iridescenceThicknessMinimum;
+    iridescenceThicknessMaximum=parameters.iridescenceThicknessMaximum;
+    iridescenceMagFilter=upper(parameters.iridescenceMagFilter);
+    iridescenceMinFilter=upper(parameters.iridescenceMinFilter);
+    iridescenceWrapS=upper(parameters.iridescenceWrapS);
+    iridescenceWrapT=upper(parameters.iridescenceWrapT);
+    iridescenceEmbedTexture=parameters.iridescenceEmbedTexture;
+    iridescenceThicknessTexture=parameters.iridescenceThicknessTexture;
+    iridescenceThicknessTextureSet=parameters.iridescenceThicknessTextureSet;
+    iridescenceThicknessMagFilter=upper(parameters.iridescenceThicknessMagFilter);
+    iridescenceThicknessMinFilter=upper(parameters.iridescenceThicknessMinFilter);
+    iridescenceThicknessWrapS=upper(parameters.iridescenceThicknessWrapS);
+    iridescenceThicknessWrapT=upper(parameters.iridescenceThicknessWrapT);
+    iridescenceThicknessEmbedTexture=parameters.iridescenceThicknessEmbedTexture;
     unlit=parameters.unlit;
     material=struct();
     if(~isempty(baseColorFactor))
@@ -856,7 +844,7 @@ function material_idx=addMaterial(gltf,varargin)
         end
         material.pbrMetallicRoughness.baseColorFactor=baseColorFactor;
     end
-    if(alphaMode~="OPAQUE")
+    if(and(alphaMode~="OPAQUE",~ismissing(alphaMode)))
         material.alphaMode=alphaMode;
     end
     if(~isempty(doubleSided))
@@ -898,6 +886,15 @@ function material_idx=addMaterial(gltf,varargin)
     if(~isempty(emissiveFactor))
         material.emissiveFactor=emissiveFactor;
     end
+    if(~ismember("emissiveStrength",ips.UsingDefaults))
+        addExtension(gltf,"KHR_materials_emissive_strength");
+        if(~isempty(emissiveStrength))
+            iorstruct=struct('emissiveStrength',emissiveStrength);
+        else
+            iorstruct=struct();
+        end
+        material.extensions.KHR_materials_ior=struct('KHR_materials_emissive_strength',iorstruct);
+    end
     if(or(~isempty(transmissionFactor),~ismissing(transmissionTexture)))
         addExtension(gltf,"KHR_materials_transmission");
         KHR_materials_transmission_struct=struct();
@@ -922,6 +919,7 @@ function material_idx=addMaterial(gltf,varargin)
         material.extensions.KHR_materials_ior=struct('KHR_materials_ior',iorstruct);
     end
     if(or(or(~isempty(thicknessFactor),~ismissing(thicknessTexture)),or(~isempty(attenuationDistance),~isempty(attenuationColor))))
+        addExtension(gltf,"KHR_materials_transmission");
         addExtension(gltf,"KHR_materials_volume");
         KHR_materials_volume_struct=struct();
         if(~isempty(thicknessFactor))
@@ -969,32 +967,6 @@ function material_idx=addMaterial(gltf,varargin)
             KHR_materials_clearcoat_struct.clearcoatNormalTexture.texCoord=clearcoatNormalTextureSet;
         end
         material.extensions.KHR_materials_clearcoat=KHR_materials_clearcoat_struct;
-    end
-    if(or(or(~isempty(diffuseFactor),~ismissing(diffuseTexture)),or(or(~isempty(pbrSpecularFactor),~isempty(pbrGlossinessFactor)),~ismissing(specularGlossinessTexture))))
-        addExtension(gltf,"KHR_materials_pbrSpecularGlossiness");
-        KHR_materials_pbrSpecularGlossiness_struct=struct();
-        if(~isempty(diffuseFactor))
-            KHR_materials_pbrSpecularGlossiness_struct.diffuseFactor=diffuseFactor;
-        end
-        if(~ismissing(diffuseTexture))
-            KHR_materials_pbrSpecularGlossiness_struct.diffuseTexture=struct('index',addTexture(gltf,diffuseTexture,'magFilter',diffuseMagFilter,'minFilter',diffuseMinFilter,'wrapS',diffuseWrapS,'wrapT',diffuseWrapT,'embedTexture',diffuseEmbedTexture));
-        end
-        if(~isnan(diffuseTextureSet))
-            KHR_materials_pbrSpecularGlossiness_struct.diffuseTexture.texCoord=diffuseTextureSet;
-        end
-        if(~isempty(pbrSpecularFactor))
-            KHR_materials_pbrSpecularGlossiness_struct.specularFactor=pbrSpecularFactor;
-        end
-        if(~isempty(pbrGlossinessFactor))
-            KHR_materials_pbrSpecularGlossiness_struct.glossinessFactor=pbrGlossinessFactor;
-        end
-        if(~ismissing(specularGlossinessTexture))
-            KHR_materials_pbrSpecularGlossiness_struct.specularGlossinessTexture=struct('index',addTexture(gltf,specularGlossinessTexture,'magFilter',specularGlossinessMagFilter,'minFilter',specularGlossinessMinFilter,'wrapS',specularGlossinessWrapS,'wrapT',specularGlossinessWrapT,'embedTexture',specularGlossinessEmbedTexture));
-        end
-        if(~isnan(specularGlossinessTextureSet))
-            KHR_materials_pbrSpecularGlossiness_struct.specularGlossinessTexture.texCoord=specularGlossinessTextureSet;
-        end
-        material.extensions.KHR_materials_pbrSpecularGlossiness=KHR_materials_pbrSpecularGlossiness_struct;
     end
     if(or(or(~isempty(sheenColorFactor),~ismissing(sheenColorTexture)),or(~isempty(sheenRoughnessFactor),~ismissing(sheenRoughnessTexture))))
         addExtension(gltf,"KHR_materials_sheen");
@@ -1045,6 +1017,35 @@ function material_idx=addMaterial(gltf,varargin)
     if(unlit)
         addExtension(gltf,"KHR_materials_unlit");
         material.extensions.KHR_materials_unlit=struct;
+    end
+    if(or(or(~isempty(iridescenceFactor),~ismissing(iridescenceTexture)),or(or(~isempty(iridescenceThicknessMinimum),~isempty(iridescenceThicknessMaximum)),~ismissing(iridescenceThicknessTexture))))
+        addExtension(gltf,"KHR_materials_iridescence");
+        KHR_materials_iridescence_struct=struct();
+        if(~isempty(iridescenceFactor))
+	        KHR_materials_iridescence_struct.iridescenceFactor=iridescenceFactor;
+        end
+        if(~ismissing(iridescenceTexture))
+	        KHR_materials_iridescence_struct.iridescenceTexture=struct('index',addTexture(gltf,iridescenceTexture,'magFilter',iridescenceMagFilter,'minFilter',iridescenceMinFilter,'wrapS',iridescenceWrapS,'wrapT',iridescenceWrapT,'embedTexture',iridescenceEmbedTexture));
+        end
+        if(~isnan(iridescenceTextureSet))
+	        KHR_materials_iridescence_struct.iridescenceTexture.texCoord=iridescenceTextureSet;
+        end
+        if(~isempty(iridescenceIor))
+	        KHR_materials_iridescence_struct.iridescenceIor=iridescenceIor;
+        end 
+        if(~isempty(iridescenceThicknessMinimum))
+	        KHR_materials_iridescence_struct.iridescenceThicknessMinimum=iridescenceThicknessMinimum;
+        end
+        if(~isempty(iridescenceThicknessMaximum))
+	        KHR_materials_iridescence_struct.iridescenceThicknessMaximum=iridescenceThicknessMaximum;
+        end
+        if(~ismissing(iridescenceThicknessTexture))
+	        KHR_materials_iridescence_struct.iridescenceThicknessTexture=struct('index',addTexture(gltf,iridescenceThicknessTexture,'magFilter',iridescenceThicknessMagFilter,'minFilter',iridescenceThicknessMinFilter,'wrapS',iridescenceThicknessWrapS,'wrapT',iridescenceThicknessWrapT,'embedTexture',iridescenceThicknessEmbedTexture));
+        end
+        if(~isnan(iridescenceThicknessTextureSet))
+	        KHR_materials_iridescence_struct.iridescenceThicknessTexture.texCoord=iridescenceThicknessTextureSet;
+        end
+        material.extensions.KHR_materials_iridescence=KHR_materials_iridescence_struct;
     end
     if(~isprop(gltf,'materials'))
         gltf.addprop('materials');

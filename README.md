@@ -2,7 +2,7 @@
 
 GLTF is a MATLAB class to export 3D graphs and other content into the GL Transmission Format (glTF).
 
-Last updated: March 20, 2023.
+Last updated: March 21, 2023.
 
 > © Copyright 2014-2023 Rohan Chabukswar
 >
@@ -237,6 +237,28 @@ The image can be stretched or otherwise deformed in a piece-wise (face-wise) lin
 * Transparent, refracting volumes (not supported by PowerPoint).
 * Write a GLB file (binary file for higher efficiency and smaller size).
 * Write a COLLADA file (for backwards and MacOS compatibility).
+
+## Extensions
+glTF is fully extensible and defines an extension mechanism that allows the base format to be extended with new capabilities. The following extensions are currently supported by this class:
+
+|Extension|Prefix|Category|Status|Notes|
+|---|---|---|---|---|
+|[`KHR_lights_punctual`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_lights_punctual)|KHR|Light|Ratified|Defines  three "punctual" light sources: directional, point and spot. Punctual lights are defined as parameterized, infinitely small points that emit light in well-defined directions and intensities.|
+|[`KHR_materials_clearcoat`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_clearcoat)|KHR|Material|Ratified|Defines a clear coating that can be layered on top of an existing glTF material definition. A clear coat is a common technique used in Physically-Based Rendering to represent a protective layer applied to a base material.|
+|[`KHR_materials_emissive_strength`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_emissive_strength)|KHR|Material|Ratified|Defines a new emissiveStrength scalar factor that governs the upper limit of emissive strength per material, for use in PBR environments with high-dynamic range reflections and lighting, stronger emission effects may be desirable.|
+|[`KHR_materials_ior`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_ior)|KHR|Material|Ratified|Allows users to set the index of refraction to a certain value.|
+|[`KHR_materials_iridescence`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_iridescence)|KHR|Material|Ratified|Allows user to specify thickness and index of refraction (IOR) of the thin-film, enabling iridescent materials (an effect where hue varies depending on the viewing angle and illumination angle).|
+|[`KHR_materials_sheen`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_sheen)|KHR|Material|Ratified|Defines a sheen that can be layered on top of an existing glTF material definition, a common technique used in Physically-Based Rendering to represent cloth and fabric materials.|
+|[`KHR_materials_specular`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_specular)|KHR|Material|Ratified|Allows users to configure the strength and the F0 color of the specular reflection in the dielectric BRDF.|
+|[`KHR_materials_transmission`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_transmission)|KHR|Material|Ratified|Provides a way to define materials that are transparent to light in a physically plausible way, enabling the creation of transparent materials that absorb, reflect and transmit light depending on the incident angle and the wavelength of light, for thin-surface transmissive materials include plastics and glass.|
+|[`KHR_materials_unlit`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_unlit)|KHR|Material|Ratified|Defines an unlit shading model for use in glTF 2.0 materials, as an alternative to the Physically Based Rendering (PBR) shading models provided by the core specification.|
+|[`KHR_materials_variants`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_variants)|KHR|Variant|Ratified|Allows for a compact glTF representation of multiple material variants of an asset, structured to allow low-latency switching at runtime.|
+|[`KHR_materials_volume`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_volume)|KHR|Material|Ratified|When combined with KHR_materials_transmission, a refractive microfacet BTDF describes the transmission of light through the volume boundary, providing effects like refraction and absorption.|
+|[`EXT_mesh_gpu_instancing`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Vendor/EXT_mesh_gpu_instancing)|EXT|Performance|Experimental|Enables GPU instancing, rendering many copies of a single mesh at once using a small number of draw calls.|
+|[`EXT_texture_webp`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Vendor/EXT_texture_webp)|EXT|Texture|Complete|Allows glTF models to use WebP as a valid image format|
+|[`MSFT_audio_emitter`](https://github.com/KhronosGroup/glTF/pull/1400)|MSFT|Audio|Pull request|Adds a specification for spatialized and ambient audio with clip randomization|
+
+**Note:** The [`MSFT_audio_emitter`](https://github.com/KhronosGroup/glTF/pull/1400), although abandoned, is included since it is supported by [Babylon.JS](https://www.babylonjs.com/). It will be replaced by the [`KHR_audio`](https://github.com/KhronosGroup/glTF/pull/2137) once that is marked as complete.
 
 # MATLAB Graph Examples
 **`surf2patch` is your friend.**

@@ -40,6 +40,12 @@ function base64string=string2URI(filename)
         fclose(fid);
         encoder=org.apache.commons.codec.binary.Base64;
         base64string=['data:audio/wav;base64,' char(encoder.encode(bytes)')];
+    elseif(ext==".webp")
+        fid=fopen(filename,'rb');
+        bytes=fread(fid);
+        fclose(fid);
+        encoder=org.apache.commons.codec.binary.Base64;
+        base64string=['data:image/webp;base64,' char(encoder.encode(bytes)')];
     else
         base64string=filename;
     end

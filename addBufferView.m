@@ -1,10 +1,10 @@
 function bufferView=addBufferView(gltf,data,componentType,target)
-    % Add binary data to the model.
+    % Add bufferView with binary data to the model.
     %
-    % ADDBINARYDATA(GLTF,DATA,COMPONENTTYPE,DATACOUNT,MINMAX) adds binary
-    % data DATA to GLTF and returns its accessor index. COMPONENTTYPE
-    % specifies the OpenGL component type of the data and needs to be one
-    % of the following (with the corresponding MATLAB data class):
+    % ADDBUFFERVIEW(GLTF,DATA,COMPONENTTYPE,TARGET) adds binary data DATA
+    % to GLTF and returns its accessor index. COMPONENTTYPE specifies the
+    % OpenGL component type of the data and needs to be one of the
+    % following (with the corresponding MATLAB data class):
     %   "BYTE":             INT8
     %   "UNSIGNED_BYTE":	UINT8
     %   "SHORT":            INT16
@@ -34,9 +34,9 @@ function bufferView=addBufferView(gltf,data,componentType,target)
     % You should have received a copy of the GNU General Public License
     % along with MATLAB GLTF. If not, see <https://www.gnu.org/licenses/>.
     %
-    componentType_str=["BYTE","UNSIGNED_BYTE","SHORT","UNSIGNED_SHORT","UNSIGNED_INT","FLOAT"];
-    componentType_Fcn={ @int8,         @uint8, @int16,         @uint16,       @uint32,@single};
-    componentTypeSize=[     1,              1,      2,               2,             4,      4];
+    componentType_str=["BYTE","UNSIGNED_BYTE","SHORT","UNSIGNED_SHORT","UNSIGNED_INT","FLOAT","BINARY"];
+    componentType_Fcn={ @int8,         @uint8, @int16,         @uint16,       @uint32,@single,   @(x)x};
+    componentTypeSize=[     1,              1,      2,               2,             4,      4,        0];
     target_num=[         34962,                 34963];
     target_str=["ARRAY_BUFFER","ELEMENT_ARRAY_BUFFER"];
     componentType=upper(componentType);
@@ -47,6 +47,7 @@ function bufferView=addBufferView(gltf,data,componentType,target)
         GLTF.validateString(target,target_str);
         target=target_num(target_str==target);
     end
+    isBinary=strcmpi(componentType,"BINARY");
     byteCount=componentTypeSize(componentType_str==componentType);
     castFcn=componentType_Fcn{componentType_str==componentType};
     bufferView=numel(gltf.bufferViews);
@@ -59,11 +60,16 @@ function bufferView=addBufferView(gltf,data,componentType,target)
         bufferOffset=numel(gltf.buffers{bufferCount});
     end
     gltf.bufferViews{bufferView+1}.buffer=uint32(bufferCount-1);
-    gltf.bufferViews{bufferView+1}.byteLength=uint32(numel(data)*byteCount);
     gltf.bufferViews{bufferView+1}.byteOffset=uint32(bufferOffset);
     if(~isempty(target))
         gltf.bufferViews{bufferView+1}.target=uint32(target);
     end
-    binData=typecast(castFcn(reshape(data',1,[])),'uint8');
-    gltf.buffers{bufferCount}=[gltf.buffers{bufferCount};binData(:)];
+    if(isBinary)
+        gltf.bufferViews{bufferView+1}.byteLength=uint32(numel(data));
+        gltf.buffers{bufferCount}=[gltf.buffers{bufferCount};data(:)];
+    else
+        gltf.bufferViews{bufferView+1}.byteLength=uint32(numel(data)*byteCount);
+        binData=typecast(castFcn(reshape(data',1,[])),'uint8');
+        gltf.buffers{bufferCount}=[gltf.buffers{bufferCount};binData(:)];
+    end
 end

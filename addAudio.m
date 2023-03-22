@@ -32,8 +32,10 @@ function audio_id=addAudio(gltf,audio,varargin)
     parameters=ips.Results;
     embedAudio=parameters.embedAudio;
     if(embedAudio)
-        data=audioread(audio);
-        bufferView=addBufferView(gltf,data,"FLOAT");
+        fid2=fopen(string(audio),'r');
+        data=uint8(fread(fid2));
+        fclose(fid2);
+        bufferView=addBufferView(gltf,data,"BINARY");
         audioStruct={struct('bufferView',uint32(bufferView),'mimeType',"audio/mpeg")};
     else
         audioStruct={struct('uri',audio)};
@@ -44,7 +46,7 @@ function audio_id=addAudio(gltf,audio,varargin)
     end
     if(isfield(gltf.extensions,'KHR_audio') && isfield(gltf.extensions.KHR_audio,'audio') && ~isempty(gltf.extensions.KHR_audio.audio))
         audio_id=numel([gltf.extensions.KHR_audio.audio{:}]);
-        gltf.extensions.KHR_audio.audio=[gltf.extensions.KHR_audio.audio{:} audioStruct{:}];
+        gltf.extensions.KHR_audio.audio=[gltf.extensions.KHR_audio.audio(:) audioStruct(:)];
     else
         audio_id=0;
         gltf.extensions.KHR_audio.audio=audioStruct;

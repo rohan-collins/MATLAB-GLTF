@@ -142,17 +142,17 @@ function emitter_id=addPositionalEmitter(gltf,varargin)
     end
     if(isfield(gltf.extensions,'KHR_audio') && isfield(gltf.extensions.KHR_audio,'emitters') && ~isempty(gltf.extensions.KHR_audio.emitters))
         emitter_id=numel([gltf.extensions.KHR_audio.emitters{:}]);
-        gltf.extensions.KHR_audio.emitters=GLTF.toCells([gltf.extensions.KHR_audio.emitters{:} emitterStruct{:}]);
+        gltf.extensions.KHR_audio.emitters=[gltf.extensions.KHR_audio.emitters(:);{emitterStruct}];
     else
         emitter_id=0;
-        gltf.extensions.KHR_audio.emitters=emitterStruct;
+        gltf.extensions.KHR_audio.emitters={emitterStruct};
     end
     for i=1:numel(addToNode)
         node_idx=addToNode(i)+1;
-        if(isfield(gltf.nodes{node_idx},'extensions') && isfield(gltf.nodes{node_idx}.extensions,'KHR_audio') && isfield(gltf.nodes{node_idx}.extensions.KHR_audio,'emitters'))
-            gltf.nodes{node_idx}.extensions.KHR_audio.emitters=GLTF.toCells([gltf.nodes{node_idx}.extensions.KHR_audio.emitters{:} emitter_id]);
+        if(isfield(gltf.nodes{node_idx},'extensions') && isfield(gltf.nodes{node_idx}.extensions,'KHR_audio') && isfield(gltf.nodes{node_idx}.extensions.KHR_audio,'emitter'))
+            gltf.nodes{node_idx}.extensions.KHR_audio.emitter=emitter_id;
         else
-            gltf.nodes{node_idx}.extensions.KHR_audio.emitters=GLTF.toCells(emitter_id);
+            gltf.nodes{node_idx}.extensions.KHR_audio.emitter=emitter_id;
         end
     end
 end

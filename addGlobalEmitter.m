@@ -58,10 +58,10 @@ function emitter_id=addGlobalEmitter(gltf,varargin)
     end
     if(isfield(gltf.extensions,'KHR_audio') && isfield(gltf.extensions.KHR_audio,'emitters') && ~isempty(gltf.extensions.KHR_audio.emitters))
         emitter_id=numel([gltf.extensions.KHR_audio.emitters{:}]);
-        gltf.extensions.KHR_audio.emitters=[gltf.extensions.KHR_audio.emitters{:} emitterStruct{:}];
+        gltf.extensions.KHR_audio.emitters=[gltf.extensions.KHR_audio.emitters(:);emitterStruct];
     else
         emitter_id=0;
-        gltf.extensions.KHR_audio.emitters=emitterStruct;
+        gltf.extensions.KHR_audio.emitters={emitterStruct};
     end
     if(addToScene)
         if(isfield(gltf.scenes{1},'extensions') && isfield(gltf.scenes{1}.extensions,'KHR_audio') && isfield(gltf.scenes{1}.extensions.KHR_audio,'emitters'))

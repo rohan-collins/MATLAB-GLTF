@@ -54,7 +54,7 @@ function source_id=addSource(gltf,audio_id,varargin)
         sourceStruct.autoplay=autoplay;
     end
     if(loop)
-        sourceStruct.autoplay=loop;
+        sourceStruct.loop=loop;
     end
     addExtension(gltf,"KHR_audio");
     if(~isprop(gltf,'extensions'))
@@ -62,9 +62,9 @@ function source_id=addSource(gltf,audio_id,varargin)
     end
     if(isfield(gltf.extensions,'KHR_audio') && isfield(gltf.extensions.KHR_audio,'sources') && ~isempty(gltf.extensions.KHR_audio.sources))
         source_id=numel([gltf.extensions.KHR_audio.sources{:}]);
-        gltf.extensions.KHR_audio.sources=[gltf.extensions.KHR_audio.sources{:} sourceStruct{:}];
+        gltf.extensions.KHR_audio.sources=[gltf.extensions.KHR_audio.sources(:);{sourceStruct}];
     else
         source_id=0;
-        gltf.extensions.KHR_audio.sources=sourceStruct;
+        gltf.extensions.KHR_audio.sources={sourceStruct};
     end
 end

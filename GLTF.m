@@ -221,6 +221,7 @@ classdef GLTF < dynamicprops
         samplerstruct=addAnimationSampler(~,input,output,varargin)
         channelstruct=addAnimationChannel(~,sampler,target_node,target_path)
         addAnimation(gltf,samplers,channels,varargin)
+        bufferView=addBufferView(gltf,data,componentType,target)
         accessor_idx=addBinaryData(gltf,data,componentType,dataCount,minmax,target)
         node_idx=addNode(gltf,varargin)
         skin_idx=addSkin(gltf,joints,varargin)
@@ -239,9 +240,10 @@ classdef GLTF < dynamicprops
         [node,library_geometries,library_controllers,node_list]=getMeshNode(gltf,documentNode,library_geometries,library_controllers,node_id,node_list,normals,tangents,binormals)
         [pred,isMesh]=nodeTree(gltf)
         addExtension(gltf,extension)
-        clip_id=addClip(gltf,filename,varargin)
-        emitter_id=addEmitter(gltf,clips,varargin)
-        eventStruct=createEventStruct(~,emitter,action,varargin)
+        audio_id=addAudio(gltf,audio,varargin)
+        source_id=addSource(gltf,audio_id,varargin)
+        emitter_id=addPositionalEmitter(gltf,varargin)
+        emitter_id=addGlobalEmitter(gltf,varargin)
     end
 
     methods(Static)

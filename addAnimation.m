@@ -8,9 +8,6 @@ function addAnimation(gltf,samplers,channels,varargin)
     % ADDANIMATIONSAMPLER(...,'name',NAME) sets the name of the animation,
     % that is used when triggering animations.
     %
-    % ADDANIMATIONSAMPLER(...,'events',EVENTS) adds EVENTS as an array of
-    % MSFT_audio_emitter events to the animation.
-    %
     % © Copyright 2014-2023 Rohan Chabukswar
     %
     % This file is part of MATLAB GLTF.
@@ -30,11 +27,9 @@ function addAnimation(gltf,samplers,channels,varargin)
     %
     ips=inputParser;
     ips.addParameter('name',missing,@isstring);
-    ips.addParameter('events',[],@isstruct);
     ips.parse(varargin{:});
     parameters=ips.Results;
     name=parameters.name;
-    events=parameters.events;
     if(~isprop(gltf,'animations'))
         gltf.addprop('animations');
     end
@@ -43,9 +38,6 @@ function addAnimation(gltf,samplers,channels,varargin)
     animationstruct{1}.channels=GLTF.toCells(channels);
     if(~ismissing(name))
         animationstruct{1}.name=name;
-    end
-    if(~isempty(events))
-        animationstruct{1}.extensions.MSFT_audio_emitter.events=GLTF.toCells(events);
     end
     if(isempty(gltf.animations))
         gltf.animations=animationstruct;

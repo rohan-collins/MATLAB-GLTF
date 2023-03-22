@@ -256,9 +256,7 @@ glTF is fully extensible and defines an extension mechanism that allows the base
 |[`KHR_materials_volume`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_volume)|KHR|Material|Ratified|When combined with KHR_materials_transmission, a refractive microfacet BTDF describes the transmission of light through the volume boundary, providing effects like refraction and absorption.|
 |[`EXT_mesh_gpu_instancing`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Vendor/EXT_mesh_gpu_instancing)|EXT|Performance|Experimental|Enables GPU instancing, rendering many copies of a single mesh at once using a small number of draw calls.|
 |[`EXT_texture_webp`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Vendor/EXT_texture_webp)|EXT|Texture|Complete|Allows glTF models to use WebP as a valid image format|
-|[`MSFT_audio_emitter`](https://github.com/KhronosGroup/glTF/pull/1400)|MSFT|Audio|Pull request|Adds a specification for spatialized and ambient audio with clip randomization|
-
-**Note:** The [`MSFT_audio_emitter`](https://github.com/KhronosGroup/glTF/pull/1400), although abandoned, is included since it is supported by [Babylon.JS](https://www.babylonjs.com/). It will be replaced by the [`KHR_audio`](https://github.com/KhronosGroup/glTF/pull/2137) once that is marked as complete.
+|[`KHR_audio`](https://github.com/KhronosGroup/glTF/pull/2137)|KHR|Audio|Pull request|Allows for the addition of spatialized and non-spatialized audio to glTF scenes|
 
 # MATLAB Graph Examples
 **`surf2patch` is your friend.**

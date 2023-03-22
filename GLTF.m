@@ -219,7 +219,8 @@ classdef GLTF < dynamicprops
         camera_idx=addOrthographicCamera(gltf,varargin)
         camera_idx=addPerspectiveCamera(gltf,varargin)
         samplerstruct=addAnimationSampler(~,input,output,varargin)
-        channelstruct=addAnimationChannel(~,sampler,target_node,target_path)
+        channelstruct=addAnimationChannel(gltf,sampler,target_node,target_path)
+        channelstruct=addAnimationPointerChannel(~,sampler,target_path)
         addAnimation(gltf,samplers,channels,varargin)
         bufferView=addBufferView(gltf,data,componentType,target)
         accessor_idx=addBinaryData(gltf,data,componentType,dataCount,minmax,target)
@@ -263,6 +264,7 @@ classdef GLTF < dynamicprops
         formatSpec_float=formatSpec_float()
         formatSpec_integer=formatSpec_integer()
         valid=validateString(input,possibilities)
+        valid=validateStringWithIndex(input,possibilities,placeholder)
         out=joinString(strings)
         base64string=string2URI(filename)
     end

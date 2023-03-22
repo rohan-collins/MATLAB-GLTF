@@ -4,7 +4,7 @@ function channelstruct=addAnimationChannel(~,sampler,target_node,target_path)
     % ADDANIMATIONCHANNEL(GLTF,SAMPLER,TARGET_NODE,TARGET_PATH) creates and
     % returns an animation channel for GLTF, with SAMPLER as the sampler
     % index, TARGET_NODE as the index of the node to be animated, and
-    % TARGET_PATHas the property to be animated. In general, the sampler
+    % TARGET_PATH as the property to be animated. In general, the sampler
     % index needs to be calculated before constructing the channel, and
     % needs to be calculated as the zero-based array index of the sampler
     % when passed to ADDANIMATION. TARGET_PATH needs to be one of

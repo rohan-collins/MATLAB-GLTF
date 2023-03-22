@@ -255,8 +255,9 @@ glTF is fully extensible and defines an extension mechanism that allows the base
 |[`KHR_materials_variants`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_variants)|KHR|Variant|Ratified|Allows for a compact glTF representation of multiple material variants of an asset, structured to allow low-latency switching at runtime.|
 |[`KHR_materials_volume`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_volume)|KHR|Material|Ratified|When combined with KHR_materials_transmission, a refractive microfacet BTDF describes the transmission of light through the volume boundary, providing effects like refraction and absorption.|
 |[`EXT_mesh_gpu_instancing`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Vendor/EXT_mesh_gpu_instancing)|EXT|Performance|Experimental|Enables GPU instancing, rendering many copies of a single mesh at once using a small number of draw calls.|
-|[`EXT_texture_webp`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Vendor/EXT_texture_webp)|EXT|Texture|Complete|Allows glTF models to use WebP as a valid image format.|
+|[`KHR_animation_pointer`](https://github.com/KhronosGroup/glTF/pull/2147)|KHR|Animation|Draft| target any value in a glTF asset with animation data using [JSON Pointers](https://datatracker.ietf.org/doc/html/rfc6901).|
 |[`KHR_audio`](https://github.com/KhronosGroup/glTF/pull/2137)|KHR|Audio|Pull request|Allows for the addition of spatialized and non-spatialized audio to glTF scenes.|
+
 
 # MATLAB Graph Examples
 **`surf2patch` is your friend.**

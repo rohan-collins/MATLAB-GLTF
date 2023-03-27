@@ -74,24 +74,6 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
     % ADDAXES(...,'axisLabelDistance',axisLabelDistance) specifies the
     % distance of the axis label from the axis for a unit cube.
     %
-    % © Copyright 2014-2023 Rohan Chabukswar
-    %
-    % This file is part of MATLAB GLTF.
-    %
-    % MATLAB GLTF is free software: you can redistribute it and/or modify
-    % it under the terms of the GNU General Public License as published by
-    % the Free Software Foundation, either version 3 of the License, or (at
-    % your option) any later version.
-    %
-    % MATLAB GLTF is distributed in the hope that it will be useful, but
-    % WITHOUT ANY WARRANTY; without even the implied warranty of
-    % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-    % General Public License for more details.
-    %
-    % You should have received a copy of the GNU General Public License
-    % along with MATLAB GLTF. If not, see <https://www.gnu.org/licenses/>.
-    %
-
     if(nargin>0)
         ax_id=["x00";"x10";"x01";"x11";"0y0";"0y1";"1y0";"1y1";"00z";"10z";"01z";"11z"];
         grid_id=["xy0","xy1","x0z","x1z","0yz","1yz","xyz"];
@@ -649,7 +631,7 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
                         skin_idx=gltf.addSkin(ticklabel_node{i}(j),'inverseBindMatrices',reshape(eye(4),16,1)');
                         gltf.addNode('mesh',ticklabel_mesh{direction(i,:)}{j},'skin',skin_idx,'children',ticklabel_node{i}(j));
                     else
-                        ticklabel_node{i}(j)=gltf.addNode('mesh',ticklabel_mesh{direction(i,:)}{j},'translation',trans(j,:)*base_rotation,'rotation',rot);
+                        ticklabel_node{i}(j)=gltf.addNode('mesh',ticklabel_mesh{direction(i,:)}{j},'translation',trans(j,:)*base_rotation,'rotation',rot,'addToScene',false);
                     end
                 end
             end

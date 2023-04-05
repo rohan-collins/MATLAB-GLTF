@@ -54,7 +54,8 @@ function material_idx=addMaterial(gltf,varargin)
     %
     % ADDMATERIAL(...,'normalTexture',FILENAME) uses the image specified by
     % FILENAME as the normal map for the material. The image format needs
-    % to be JPEG or PNG.
+    % to be JPEG or PNG, without an alpha channel. Red channel [0,1] maps
+    % to X [-1,1], green [0,1] to Y [-1,1], and blue (0.5,1] to Z (0,1].
     %
     % ADDMATERIAL(...,'normalTextureSet',SET) uses the TEXCOORD SET as the
     % texture coordintes for the material normal texture.
@@ -82,9 +83,9 @@ function material_idx=addMaterial(gltf,varargin)
     % ADDMATERIAL(...,'normalEmbedTexture',FALSE) includes the normal
     % texture image as a link inside the GLTF file.
     %
-    % ADDMATERIAL(...,'occlusionTexture',FILENAME) uses the image specified
-    % by FILENAME as the occlusion map for the material. The image format
-    % needs to be JPEG or PNG.
+    % ADDMATERIAL(...,'occlusionTexture',FILENAME) uses the R channel of
+    % the image specified by FILENAME as the occlusion map for the
+    % material. The image format needs to be JPEG or PNG.
     %
     % ADDMATERIAL(...,'occlusionTextureSet',SET) uses the TEXCOORD SET as
     % the texture coordintes for the material occlusion.
@@ -111,6 +112,37 @@ function material_idx=addMaterial(gltf,varargin)
     %
     % ADDMATERIAL(...,'occlusionEmbedTexture',FALSE) includes the occlusion
     % texture image as a link inside the GLTF file.
+    %
+    % ADDMATERIAL(...,'metallicRoughnessTexture',FILENAME) uses the G and B
+    % image specified by FILENAME as the metallic and roughness maps
+    % respectively for the material. The image format needs to be JPEG or
+    % PNG.
+    %
+    % ADDMATERIAL(...,'metallicRoughnessTextureSet',SET) uses the TEXCOORD
+    % SET as the texture coordintes for the material metallic roughness.
+    %
+    % ADDMATERIAL(...,'metallicRoughnessMagFilter',MAGFILTER) sets the
+    % magnification filter for the metallic roughness texture as per
+    % OpenGL. MAGFILTER should be one of "NEAREST", "LINEAR",
+    % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
+    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
+    %
+    % ADDMATERIAL(...,'metallicRoughnessMinFilter',MINFILTER) sets the
+    % minification filter for the metallic roughness texture as per OpenGL.
+    % MINFILTER should be one of "NEAREST", "LINEAR",
+    % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
+    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
+    %
+    % ADDMATERIAL(...,'metallicRoughnessWrapS',WRAPS) sets the wrapping of
+    % the U coordinate of metallic roughness texture as per OpenGL. WRAPS
+    % should be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
+    %
+    % ADDMATERIAL(...,'metallicRoughnessWrapT',WRAPT) sets the wrapping of
+    % the V coordinate of metallic roughness texture as per OpenGL. WRAPT
+    % should be one of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
+    %
+    % ADDMATERIAL(...,'metallicRoughnessEmbedTexture',FALSE) includes the
+    % metallic roughness texture image as a link inside the GLTF file.
     %
     % ADDMATERIAL(...,'emissiveFactor',EMISSIVEFACTOR) sets the base
     % emmisivity for the material.
@@ -235,9 +267,9 @@ function material_idx=addMaterial(gltf,varargin)
     % ADDMATERIAL(...,'clearcoatFactor',CLEARCOATFACTOR) sets the base
     % clearcoat layer intensity.
     %
-    % ADDMATERIAL(...,'clearcoatTexture',FILENAME) uses the image specified
-    % by FILENAME as the clearcoat layer intensity texture. The image
-    % format needs to be JPEG or PNG.
+    % ADDMATERIAL(...,'clearcoatTexture',FILENAME) uses the R channel of
+    % the image specified by FILENAME as the clearcoat layer intensity
+    % texture. The image format needs to be JPEG or PNG.
     %
     % ADDMATERIAL(...,'clearcoatTextureTextureSet',SET) uses the TEXCOORD
     % SET as the texture coordintes for the material clearcoat texture.
@@ -268,9 +300,10 @@ function material_idx=addMaterial(gltf,varargin)
     % ADDMATERIAL(...,'clearcoatRoughnessFactor', CLEARCOATROUGHNESSFACTOR)
     % sets the base clearcoat layer roughness.
     %
-    % ADDMATERIAL(...,'clearcoatRoughnessTexture',FILENAME) uses the image
-    % specified by FILENAME as the clearcoat layer roughness texture. The
-    % image format needs to be JPEG or PNG.
+    % ADDMATERIAL(...,'clearcoatRoughnessTexture',FILENAME) uses the G
+    % channel of the image specified by FILENAME as the clearcoat layer
+    % roughness texture. The image format needs to be JPEG or PNG, with
+    % clearcoat roughness values in the green channel.
     %
     % ADDMATERIAL(...,'clearcoatRoughnessTextureTextureSet',SET) uses the
     % TEXCOORD SET as the texture coordintes for the material clearcoat
@@ -303,7 +336,9 @@ function material_idx=addMaterial(gltf,varargin)
     %
     % ADDMATERIAL(...,'clearcoatNormalTexture',FILENAME) uses the image
     % specified by FILENAME as the clearcoat layer normal map texture. The
-    % image format needs to be JPEG or PNG.
+    % image format needs to be JPEG or PNG, without an alpha channel. Red
+    % channel [0,1] maps to X [-1,1], green [0,1] to Y [-1,1], and blue
+    % (0.5,1] to Z (0,1].
     %
     % ADDMATERIAL(...,'clearcoatNormalTextureTextureSet',SET) uses the
     % TEXCOORD SET as the texture coordintes for the material clearcoat
@@ -337,9 +372,9 @@ function material_idx=addMaterial(gltf,varargin)
     % ADDMATERIAL(...,'sheenColorFactor',SHEENCOLORFACTOR) sets the base
     % sheen color for the material.
     %
-    % ADDMATERIAL(...,'sheenColorTexture',FILENAME) uses the RGB channels
-    % of the image specified by FILENAME as the sheen colour for the
-    % material. The image format needs to be JPEG or PNG.
+    % ADDMATERIAL(...,'sheenColorTexture',FILENAME) uses the image
+    % specified by FILENAME as the sheen colour for the material. The image
+    % format needs to be JPEG or PNG.
     %
     % ADDMATERIAL(...,'sheenColorTextureSet',SET) uses the TEXCOORD SET as
     % the texture coordintes for the material sheen colour.
@@ -474,7 +509,8 @@ function material_idx=addMaterial(gltf,varargin)
     %
     % ADDMATERIAL(...,'iridescenceTexture',FILENAME) uses the image
     % specified by FILENAME as the iridescence intensity texture for the
-    % material. The image format needs to be JPEG or PNG.
+    % material. The image format needs to be JPEG or PNG, with iridescence
+    % intensity values in the red channel.
     %
     % ADDMATERIAL(...,'iridescenceTextureSet',SET) uses the TEXCOORD SET as
     % the texture coordintes for the material iridescence intensity.
@@ -513,7 +549,8 @@ function material_idx=addMaterial(gltf,varargin)
     %
     % ADDMATERIAL(...,'iridescenceThicknessTexture',FILENAME) uses the
     % image specified by FILENAME as the thickness texture of the thin-film
-    % layer for the material. The image format needs to be JPEG or PNG.
+    % layer for the material. The image format needs to be JPEG or PNG,
+    % with thickness values in the green channel.
     %
     % ADDMATERIAL(...,'iridescenceThicknessTextureSet',SET) uses the
     % TEXCOORD SET as the texture coordintes for the thin-film layer
@@ -593,6 +630,13 @@ function material_idx=addMaterial(gltf,varargin)
     ips.addParameter('occlusionWrapS',missing,@(x)GLTF.validateString(x,wrap_str_values));
     ips.addParameter('occlusionWrapT',missing,@(x)GLTF.validateString(x,wrap_str_values));
     ips.addParameter('occlusionEmbedTexture',true,@islogical);
+    ips.addParameter('metallicRoughnessTexture',missing,@isstring);
+    ips.addParameter('metallicRoughnessTextureSet',nan,@isnumeric);
+    ips.addParameter('metallicRoughnessMagFilter',missing,@(x)GLTF.validateString(x,filter_str_values));
+    ips.addParameter('metallicRoughnessMinFilter',missing,@(x)GLTF.validateString(x,filter_str_values));
+    ips.addParameter('metallicRoughnessWrapS',missing,@(x)GLTF.validateString(x,wrap_str_values));
+    ips.addParameter('metallicRoughnessWrapT',missing,@(x)GLTF.validateString(x,wrap_str_values));
+    ips.addParameter('metallicRoughnessEmbedTexture',true,@islogical);
     ips.addParameter('emissiveFactor',[],@isnumeric);
     ips.addParameter('emissiveTexture',missing,@isstring);
     ips.addParameter('emissiveTextureSet',nan,@isnumeric);
@@ -724,6 +768,13 @@ function material_idx=addMaterial(gltf,varargin)
     occlusionWrapS=upper(parameters.occlusionWrapS);
     occlusionWrapT=upper(parameters.occlusionWrapT);
     occlusionEmbedTexture=parameters.occlusionEmbedTexture;
+    metallicRoughnessTexture=parameters.metallicRoughnessTexture;
+    metallicRoughnessTextureSet=parameters.metallicRoughnessTextureSet;
+    metallicRoughnessMagFilter=upper(parameters.metallicRoughnessMagFilter);
+    metallicRoughnessMinFilter=upper(parameters.metallicRoughnessMinFilter);
+    metallicRoughnessWrapS=upper(parameters.metallicRoughnessWrapS);
+    metallicRoughnessWrapT=upper(parameters.metallicRoughnessWrapT);
+    metallicRoughnessEmbedTexture=parameters.metallicRoughnessEmbedTexture;
     emissiveFactor=parameters.emissiveFactor;
     emissiveTexture=parameters.emissiveTexture;
     emissiveTextureSet=parameters.emissiveTextureSet;
@@ -876,6 +927,12 @@ function material_idx=addMaterial(gltf,varargin)
     end
     if(~isnan(occlusionTextureSet))
         material.occlusionTexture.texCoord=occlusionTextureSet;
+    end
+    if(~ismissing(metallicRoughnessTexture))
+        material.metallicRoughnessTexture=struct('index',addTexture(gltf,metallicRoughnessTexture,'magFilter',metallicRoughnessMagFilter,'minFilter',metallicRoughnessMinFilter,'wrapS',metallicRoughnessWrapS,'wrapT',metallicRoughnessWrapT,'embedTexture',metallicRoughnessEmbedTexture));
+    end
+    if(~isnan(metallicRoughnessTextureSet))
+        material.metallicRoughnessTexture.texCoord=metallicRoughnessTextureSet;
     end
     if(~ismissing(emissiveTexture))
         material.emissiveTexture=struct('index',addTexture(gltf,emissiveTexture,'magFilter',emissiveMagFilter,'minFilter',emissiveMinFilter,'wrapS',emissiveWrapS,'wrapT',emissiveWrapT,'embedTexture',emissiveEmbedTexture));

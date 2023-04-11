@@ -16,7 +16,7 @@ Last updated: March 21, 2023.
 >
 > Comic panels with their characters are © [xkcd](https://xkcd.com/) and used under [Creative Commons Attribution-NonCommercial 2.5 License](https://xkcd.com/license.html).
 
-[![View MATLAB-GLTF on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://uk.mathworks.com/matlabcentral/fileexchange/123955-matlab-gltf)
+[![View MATLAB-GLTF on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://mathworks.com/matlabcentral/fileexchange/123955)
 
 # Table Of Contents
 * [Introduction](#introduction)

@@ -1,11 +1,16 @@
 function texture_idx=addTexture(gltf,image,varargin)
     % Add a texture.
     %
-    % ADDTEXTURE(GLTF,FILENAME) adds the image specified in filename as a
-    % new texture, normal map, occusion map, or emission map and returns
-    % its index.
+    % ADDTEXTURE(GLTF,IMAGE) adds the IMAGE as a new texture, normal map,
+    % occusion map, or emission map and returns its index. IMAGE can be a
+    % JPG or PNG filename or an index to an image. If it is an index, the
+    % value of 'embedTexture', if provided, is ignored.
     %
     % ADDTEXTURE(...,'name',NAME) sets the name of the texture.
+    %
+    % ADDTEXTURE(...,'sampler',SAMPLER_IDX) uses the given SAMPLER_IDX as
+    % the sampler. If this is set, any given values of 'magFilter',
+    % 'minFilter', 'wrapS', or 'wrapT' are ignored.
     %
     % ADDTEXTURE(...,'webpImage',FILENAME) uses the WebP image specified in
     % filename as the texture. A client that does not accept WebP images
@@ -56,6 +61,7 @@ function texture_idx=addTexture(gltf,image,varargin)
     wrap_str_values=["CLAMP_TO_EDGE","MIRRORED_REPEAT","REPEAT"];
     ips=inputParser;
     ips.addParameter('name',missing,@isstring);
+    ips.addParameter('sampler',nan,@isnumeric);
     ips.addParameter('magFilter',missing,@(x)GLTF.validateString(x,filter_str_values));
     ips.addParameter('minFilter',missing,@(x)GLTF.validateString(x,filter_str_values));
     ips.addParameter('wrapS',missing,@(x)GLTF.validateString(x,wrap_str_values));
@@ -65,14 +71,21 @@ function texture_idx=addTexture(gltf,image,varargin)
     ips.parse(varargin{:});
     parameters=ips.Results;
     name=parameters.name;
+    sampler_idx=parameters.sampler;
     magFilter=upper(parameters.magFilter);
     minFilter=upper(parameters.minFilter);
     wrapS=upper(parameters.wrapS);
     wrapT=upper(parameters.wrapT);
     embedTexture=parameters.embedTexture;
     webpImage=parameters.webpImage;
-    sampler_idx=gltf.addTextureSampler('magFilter',magFilter,'minFilter',minFilter,'wrapS',wrapS,'wrapT',wrapT);
-    image_idx=gltf.addImage(image,'embedTexture',embedTexture);
+    if(isnan(sampler_idx))
+        sampler_idx=gltf.addTextureSampler('magFilter',magFilter,'minFilter',minFilter,'wrapS',wrapS,'wrapT',wrapT);
+    end
+    if(isstring(image))
+        image_idx=gltf.addImage(image,'embedTexture',embedTexture);
+    else
+        image_idx=image;
+    end
     if(~isprop(gltf,'textures'))
         gltf.addprop('textures');
     end

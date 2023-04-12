@@ -59,6 +59,9 @@ function accessor_idx=addBinaryData(gltf,data,componentType,dataCount,minmax,tar
     GLTF.validateString(dataCount,dataCount_str);
     component=componentType_num(componentType_str==componentType);
     accessor_idx=numel(gltf.accessors);
+    if(or(or(dataCount=="MAT2",dataCount=="MAT3"),dataCount=="MAT4"))
+        data=reshape(data,size(data,1)*size(data,1),size(data,3))';
+    end
     if(nargin<6)
         bufferView=addBufferView(gltf,data,componentType);
     else
@@ -66,9 +69,6 @@ function accessor_idx=addBinaryData(gltf,data,componentType,dataCount,minmax,tar
     end
     gltf.accessors{accessor_idx+1}.bufferView=uint32(bufferView);
     gltf.accessors{accessor_idx+1}.componentType=component;
-    if(or(or(dataCount=="MAT2",dataCount=="MAT3"),dataCount=="MAT4"))
-        data=reshape(data,size(data,1)*size(data,1),size(data,3))';
-    end
     if(dataCount=="SCALAR")
         gltf.accessors{accessor_idx+1}.count=uint32(numel(data));
     else

@@ -301,6 +301,7 @@ function [gltf,piece_node]=ABeautifulGame()
 
     % Create new GLTF.
     gltf=GLTF();
+    gltf.asset.copyright=gltf_orig.asset.copyright;
     % Create the default sampler.
     sampler_idx=gltf.addTextureSampler();
     % Download chessboard textures.

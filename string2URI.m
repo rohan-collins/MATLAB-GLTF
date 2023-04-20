@@ -22,28 +22,45 @@ function base64string=string2URI(filename)
     % along with MATLAB GLTF. If not, see <https://www.gnu.org/licenses/>.
     %
     [~,~,ext]=fileparts(string(filename));
+    isurl=~isfile(filename);
     if(ext==".png")
-        fid=fopen(filename,'rb');
-        bytes=fread(fid);
-        fclose(fid);
+        if(isurl)
+            bytes=webread(filename,weboptions("ContentType","binary"));
+        else
+            fid=fopen(filename,'rb');
+            bytes=fread(fid);
+            fclose(fid);
+        end
         encoder=org.apache.commons.codec.binary.Base64;
         base64string=['data:image/png;base64,' char(encoder.encode(bytes)')];
     elseif(or(ext==".jpg",ext==".jpeg"))
-        fid=fopen(filename,'rb');
-        bytes=fread(fid);
-        fclose(fid);
+        if(isurl)
+            bytes=webread(filename,weboptions("ContentType","binary"));
+        else
+            fid=fopen(filename,'rb');
+            bytes=fread(fid);
+            fclose(fid);
+        end
         encoder=org.apache.commons.codec.binary.Base64;
         base64string=['data:image/jpeg;base64,' char(encoder.encode(bytes)')];
     elseif(ext==".wav")
-        fid=fopen(filename,'rb');
-        bytes=fread(fid);
-        fclose(fid);
+        if(isurl)
+            bytes=webread(filename,weboptions("ContentType","binary"));
+        else
+            fid=fopen(filename,'rb');
+            bytes=fread(fid);
+            fclose(fid);
+        end
         encoder=org.apache.commons.codec.binary.Base64;
         base64string=['data:audio/wav;base64,' char(encoder.encode(bytes)')];
     elseif(ext==".webp")
-        fid=fopen(filename,'rb');
-        bytes=fread(fid);
-        fclose(fid);
+        if(isurl)
+            bytes=webread(filename,weboptions("ContentType","binary"));
+        else
+            fid=fopen(filename,'rb');
+            bytes=fread(fid);
+            fclose(fid);
+        end
         encoder=org.apache.commons.codec.binary.Base64;
         base64string=['data:image/webp;base64,' char(encoder.encode(bytes)')];
     else

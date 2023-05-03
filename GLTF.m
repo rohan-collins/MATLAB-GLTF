@@ -116,7 +116,6 @@ classdef GLTF < dynamicprops
                             end
                         end
                     elseif(ext==".gltf")
-                        decoder=org.apache.commons.codec.binary.Base64;
                         if(isurl)
                             finalBuffer=webread(filename);
                         else
@@ -207,7 +206,7 @@ classdef GLTF < dynamicprops
                                 end
                             else
                                 encoded=encoded{1}{3};
-                                gltf.buffers{i}=decoder.decode(uint8(encoded));
+                                gltf.buffers{i}=matlab.net.base64decode(uint8(encoded));
                             end
                         end
                     end

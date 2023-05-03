@@ -116,8 +116,8 @@ q90=[0 sin(90*pi/180/2) 0 cos(90*pi/180/2)];
 q=[q0;q0;q90;q90;q0];
 % Create input and output samplers (this tells OpenGL how to interpret the
 % data).
-inputSampler=gltf.addBinaryData(t,"FLOAT","SCALAR",true,"ARRAY_BUFFER");
-outputSampler=gltf.addBinaryData(q,"FLOAT","VEC4",true,"ARRAY_BUFFER");
+inputSampler=gltf.addBinaryData(t,"FLOAT","SCALAR",true);
+outputSampler=gltf.addBinaryData(q,"FLOAT","VEC4",true);
 % Create the sampler (this tells OpenGL how to interpolate (default is
 % linear)).
 sampler=gltf.addAnimationSampler(inputSampler,outputSampler);

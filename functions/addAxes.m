@@ -195,12 +195,12 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
                     Ws=[ones(size(Vg2,1),1) zeros(size(Vg2,1),3)];
                     gltf.addPrimitiveToMesh(yzmesh,Vg2.*s*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat,'WEIGHTS',Ws,'JOINTS',Js);
                     if(ismember("0yz",gridIds))
-                        gridlinesNodes(1)=gltf.addNode('addToScene',false,'translation',[1 0 0]*ax(1,1).*s*base_rotation);
+                        gridlinesNodes(1)=gltf.addNode('translation',[1 0 0]*ax(1,1).*s*base_rotation,'addToScene',false);
                         skin_idx=gltf.addSkin(gridlinesNodes(1),'inverseBindMatrices',reshape(eye(4),16,1)');
                         gltf.addNode('mesh',yzmesh,'skin',skin_idx,'children',gridlinesNodes(1));
                     end
                     if(ismember("1yz",gridIds))
-                        gridlinesNodes(2)=gltf.addNode('addToScene',false,'translation',[1 0 0]*ax(2,1).*s*base_rotation);
+                        gridlinesNodes(2)=gltf.addNode('translation',[1 0 0]*ax(2,1).*s*base_rotation,'addToScene',false);
                         skin_idx=gltf.addSkin(gridlinesNodes(2),'inverseBindMatrices',reshape(eye(4),16,1)');
                         gltf.addNode('mesh',yzmesh,'skin',skin_idx,'children',gridlinesNodes(2));
                     end
@@ -208,10 +208,10 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
                     yzmesh=gltf.addMesh(Vg1.*s*base_rotation,'indices',Eg1,'mode',"LINES",'material',gridlines_mat);
                     gltf.addPrimitiveToMesh(yzmesh,Vg2.*s*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat);
                     if(ismember("0yz",gridIds))
-                        gridlinesNodes(1)=gltf.addNode('mesh',yzmesh,'translation',[1 0 0]*ax(1,1).*s*base_rotation);
+                        gridlinesNodes(1)=gltf.addNode('mesh',yzmesh,'translation',[1 0 0]*ax(1,1).*s*base_rotation,'addToScene',false);
                     end
                     if(ismember("1yz",gridIds))
-                        gridlinesNodes(2)=gltf.addNode('mesh',yzmesh,'translation',[1 0 0]*ax(2,1).*s*base_rotation);
+                        gridlinesNodes(2)=gltf.addNode('mesh',yzmesh,'translation',[1 0 0]*ax(2,1).*s*base_rotation,'addToScene',false);
                     end
                 end
             end
@@ -230,12 +230,12 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
                     Ws=[ones(size(Vg2,1),1) zeros(size(Vg2,1),3)];
                     gltf.addPrimitiveToMesh(xzmesh,Vg2.*s*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat,'WEIGHTS',Ws,'JOINTS',Js);
                     if(ismember("0yz",gridIds))
-                        gridlinesNodes(3)=gltf.addNode('addToScene',false,'translation',[0 1 0]*ax(1,1).*s*base_rotation);
+                        gridlinesNodes(3)=gltf.addNode('translation',[0 1 0]*ax(1,1).*s*base_rotation,'addToScene',false);
                         skin_idx=gltf.addSkin(gridlinesNodes(3),'inverseBindMatrices',reshape(eye(4),16,1)');
                         gltf.addNode('mesh',xzmesh,'skin',skin_idx,'children',gridlinesNodes(3));
                     end
                     if(ismember("1yz",gridIds))
-                        gridlinesNodes(4)=gltf.addNode('addToScene',false,'translation',[0 1 0]*ax(2,1).*s*base_rotation);
+                        gridlinesNodes(4)=gltf.addNode('translation',[0 1 0]*ax(2,1).*s*base_rotation,'addToScene',false);
                         skin_idx=gltf.addSkin(gridlinesNodes(4),'inverseBindMatrices',reshape(eye(4),16,1)');
                         gltf.addNode('mesh',xzmesh,'skin',skin_idx,'children',gridlinesNodes(4));
                     end
@@ -243,10 +243,10 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
                     xzmesh=gltf.addMesh(Vg1.*s*base_rotation,'indices',Eg1,'mode',"LINES",'material',gridlines_mat);
                     gltf.addPrimitiveToMesh(xzmesh,Vg2.*s*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat);
                     if(ismember("x0z",gridIds))
-                        gridlinesNodes(3)=gltf.addNode('mesh',xzmesh,'translation',[0 1 0]*ax(1,2).*s*base_rotation);
+                        gridlinesNodes(3)=gltf.addNode('mesh',xzmesh,'translation',[0 1 0]*ax(1,2).*s*base_rotation,'addToScene',false);
                     end
                     if(ismember("x1z",gridIds))
-                        gridlinesNodes(4)=gltf.addNode('mesh',xzmesh,'translation',[0 1 0]*ax(2,2).*s*base_rotation);
+                        gridlinesNodes(4)=gltf.addNode('mesh',xzmesh,'translation',[0 1 0]*ax(2,2).*s*base_rotation,'addToScene',false);
                     end
                 end
             end
@@ -265,12 +265,12 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
                     Ws=[ones(size(Vg2,1),1) zeros(size(Vg2,1),3)];
                     gltf.addPrimitiveToMesh(xymesh,Vg2.*s*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat,'WEIGHTS',Ws,'JOINTS',Js);
                     if(ismember("0yz",gridIds))
-                        gridlinesNodes(5)=gltf.addNode('addToScene',false,'translation',[0 1 0]*ax(1,1).*s*base_rotation);
+                        gridlinesNodes(5)=gltf.addNode('translation',[0 1 0]*ax(1,1).*s*base_rotation,'addToScene',false);
                         skin_idx=gltf.addSkin(gridlinesNodes(5),'inverseBindMatrices',reshape(eye(4),16,1)');
                         gltf.addNode('mesh',xymesh,'skin',skin_idx,'children',gridlinesNodes(5));
                     end
                     if(ismember("1yz",gridIds))
-                        gridlinesNodes(6)=gltf.addNode('addToScene',false,'translation',[0 1 0]*ax(2,1).*s*base_rotation);
+                        gridlinesNodes(6)=gltf.addNode(translation',[0 1 0]*ax(2,1).*s*base_rotation,'addToScene',false);
                         skin_idx=gltf.addSkin(gridlinesNodes(6),'inverseBindMatrices',reshape(eye(4),16,1)');
                         gltf.addNode('mesh',xymesh,'skin',skin_idx,'children',gridlinesNodes(6));
                     end
@@ -278,10 +278,10 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
                     xymesh=gltf.addMesh(Vg1.*s*base_rotation,'indices',Eg1,'mode',"LINES",'material',gridlines_mat);
                     gltf.addPrimitiveToMesh(xymesh,Vg2.*s*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat);
                     if(ismember("xy0",gridIds))
-                        gridlinesNodes(5)=gltf.addNode('mesh',xymesh,'translation',[0 0 1]*ax(1,3).*s*base_rotation);
+                        gridlinesNodes(5)=gltf.addNode('mesh',xymesh,'translation',[0 0 1]*ax(1,3).*s*base_rotation,'addToScene',false);
                     end
                     if(ismember("xy1",gridIds))
-                        gridlinesNodes(6)=gltf.addNode('mesh',xymesh,'translation',[0 0 1]*ax(2,3).*s*base_rotation);
+                        gridlinesNodes(6)=gltf.addNode('mesh',xymesh,'translation',[0 0 1]*ax(2,3).*s*base_rotation,'addToScene',false);
                     end
                 end
             end
@@ -615,7 +615,7 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
                 if(strlength(string(ax_h.(axislabel(direction(i,:))).String))>0)
                     trans=tick_dir(i,:)*axlabel_l+s.*ax(1,:)+s.*diff(ax).*(double(tick_dir(i,:)>0)+direction(i,:)/2);
                     if(skeleton)
-                        axislabel_node(i)=gltf.addNode('addToScene',false,'translation',trans*base_rotation,'rotation',rot);
+                        axislabel_node(i)=gltf.addNode('translation',trans*base_rotation,'rotation',rot,'addToScene',false);
                         skin_idx=gltf.addSkin(axislabel_node(i),'inverseBindMatrices',reshape(eye(4),16,1)');
                         gltf.addNode('mesh',axlabel_mesh{direction(i,:)},'skin',skin_idx,'children',axislabel_node(i));
                     else
@@ -627,7 +627,7 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
                 trans(:,direction(i,:))=tick_loc'*s(direction(i,:));
                 for j=1:J
                     if(skeleton)
-                        ticklabel_node{i}(j)=gltf.addNode('addToScene',false,'translation',trans(j,:)*base_rotation,'rotation',rot);
+                        ticklabel_node{i}(j)=gltf.addNode('translation',trans(j,:)*base_rotation,'rotation',rot,'addToScene',false);
                         skin_idx=gltf.addSkin(ticklabel_node{i}(j),'inverseBindMatrices',reshape(eye(4),16,1)');
                         gltf.addNode('mesh',ticklabel_mesh{direction(i,:)}{j},'skin',skin_idx,'children',ticklabel_node{i}(j));
                     else

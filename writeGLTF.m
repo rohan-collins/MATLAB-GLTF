@@ -32,13 +32,12 @@ function writeGLTF(gltf,filename,varargin)
     parameters=ips.Results;
     bufferFile=parameters.bufferFile;
 
-    encoder=org.apache.commons.codec.binary.Base64;
     warning('off','MATLAB:structOnObject');
     st=struct(gltf);
     warning('on','MATLAB:structOnObject');
     if(ismissing(bufferFile))
         for i=1:numel(gltf.buffers)
-            st.buffers{i}=struct('uri',['data:application/octet-stream;base64,' char(encoder.encode(gltf.buffers{i})')],'byteLength',uint32(numel(gltf.buffers{i})));
+            st.buffers{i}=struct('uri',['data:application/octet-stream;base64,' matlab.net.base64encode(gltf.buffers{i})],'byteLength',uint32(numel(gltf.buffers{i})));
         end
     else
         if(numel(gltf.buffers)>1)

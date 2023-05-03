@@ -31,8 +31,7 @@ function base64string=string2URI(filename)
             bytes=fread(fid);
             fclose(fid);
         end
-        encoder=org.apache.commons.codec.binary.Base64;
-        base64string=['data:image/png;base64,' char(encoder.encode(bytes)')];
+        base64string=['data:image/png;base64,' matlab.net.base64encode(bytes)];
     elseif(or(ext==".jpg",ext==".jpeg"))
         if(isurl)
             bytes=webread(filename,weboptions("ContentType","binary"));
@@ -41,8 +40,7 @@ function base64string=string2URI(filename)
             bytes=fread(fid);
             fclose(fid);
         end
-        encoder=org.apache.commons.codec.binary.Base64;
-        base64string=['data:image/jpeg;base64,' char(encoder.encode(bytes)')];
+        base64string=['data:image/jpeg;base64,' matlab.net.base64encode(bytes)];
     elseif(ext==".wav")
         if(isurl)
             bytes=webread(filename,weboptions("ContentType","binary"));
@@ -51,8 +49,7 @@ function base64string=string2URI(filename)
             bytes=fread(fid);
             fclose(fid);
         end
-        encoder=org.apache.commons.codec.binary.Base64;
-        base64string=['data:audio/wav;base64,' char(encoder.encode(bytes)')];
+        base64string=['data:audio/wav;base64,' matlab.net.base64encode(bytes)];
     elseif(ext==".webp")
         if(isurl)
             bytes=webread(filename,weboptions("ContentType","binary"));
@@ -61,8 +58,7 @@ function base64string=string2URI(filename)
             bytes=fread(fid);
             fclose(fid);
         end
-        encoder=org.apache.commons.codec.binary.Base64;
-        base64string=['data:image/webp;base64,' char(encoder.encode(bytes)')];
+        base64string=['data:image/webp;base64,' matlab.net.base64encode(bytes)];
     else
         base64string=filename;
     end

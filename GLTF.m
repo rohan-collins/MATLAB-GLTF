@@ -206,7 +206,7 @@ classdef GLTF < dynamicprops
                                 end
                             else
                                 encoded=encoded{1}{3};
-                                gltf.buffers{i}=matlab.net.base64decode(uint8(encoded));
+                                gltf.buffers{i}=matlab.net.base64decode(encoded);
                             end
                         end
                     end

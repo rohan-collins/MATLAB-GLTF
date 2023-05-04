@@ -24,7 +24,7 @@ second=[-sin(t)+ 8*sin(2*t) -cos(t)- 8*cos(2*t)   9*sin(3*t)]*(dtheta*pi/180)^2;
 third =[-cos(t)+16*cos(2*t)  sin(t)+16*sin(2*t)  27*cos(3*t)]*(dtheta*pi/180)^3;
 % Generate the ribbon. Use Resolution 2 for ribbon.
 R=0.607154708718215;
-[F,V,~,N]=tubeplot(curve,'Radius',R,'Resolution',2,'FirstDerivative',first,'SecondDerivative',second,'ThirdDerivative',third);
+[F,V,~,N]=tubeplot(curve,'Radius',R,'Resolution',2,'FirstDerivative',first,'SecondDerivative',second,'ThirdDerivative',third,'Theta_0',pi/2);
 % Create the GLTF object.
 gltf=GLTF();
 % Add the mesh with faces, vertices, normals, and a new material.

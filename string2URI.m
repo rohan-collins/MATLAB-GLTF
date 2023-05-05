@@ -22,25 +22,36 @@ function base64string=string2URI(filename)
     % along with MATLAB GLTF. If not, see <https://www.gnu.org/licenses/>.
     %
     [~,~,ext]=fileparts(string(filename));
+    isurl=~isfile(filename);
     if(ext==".png")
-        fid=fopen(filename,'rb');
-        bytes=fread(fid);
-        fclose(fid);
-        encoder=org.apache.commons.codec.binary.Base64;
-        base64string=['data:image/png;base64,' char(encoder.encode(bytes)')];
+        if(isurl)
+            bytes=webread(filename,weboptions("ContentType","binary"));
+        else
+            fid=fopen(filename,'rb');
+            bytes=fread(fid);
+            fclose(fid);
+        end
+        base64string=['data:image/png;base64,' matlab.net.base64encode(bytes)];
     elseif(or(ext==".jpg",ext==".jpeg"))
-        fid=fopen(filename,'rb');
-        bytes=fread(fid);
-        fclose(fid);
-        encoder=org.apache.commons.codec.binary.Base64;
-        base64string=['data:image/jpeg;base64,' char(encoder.encode(bytes)')];
+        if(isurl)
+            bytes=webread(filename,weboptions("ContentType","binary"));
+        else
+            fid=fopen(filename,'rb');
+            bytes=fread(fid);
+            fclose(fid);
+        end
+        base64string=['data:image/jpeg;base64,' matlab.net.base64encode(bytes)];
     elseif(ext==".wav")
-        fid=fopen(filename,'rb');
-        bytes=fread(fid);
-        fclose(fid);
-        encoder=org.apache.commons.codec.binary.Base64;
-        base64string=['data:audio/wav;base64,' char(encoder.encode(bytes)')];
+        if(isurl)
+            bytes=webread(filename,weboptions("ContentType","binary"));
+        else
+            fid=fopen(filename,'rb');
+            bytes=fread(fid);
+            fclose(fid);
+        end
+        base64string=['data:audio/wav;base64,' matlab.net.base64encode(bytes)];
     elseif(ext==".webp")
+<<<<<<< HEAD
         fid=fopen(filename,'rb');
         bytes=fread(fid);
         fclose(fid);
@@ -52,6 +63,16 @@ function base64string=string2URI(filename)
         fclose(fid);
         encoder=org.apache.commons.codec.binary.Base64;
         base64string=['data:audio/mpeg;base64,' char(encoder.encode(bytes)')];
+=======
+        if(isurl)
+            bytes=webread(filename,weboptions("ContentType","binary"));
+        else
+            fid=fopen(filename,'rb');
+            bytes=fread(fid);
+            fclose(fid);
+        end
+        base64string=['data:image/webp;base64,' matlab.net.base64encode(bytes)];
+>>>>>>> master
     else
         base64string=filename;
     end

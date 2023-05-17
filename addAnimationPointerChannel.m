@@ -68,7 +68,7 @@ function channelstruct=addAnimationPointerChannel(gltf,sampler,target_path)
     % You should have received a copy of the GNU General Public License
     % along with MATLAB GLTF. If not, see <https://www.gnu.org/licenses/>.
     %
-    possibilities=["/meshes/idx/weights";
+    possibilities=["/meshes/idx/weights";"/meshes/idx/COLOR";
         "/nodes/idx/rotation";
         "/nodes/idx/scale";
         "/nodes/idx/translation";

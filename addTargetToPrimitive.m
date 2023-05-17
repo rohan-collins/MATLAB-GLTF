@@ -49,10 +49,10 @@ function addTargetToPrimitive(gltf,mesh_idx,primitive_idx,V,varargin)
     end
     if(isfield(gltf.meshes{mesh_idx+1}.primitives{primitive_idx+1},'targets'))
         gltf.meshes{mesh_idx+1}.primitives{primitive_idx+1}.targets=[gltf.meshes{mesh_idx+1}.primitives{primitive_idx+1}.targets targets];
-        if(~isempty(weight)&& isfield(gltf.meshes{1},'weights') && ~isempty(gltf.meshes{1}.weights))
-            gltf.meshes{mesh_idx+1}.weights=[gltf.meshes{1}.weights;{weight}];
-        elseif(isfield(gltf.meshes{1},'weights') && ~isempty(gltf.meshes{1}.weights))
-            gltf.meshes{mesh_idx+1}.weights=[gltf.meshes{1}.weights;{0}];
+        if(~isempty(weight)&& isfield(gltf.meshes{mesh_idx+1},'weights') && ~isempty(gltf.meshes{mesh_idx+1}.weights))
+            gltf.meshes{mesh_idx+1}.weights=[gltf.meshes{mesh_idx+1}.weights;{weight}];
+        elseif(isfield(gltf.meshes{mesh_idx+1},'weights') && ~isempty(gltf.meshes{mesh_idx+1}.weights))
+            gltf.meshes{mesh_idx+1}.weights=[gltf.meshes{mesh_idx+1}.weights;{weight}];
         elseif(~isempty(weight))
             gltf.meshes{mesh_idx+1}.weights=repmat({0},1,numel(gltf.meshes{mesh_idx+1}.primitives{primitive_idx+1}.targets)+1);
         end

@@ -1336,11 +1336,11 @@ function material_idx=addMaterial(gltf,varargin)
     if(~ismember("emissiveStrength",ips.UsingDefaults))
         addExtension(gltf,"KHR_materials_emissive_strength");
         if(~isempty(emissiveStrength))
-            iorstruct=struct('emissiveStrength',emissiveStrength);
+            emissiveStrengthstruct=struct('emissiveStrength',emissiveStrength);
         else
-            iorstruct=struct();
+            emissiveStrengthstruct=struct();
         end
-        material.extensions.KHR_materials_ior=struct('KHR_materials_emissive_strength',iorstruct);
+        material.extensions.KHR_materials_emissive_strength=emissiveStrengthstruct;
     end
     if(or(~isnan(transmissionTextureIdx),or(~isempty(transmissionFactor),~ismissing(transmissionTexture))))
         addExtension(gltf,"KHR_materials_transmission");

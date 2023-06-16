@@ -40,7 +40,7 @@ function material_idx=addMaterial(gltf,varargin)
     % provided, is ignored.
     %
     % ADDMATERIAL(...,'baseColorTextureSet',SET) uses the TEXCOORD SET as
-    % the texture coordintes for the material base colour.
+    % the texture coordinates for the material base colour.
     %
     % ADDMATERIAL(...,'baseColorMagFilter',MAGFILTER) sets the
     % magnification filter for the base colour texture as per OpenGL.
@@ -82,7 +82,7 @@ function material_idx=addMaterial(gltf,varargin)
     % to X [-1,1], green [0,1] to Y [-1,1], and blue (0.5,1] to Z (0,1].
     %
     % ADDMATERIAL(...,'normalTextureSet',SET) uses the TEXCOORD SET as the
-    % texture coordintes for the material normal texture.
+    % texture coordinates for the material normal texture.
     %
     % ADDMATERIAL(...,'normalMagFilter',MAGFILTER) sets the magnification
     % filter for the normal texture as per OpenGL. MAGFILTER should be one
@@ -125,7 +125,7 @@ function material_idx=addMaterial(gltf,varargin)
     % 'occlusionEmbedTexture', if provided, is ignored.
     %
     % ADDMATERIAL(...,'occlusionTextureSet',SET) uses the TEXCOORD SET as
-    % the texture coordintes for the material occlusion.
+    % the texture coordinates for the material occlusion.
     %
     % ADDMATERIAL(...,'occlusionMagFilter',MAGFILTER) sets the
     % magnification filter for the occlusion texture as per OpenGL.
@@ -170,7 +170,7 @@ function material_idx=addMaterial(gltf,varargin)
     % 'metallicRoughnessEmbedTexture', if provided, is ignored.
     %
     % ADDMATERIAL(...,'metallicRoughnessTextureSet',SET) uses the TEXCOORD
-    % SET as the texture coordintes for the material metallic roughness.
+    % SET as the texture coordinates for the material metallic roughness.
     %
     % ADDMATERIAL(...,'metallicRoughnessMagFilter',MAGFILTER) sets the
     % magnification filter for the metallic roughness texture as per
@@ -218,7 +218,7 @@ function material_idx=addMaterial(gltf,varargin)
     % if provided, is ignored.
     %
     % ADDMATERIAL(...,'emissiveTextureSet',SET) uses the TEXCOORD SET as
-    % the texture coordintes for the material emissive.
+    % the texture coordinates for the material emissive.
     %
     % ADDMATERIAL(...,'emissiveMagFilter',MAGFILTER) sets the magnification
     % filter for the emissive texture as per OpenGL. MAGFILTER should be
@@ -265,7 +265,7 @@ function material_idx=addMaterial(gltf,varargin)
     % of 'transmissionEmbedTexture', if provided, is ignored.
     %
     % ADDMATERIAL(...,'transmissionTextureSet',SET) uses the TEXCOORD SET
-    % as the texture coordintes for the material transmission.
+    % as the texture coordinates for the material transmission.
     %
     % ADDMATERIAL(...,'transmissionMagFilter',MAGFILTER) sets the
     % magnification filter for the transmission texture as per OpenGL.
@@ -319,7 +319,7 @@ function material_idx=addMaterial(gltf,varargin)
     % 'thicknessEmbedTexture', if provided, is ignored.
     %
     % ADDMATERIAL(...,'thicknessTextureSet',SET) uses the TEXCOORD SET as
-    % the texture coordintes for the material thickness.
+    % the texture coordinates for the material thickness.
     %
     % ADDMATERIAL(...,'thicknessMagFilter',MAGFILTER) sets the
     % magnification filter for the thickness texture as per OpenGL.
@@ -374,7 +374,7 @@ function material_idx=addMaterial(gltf,varargin)
     % value of 'clearcoatEmbedTexture', if provided, is ignored.
     %
     % ADDMATERIAL(...,'clearcoatTextureSet',SET) uses the TEXCOORD
-    % SET as the texture coordintes for the material clearcoat texture.
+    % SET as the texture coordinates for the material clearcoat texture.
     %
     % ADDMATERIAL(...,'clearcoatTextureMagFilter',MAGFILTER) sets the
     % magnification filter for the clearcoat texture as per OpenGL.
@@ -422,7 +422,7 @@ function material_idx=addMaterial(gltf,varargin)
     % ignored.
     %
     % ADDMATERIAL(...,'clearcoatRoughnessTextureSet',SET) uses the
-    % TEXCOORD SET as the texture coordintes for the material clearcoat
+    % TEXCOORD SET as the texture coordinates for the material clearcoat
     % roughness texture.
     %
     % ADDMATERIAL(...,'clearcoatRoughnessTextureMagFilter',MAGFILTER) sets
@@ -471,7 +471,7 @@ function material_idx=addMaterial(gltf,varargin)
     % [-1,1], and blue (0.5,1] to Z (0,1].
     %
     % ADDMATERIAL(...,'clearcoatNormalTextureSet',SET) uses the
-    % TEXCOORD SET as the texture coordintes for the material clearcoat
+    % TEXCOORD SET as the texture coordinates for the material clearcoat
     % normal.
     %
     % ADDMATERIAL(...,'clearcoatNormalTextureMagFilter',MAGFILTER) sets the
@@ -520,7 +520,7 @@ function material_idx=addMaterial(gltf,varargin)
     % 'sheenColorEmbedTexture', if provided, is ignored.
     %
     % ADDMATERIAL(...,'sheenColorTextureSet',SET) uses the TEXCOORD SET as
-    % the texture coordintes for the material sheen colour.
+    % the texture coordinates for the material sheen colour.
     %
     % ADDMATERIAL(...,'sheenColorMagFilter',MAGFILTER) sets the
     % magnification filter for the sheen colour texture as per OpenGL.
@@ -568,7 +568,7 @@ function material_idx=addMaterial(gltf,varargin)
     % ignored.
     %
     % ADDMATERIAL(...,'sheenRoughnessTextureSet',SET) uses the TEXCOORD SET
-    % as the texture coordintes for the material sheen roughness.
+    % as the texture coordinates for the material sheen roughness.
     %
     % ADDMATERIAL(...,'sheenRoughnessMagFilter',MAGFILTER) sets the
     % magnification filter for the sheen roughness texture as per OpenGL.
@@ -614,7 +614,7 @@ function material_idx=addMaterial(gltf,varargin)
     % ignored.
     %
     % ADDMATERIAL(...,'specularTextureSet',SET) uses the TEXCOORD SET as
-    % the texture coordintes for the material specular texture.
+    % the texture coordinates for the material specular texture.
     %
     % ADDMATERIAL(...,'specularMagFilter',MAGFILTER) sets the magnification
     % filter for the specular texture as per OpenGL. MAGFILTER should be
@@ -665,7 +665,7 @@ function material_idx=addMaterial(gltf,varargin)
     % specular reflection. The image format needs to be JPEG or PNG.
     %
     % ADDMATERIAL(...,'specularColorTextureSet',SET) uses the TEXCOORD SET
-    % as the texture coordintes for the material specular colour.
+    % as the texture coordinates for the material specular colour.
     %
     % ADDMATERIAL(...,'specularColorMagFilter',MAGFILTER) sets the
     % magnification filter for the specular colour texture as per OpenGL.
@@ -714,7 +714,7 @@ function material_idx=addMaterial(gltf,varargin)
     % the value of 'iridescenceEmbedTexture', if provided, is ignored.
     %
     % ADDMATERIAL(...,'iridescenceTextureSet',SET) uses the TEXCOORD SET as
-    % the texture coordintes for the material iridescence intensity.
+    % the texture coordinates for the material iridescence intensity.
     %
     % ADDMATERIAL(...,'iridescenceIor',IOR) sets the index of refraction of
     % the dielectric thin-film layer.
@@ -767,7 +767,7 @@ function material_idx=addMaterial(gltf,varargin)
     % 'iridescenceThicknessEmbedTexture', if provided, is ignored.
     %
     % ADDMATERIAL(...,'iridescenceThicknessTextureSet',SET) uses the
-    % TEXCOORD SET as the texture coordintes for the thin-film layer
+    % TEXCOORD SET as the texture coordinates for the thin-film layer
     % thickness of the material.
     %
     % ADDMATERIAL(...,'iridescenceThicknessMagFilter',MAGFILTER) sets the
@@ -795,6 +795,56 @@ function material_idx=addMaterial(gltf,varargin)
     % ADDMATERIAL(...,'iridescenceThicknessEmbedTexture',FALSE) includes
     % the thickness texture image of the thin-film layer as a link inside
     % the GLTF file.
+    %
+    % ADDMATERIAL(...,'anisotropyStrength',STRENGTH) sets the base
+    % anisotropy strength for the material, a dimensionless number in the
+    % range [0,1] and increases the roughness along a chosen direction.
+    %
+    % ADDMATERIAL(...,'anisotropyRotation',ANGLE) sets ANGLE as rotation of
+    % the anisotropy in tangent-bitangent space, measured in radians
+    % counter-clockwise from the tangent towards the bitangent. When
+    % 'anisotropyTexture' is provided, setting this provides additional
+    % rotation to the vectors in the texture.
+    %
+    % ADDMATERIAL(...,'anisotropyTextureIdx',TEXTURE_IDX) uses TEXTURE_IDX
+    % as the anisotropy map for the material.
+    % 
+    % ADDMATERIAL(...,'anisotropyTextureSampler',SAMPLER_IDX) uses
+    % SAMPLER_IDX as the anisotropy map sampler for the material.
+    % 
+    % ADDMATERIAL(...,'anisotropyTexture',IMAGE) uses the R and G channels
+    % of IMAGE as the the anisotropy direction in [-1,1] tangent-bitangent
+    % space for the material, to be further rotated by 'anisotropyRotation'
+    % if provided, and the B channel as strength as [0,1] to be multiplied
+    % by 'anisotropyStrength', if provided. IMAGE can be a JPG or PNG
+    % filename, or an index to an image. If it is an index, the value of
+    % 'anisotropyEmbedTexture', if provided, is ignored.
+    %
+    % ADDMATERIAL(...,'anisotropyTextureSet',SET) uses the TEXCOORD SET as
+    % the texture coordinates for the material anisotropy.
+    %
+    % ADDMATERIAL(...,'anisotropyMagFilter',MAGFILTER) sets the
+    % magnification filter for the anisotropy texture as per OpenGL.
+    % MAGFILTER should be one of "NEAREST", "LINEAR",
+    % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
+    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
+    %
+    % ADDMATERIAL(...,'anisotropyMinFilter',MINFILTER) sets the
+    % minification filter for the anisotropy texture as per OpenGL.
+    % MINFILTER should be one of "NEAREST", "LINEAR",
+    % "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST",
+    % "NEAREST_MIPMAP_LINEAR", or "LINEAR_MIPMAP_LINEAR".
+    %
+    % ADDMATERIAL(...,'anisotropyWrapS',WRAPS) sets the wrapping of the U
+    % coordinate of anisotropy texture as per OpenGL. WRAPS should be one
+    % of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
+    %
+    % ADDMATERIAL(...,'anisotropyWrapT',WRAPT) sets the wrapping of the V
+    % coordinate of anisotropy texture as per OpenGL. WRAPT should be one
+    % of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
+    %
+    % ADDMATERIAL(...,'anisotropyEmbedTexture',FALSE) includes the
+    % anisotropy texture image as a link inside the GLTF file.
     %
     % © Copyright 2014-2023 Rohan Chabukswar
     %
@@ -962,7 +1012,6 @@ function material_idx=addMaterial(gltf,varargin)
     ips.addParameter('specularColorWrapS',missing,@(x)GLTF.validateString(x,wrap_str_values));
     ips.addParameter('specularColorWrapT',missing,@(x)GLTF.validateString(x,wrap_str_values));
     ips.addParameter('specularColorEmbedTexture',true,@islogical);
-    ips.addParameter('unlit',false,@islogical);
     ips.addParameter('iridescenceFactor',[],@isnumeric);
     ips.addParameter('iridescenceTexture',missing,@(x)or(isstring(x),isnumeric(x)));
     ips.addParameter('iridescenceTextureIdx',nan,@isnumeric);
@@ -985,6 +1034,18 @@ function material_idx=addMaterial(gltf,varargin)
     ips.addParameter('iridescenceThicknessWrapS',missing,@(x)GLTF.validateString(x,wrap_str_values));
     ips.addParameter('iridescenceThicknessWrapT',missing,@(x)GLTF.validateString(x,wrap_str_values));
     ips.addParameter('iridescenceThicknessEmbedTexture',true,@islogical);
+    ips.addParameter('unlit',false,@islogical);
+    ips.addParameter('anisotropyStrength',[],@isnumeric);
+    ips.addParameter('anisotropyRotation',[],@isnumeric);
+    ips.addParameter('anisotropyTexture',missing,@(x)or(isstring(x),isnumeric(x)));
+    ips.addParameter('anisotropyTextureIdx',nan,@isnumeric);
+    ips.addParameter('anisotropyTextureSampler',nan,@isnumeric);
+    ips.addParameter('anisotropyTextureSet',nan,@isnumeric);
+    ips.addParameter('anisotropyMagFilter',missing,@(x)GLTF.validateString(x,filter_str_values));
+    ips.addParameter('anisotropyMinFilter',missing,@(x)GLTF.validateString(x,filter_str_values));
+    ips.addParameter('anisotropyWrapS',missing,@(x)GLTF.validateString(x,wrap_str_values));
+    ips.addParameter('anisotropyWrapT',missing,@(x)GLTF.validateString(x,wrap_str_values));
+    ips.addParameter('anisotropyEmbedTexture',true,@islogical);
     ips.parse(varargin{:});
     parameters=ips.Results;
     name=parameters.name;
@@ -1154,6 +1215,17 @@ function material_idx=addMaterial(gltf,varargin)
     iridescenceThicknessWrapS=upper(parameters.iridescenceThicknessWrapS);
     iridescenceThicknessWrapT=upper(parameters.iridescenceThicknessWrapT);
     iridescenceThicknessEmbedTexture=parameters.iridescenceThicknessEmbedTexture;
+    anisotropyStrength=parameters.anisotropyStrength;
+    anisotropyRotation=parameters.anisotropyRotation;
+    anisotropyTexture=parameters.anisotropyTexture;
+    anisotropyTextureIdx=parameters.anisotropyTextureIdx;
+    anisotropyTextureSampler=parameters.anisotropyTextureSampler;
+    anisotropyTextureSet=parameters.anisotropyTextureSet;
+    anisotropyMagFilter=parameters.anisotropyMagFilter;
+    anisotropyMinFilter=parameters.anisotropyMinFilter;
+    anisotropyWrapS=parameters.anisotropyWrapS;
+    anisotropyWrapT=parameters.anisotropyWrapT;
+    anisotropyEmbedTexture=parameters.anisotropyEmbedTexture;
     unlit=parameters.unlit;
     material=struct();
     if(~isempty(baseColorFactor))
@@ -1518,6 +1590,31 @@ function material_idx=addMaterial(gltf,varargin)
 	        KHR_materials_iridescence_struct.iridescenceThicknessTexture.texCoord=iridescenceThicknessTextureSet;
         end
         material.extensions.KHR_materials_iridescence=KHR_materials_iridescence_struct;
+    end
+    if(or(or(~isempty(anisotropyStrength),~isempty(anisotropyRotation)),or(~ismissing(anisotropyTexture),~isnan(anisotropyTextureIdx))))
+        addExtension(gltf,"KHR_materials_anisotropy");
+        KHR_materials_anisotropy_struct=struct();
+        if(~isempty(anisotropyStrength))
+            KHR_materials_anisotropy_struct.anisotropyStrength=anisotropyStrength;
+        end
+        if(~isempty(anisotropyRotation))
+            KHR_materials_anisotropy_struct.anisotropyRotation=anisotropyRotation;
+        end
+        if(~isnan(anisotropyTextureIdx))
+            KHR_materials_anisotropy_struct.anisotropyTexture=struct('index',anisotropyTextureIdx);
+        elseif(~ismissing(anisotropyTexture))
+            if(isnumeric(anisotropyTexture))
+                KHR_materials_anisotropy_struct.anisotropyTexture=struct('index',addTexture(gltf,anisotropyTexture));
+            elseif(~isnan(anisotropyTextureSampler))
+                KHR_materials_anisotropy_struct.anisotropyTexture=struct('index',addTexture(gltf,anisotropyTexture,'sampler',anisotropyTextureSampler,'embedTexture',anisotropyEmbedTexture));
+            else
+                KHR_materials_anisotropy_struct.anisotropyTexture=struct('index',addTexture(gltf,anisotropyTexture,'magFilter',anisotropyMagFilter,'minFilter',anisotropyMinFilter,'wrapS',anisotropyWrapS,'wrapT',anisotropyWrapT,'embedTexture',anisotropyEmbedTexture));
+            end
+        end
+        if(~isnan(anisotropyTextureSet))
+            KHR_materials_anisotropy_struct.anisotropyTexture.texCoord=anisotropyTextureSet;
+        end
+        material.extensions.KHR_materials_anisotropy=KHR_materials_anisotropy_struct;
     end
     if(~isprop(gltf,'materials'))
         gltf.addprop('materials');

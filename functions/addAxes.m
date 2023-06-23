@@ -486,7 +486,7 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
             R=[cos(rot) sin(rot) 0;-sin(rot) cos(rot) 0;0 0 1];
             J=numel(tempstr);
             if(strlength(string(ax_h.(axislabel(i)).String))>0)
-                [axlabelsF{i},axlabelsV{i}]=text2FV(string(ax_h.(axislabel(i)).String),fontFile,10);
+                [axlabelsF{i},axlabelsV{i}]=text2FV(string(ax_h.(axislabel(i)).String),fontFile);
                 axlabelsV{i}(:,1)=axlabelsV{i}(:,1)-(max(axlabelsV{i}(:,1))+min(axlabelsV{i}(:,1)))/2;
                 VYmax=max(VYmax,max(axlabelsV{i}(:,2)));
                 VYmin=min(VYmin,min(axlabelsV{i}(:,2)));
@@ -498,7 +498,7 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
                     ticklabelsF{i}{j}=[];
                     ticklabelsV{i}{j}=[];
                 else
-                    [ticklabelsF{i}{j},ticklabelsV{i}{j}]=text2FV(tempstr(j),fontFile,10);
+                    [ticklabelsF{i}{j},ticklabelsV{i}{j}]=text2FV(tempstr(j),fontFile);
                     VYmax=max(VYmax,max(ticklabelsV{i}{j}(:,2)));
                     VYmin=min(VYmin,min(ticklabelsV{i}{j}(:,2)));
                     ticklabelsV{i}{j}=ticklabelsV{i}{j}*R;

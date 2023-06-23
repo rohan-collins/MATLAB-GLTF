@@ -94,7 +94,7 @@ for i=1:numel(x)
     % Get the index of the text object
     p3=(i-1)*4+4;
     % Convert the text string to mesh
-    [Ft,Vt]=text2FV(string(s(p3).String),fontFile,N);
+    [Ft,Vt]=text2FV(string(s(p3).String),fontFile);
     % Scale it so that the text height is 0.1 (times the pie radius, which
     % is always 1).
     Vt=Vt/(max(Vt(:,2))-min(Vt(:,2)))*0.1;

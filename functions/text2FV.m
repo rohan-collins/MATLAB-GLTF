@@ -1,10 +1,10 @@
-function [F,V]=text2FV(text,fontfile,N)
+function [F,V]=text2FV(text,fontfile)
     % Create a mesh from text
     %
     % TEXT2FV(text,fontfile,resolution) converts text to mesh, using the
-    % font file specified, and given resolution for bezier arcs. The output
-    % of READFONTFILE can be used instead of filename, to avoid re-reading
-    % of large font files. The function returns faces and vertices.
+    % font file specified. The output of READFONTFILE can be used instead
+    % of filename, to avoid re-reading of large font files. The function
+    % returns faces and vertices.
     %
     % © Copyright 2014-2023 Rohan Chabukswar
     %
@@ -27,6 +27,7 @@ function [F,V]=text2FV(text,fontfile,N)
     if(isstring(fontfile))
         fontfile=readFontFile(fontfile);
     end
+    N=fontfile.lineheight/50;
     patchlist=readSVG(writeSVG(text,fontfile),N);
     F=[];
     V=[];
@@ -275,6 +276,7 @@ function fullout=writeSVG(multitext,fontfile)
     if(~exist('lineheight','var'))
         lineheight=fontfile.lineheight;
     end
+    N2=lineheight/50;
     N=numel(multitext);
     bounds=repmat([Inf -Inf Inf -Inf],N,1);
     for j=1:N
@@ -285,7 +287,7 @@ function fullout=writeSVG(multitext,fontfile)
             if(glyphIdx(i)>0)
                 if(glyphs(glyphIdx(i),1)~=" ")
                     pathstr=glyphs(glyphIdx(i),3);
-                    [~,bounds_temp]=readSVGpaths(pathstr);
+                    [~,bounds_temp]=readSVGpaths(pathstr,N2);
                     bounds_temp=bounds_temp+[newx newx 0 0];
                     bounds(j,:)=[min(bounds(j,1),bounds_temp(1)) max(bounds(j,2),bounds_temp(2)) min(bounds(j,3),bounds_temp(3)) max(bounds(j,4),bounds_temp(4))];
                 end
@@ -389,9 +391,6 @@ function [newpath,bounds]=readSVGpaths(path,N)
     % READSVGPATHS(path,N) converts the SVG path definition string to
     % polygon, and returns the bounds of the path as [xmin xmax ymin ymax].
     %
-    if(nargin<2)
-        N=100;
-    end
     cmdsplit = '\s*([mMzZlLhHvVcCsSqQtTaA])\s*';
     numsplit = [ ...
         '\s*,\s*|'                ... % Split at comma with whitespace, or
@@ -615,7 +614,9 @@ function [newpath,bounds]=readSVGpaths(path,N)
     for i=1:numel(segmentcmds)
         switch(segmentcmds{i})
             case{'C','Q','c','q'}
-                [newpath,boundstemp]=bezier(segmentcoeffs{i},linspace(0,1,N+1));
+                t=[0;cumsum(vecnorm(diff(bezier(segmentcoeffs{i},linspace(0,1,1001))),2,2))]/sum(vecnorm(diff(bezier(segmentcoeffs{i},linspace(0,1,1001))),2,2));
+                t(end)=1;
+                [newpath,boundstemp]=bezier(segmentcoeffs{i},interp1(t,linspace(0,1,1001)',linspace(0,1,ceil(sum(vecnorm(diff(bezier(segmentcoeffs{i},linspace(0,1,1001))),2,2))/N)+1)'));
                 bounds=[min(bounds(1),boundstemp(1)) max(bounds(2),boundstemp(2)) min(bounds(3),boundstemp(3)) max(bounds(4),boundstemp(4))];
             otherwise
                 newpath=segmentcoeffs{i};

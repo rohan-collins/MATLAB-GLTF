@@ -94,9 +94,9 @@ MATLAB already has functions to display data in 3D:
 * Apple provides [a Reality Converter app and Python-based command-line tools](https://developer.apple.com/augmented-reality/tools/) to export FBX and GLTF/GLB objects to USDZ, which is used by Android and Apple to show objects in AR.
 
 ## Origin
-**GLTF class is not available in MATLAB or on MATLAB Central.**
+**GLTF class is now available on MATLAB Central.**
 
-There are no toolboxes or libraries to export 3D object from MATLAB. There are a couple of scripts on MATLAB Central that can help you read and `.stl` and `.obj` files.
+There are no toolboxes or libraries to export 3D objects from MATLAB. There are a couple of scripts on MATLAB Central that can help you read and `.stl` and `.obj` files.
 
 Using Blender or MeshLab to create the models or graphics would lose the mathematical aspect, and it would take too long.
 

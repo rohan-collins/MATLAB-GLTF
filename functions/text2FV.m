@@ -23,7 +23,6 @@ function [F,V]=text2FV(text,fontfile)
     % You should have received a copy of the GNU General Public License
     % along with MATLAB GLTF. If not, see <https://www.gnu.org/licenses/>.
     %
-
     if(isstring(fontfile))
         fontfile=readFontFile(fontfile);
     end
@@ -587,25 +586,28 @@ function [newpath,bounds]=readSVGpaths(path,N)
                     startpoint = endpoint;
                 end
             case 'a'  % Elliptical arc to:
-                % TODO: Implement elliptical arcs, cf.:
-                % http://www.w3.org/TR/SVG/implnote.html#ArcImplementationNotes
                 for k=1:7:nparams
                     segments = segments + 1;
-                    segmentcmds{segments} = 'L'; %#ok<AGROW>
+                    segmentcmds{segments} = 'A'; %#ok<AGROW>
                     endpoint = startpoint + params(k+5:k+6);
-                    segmentcoeffs{segments} = [startpoint; endpoint]; %#ok<AGROW>
+                    r=params(k:k+1);
+                    phi=params(k+2);
+                    f=params(k+3:k+4)>0.5;
+                    segmentcoeffs{segments} = [startpoint; endpoint; r; phi nan; f]; %#ok<AGROW>
                     startpoint = endpoint;
                 end
             case 'A'
                 for k=1:7:nparams
                     segments = segments + 1;
-                    segmentcmds{segments} = 'L'; %#ok<AGROW>
+                    segmentcmds{segments} = 'A'; %#ok<AGROW>
                     endpoint = params(k+5:k+6);
-                    segmentcoeffs{segments} = [startpoint; endpoint]; %#ok<AGROW>
+                    r=params(k:k+1);
+                    phi=params(k+2);
+                    f=params(k+3:k+4)>0.5;
+                    segmentcoeffs{segments} = [startpoint; endpoint; r; phi nan; f]; %#ok<AGROW>
                     startpoint = endpoint;
                 end
             case 'z'  % Close path:
-                % Do nothing in this case.
             case 'Z'
         end
     end
@@ -613,10 +615,13 @@ function [newpath,bounds]=readSVGpaths(path,N)
     bounds=[Inf -Inf Inf -Inf];
     for i=1:numel(segmentcmds)
         switch(segmentcmds{i})
-            case{'C','Q','c','q'}
+            case{'C','Q'}
                 t=[0;cumsum(vecnorm(diff(bezier(segmentcoeffs{i},linspace(0,1,1001))),2,2))]/sum(vecnorm(diff(bezier(segmentcoeffs{i},linspace(0,1,1001))),2,2));
                 t(end)=1;
                 [newpath,boundstemp]=bezier(segmentcoeffs{i},interp1(t,linspace(0,1,1001)',linspace(0,1,ceil(sum(vecnorm(diff(bezier(segmentcoeffs{i},linspace(0,1,1001))),2,2))/N)+1)'));
+                bounds=[min(bounds(1),boundstemp(1)) max(bounds(2),boundstemp(2)) min(bounds(3),boundstemp(3)) max(bounds(4),boundstemp(4))];
+            case{'A'}
+                [newpath,boundstemp]=arc(segmentcoeffs{i},N);
                 bounds=[min(bounds(1),boundstemp(1)) max(bounds(2),boundstemp(2)) min(bounds(3),boundstemp(3)) max(bounds(4),boundstemp(4))];
             otherwise
                 newpath=segmentcoeffs{i};
@@ -687,6 +692,97 @@ function curve=bezierfun(x,points)
     for i=0:degree
         curve(:,1)=curve(:,1)+nchoosek(degree,i)*(x.^i).*((1-x).^(degree-i))*points(i+1,1);
     end
+end
+
+function [curve,bounds]=arc(params,N)
+    % Generate an elliptical arc given parameters and the bounds.
+    %
+    % ARC(params,N) computes the coordiantes of the elliptical arc defined
+    % by the parameters. The first row of the parameters gives the start
+    % point, the second gives the end point, the third row has the
+    % semimajor and semiminor axes, the first element of fourth row is the
+    % angle or rotation of the ellipse in degrees, if the first element of
+    % the fifth row is more than 0.5 the arc is greater than 180°,
+    % otherwise it's less than 180°, if the second element of the fifth row
+    % is more than 0.5, the arc begins moving at positive angles, otherwise
+    % at negative angles, and the second element of the fifth row is
+    % disregarded. If the start and end points are farther than the
+    % ellipse's x and y radius can reach, the ellipse's radii will be
+    % minimally expanded so it could reach the start and end points.
+    %
+    x1=params(1,1);
+    y1=params(1,2);
+    x2=params(2,1);
+    y2=params(2,2);
+    rx=params(3,1);
+    ry=params(3,2);
+    phi=params(4,1);
+    fa=params(5,1);
+    fs=params(5,2);
+    if(or(rx==0,ry==0))
+        curve=[x1 y1;x2 y2];
+        bounds=[min(x1,x2) max(x1,x2) min(y1,y2) max(y1,y2)];
+    else
+        R=[cos(phi*pi/180) -sin(phi*pi/180);sin(phi*pi/180) cos(phi*pi/180)];
+        xy1dash=R'*[(x1-x2)/2;(y1-y2)/2];
+        x1dash=xy1dash(1);
+        y1dash=xy1dash(2);
+        rx=abs(rx);
+        ry=abs(ry);
+        Lambda=x1dash.^2./rx.^2+y1dash.^2./ry.^2;
+        if(Lambda>1)
+            rx=sqrt(Lambda)*rx;
+            ry=sqrt(Lambda)*ry;
+        end
+        sgn=1-(fa==fs)*2;
+        radicand_numerator=rx.^2.*ry.^2;
+        radicand_denominator=rx.^2.*y1dash.^2+ry.^2.*x1dash.^2;
+        if(radicand_numerator./radicand_denominator-1<=2*eps) %#ok<BDSCA>
+            cxydash=[0;0];
+        else
+            cxydash=sgn*sqrt(radicand_numerator./radicand_denominator-1)*[rx./ry.*y1dash;-ry./rx.*x1dash];
+        end
+        cxdash=cxydash(1);
+        cydash=cxydash(2);
+        cxy=R*cxydash+[(x1+x2)/2;(y1+y2)/2];
+        cx=cxy(1);
+        cy=cxy(2);
+        theta1=ang([1;0],[(x1dash-cxdash)./rx;(y1dash-cydash)./ry]);
+        dtheta=mod(ang([(x1dash-cxdash)./rx;(y1dash-cydash)./ry],[(-x1dash-cxdash)./rx;(-y1dash-cydash)./ry]),2*pi);
+        if(fs<0.5)
+            dtheta=dtheta-2*pi;
+        end
+        theta=linspace(theta1,theta1+dtheta,N+1);
+        curve=R*[rx.*cos(theta);ry.*sin(theta)]+cxy;
+        curve=curve';
+        if(dtheta<0)
+            t1=theta1+dtheta;
+            t2=theta1;
+        else
+            t1=theta1;
+            t2=theta1+dtheta;
+        end
+        [~,bounds(1)]=fminbnd(@(x)R(1,:)*[rx.*cos(x);ry.*sin(x)]+cx,t1,t2);
+        [~,bounds(2)]=fminbnd(@(x)-(R(1,:)*[rx.*cos(x);ry.*sin(x)]+cx),t1,t2);
+        bounds(2)=-bounds(2);
+        [~,bounds(3)]=fminbnd(@(x)R(2,:)*[rx.*cos(x);ry.*sin(x)]+cy,t1,t2);
+        [~,bounds(4)]=fminbnd(@(x)-(R(2,:)*[rx.*cos(x);ry.*sin(x)]+cy),t1,t2);
+        bounds(4)=-bounds(4);
+    end
+end
+
+function alpha=ang(u,v)
+    % Calculate the angle between two vectors.
+    %
+    % ANG(u,v) calculates the angle in radians between the two column
+    % vectors u and v.
+    %
+    if(det([u v])<0)
+        sgn=-1;
+    else
+        sgn=1;
+    end
+    alpha=sgn*real(acos(dot(u,v)/vecnorm(u)/vecnorm(v)));
 end
 
 function out=double2string(num)

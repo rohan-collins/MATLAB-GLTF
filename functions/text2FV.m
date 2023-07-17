@@ -360,17 +360,19 @@ function glyphIdx=text2glyphIdx(text,glyphs)
         checklist=cell2mat(temp(strl==l));
         for i=1:size(substrings,1)
             if(all(~isnan(glyphIdx(i:i+l-1))))
-                if(any(all(substrings(i,:)==checklist,2)))
-                    if(i+l<numel(textunicode))
-                        if(textunicode(i+l)~=8204)
+                if(~isempty(checklist))
+                    if(any(all(substrings(i,:)==checklist,2)))
+                        if(i+l<numel(textunicode))
+                            if(textunicode(i+l)~=8204)
+                                locB=find(all(substrings(i,:)==checklist,2));
+                                glyphIdx(i)=locB+count;
+                                glyphIdx(i+1:i+l-1)=nan;
+                            end
+                        else
                             locB=find(all(substrings(i,:)==checklist,2));
                             glyphIdx(i)=locB+count;
                             glyphIdx(i+1:i+l-1)=nan;
                         end
-                    else
-                        locB=find(all(substrings(i,:)==checklist,2));
-                        glyphIdx(i)=locB+count;
-                        glyphIdx(i+1:i+l-1)=nan;
                     end
                 end
             end

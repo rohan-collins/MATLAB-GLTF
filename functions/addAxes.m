@@ -543,16 +543,18 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
                 end
                 J=numel(ticklabelsV{i});
                 for j=1:J
-                    ticklabelsV{i}{j}(:,2)=ticklabelsV{i}{j}(:,2)-VYcentre;
-                    ticklabelsV{i}{j}=ticklabelsV{i}{j}/VYrange*line_h;
-                    if(skeleton)
-                        Js=zeros(size(ticklabelsV{i}{j},1),4);
-                        Ws=[ones(size(ticklabelsV{i}{j},1),1) zeros(size(ticklabelsV{i}{j},1),3)];
-                        ticklabel_mesh{i}{j}=gltf.addMesh(ticklabelsV{i}{j},'indices',ticklabelsF{i}{j},'material',mat_idx(i),'WEIGHTS',Ws,'JOINTS',Js);
-                        gltf.addPrimitiveToMesh(ticklabel_mesh{i}{j},ticklabelsV{i}{j}.*[-1 1 0],'indices',ticklabelsF{i}{j},'material',mat_idx(i),'WEIGHTS',Ws,'JOINTS',Js);
-                    else
-                        ticklabel_mesh{i}{j}=gltf.addMesh(ticklabelsV{i}{j},'indices',ticklabelsF{i}{j},'material',mat_idx(i));
-                        gltf.addPrimitiveToMesh(ticklabel_mesh{i}{j},ticklabelsV{i}{j}.*[-1 1 0],'indices',ticklabelsF{i}{j},'material',mat_idx(i));
+                    if(~isempty(ticklabelsV{i}{j}))
+                        ticklabelsV{i}{j}(:,2)=ticklabelsV{i}{j}(:,2)-VYcentre;
+                        ticklabelsV{i}{j}=ticklabelsV{i}{j}/VYrange*line_h;
+                        if(skeleton)
+                            Js=zeros(size(ticklabelsV{i}{j},1),4);
+                            Ws=[ones(size(ticklabelsV{i}{j},1),1) zeros(size(ticklabelsV{i}{j},1),3)];
+                            ticklabel_mesh{i}{j}=gltf.addMesh(ticklabelsV{i}{j},'indices',ticklabelsF{i}{j},'material',mat_idx(i),'WEIGHTS',Ws,'JOINTS',Js);
+                            gltf.addPrimitiveToMesh(ticklabel_mesh{i}{j},ticklabelsV{i}{j}.*[-1 1 0],'indices',ticklabelsF{i}{j},'material',mat_idx(i),'WEIGHTS',Ws,'JOINTS',Js);
+                        else
+                            ticklabel_mesh{i}{j}=gltf.addMesh(ticklabelsV{i}{j},'indices',ticklabelsF{i}{j},'material',mat_idx(i));
+                            gltf.addPrimitiveToMesh(ticklabel_mesh{i}{j},ticklabelsV{i}{j}.*[-1 1 0],'indices',ticklabelsF{i}{j},'material',mat_idx(i));
+                        end
                     end
                 end
             end
@@ -625,6 +627,7 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
                 trans=tick_dir(i,:)*ticklabel_l+(s.*ax(1,:)+s.*diff(ax).*double(tick_dir(i,:)>0));
                 trans=repmat(trans,J,1);
                 trans(:,direction(i,:))=tick_loc'*s(direction(i,:));
+                J=numel(ticklabelsV{direction(i,:)});
                 for j=1:J
                     if(skeleton)
                         ticklabel_node{i}(j)=gltf.addNode('translation',trans(j,:)*base_rotation,'rotation',rot,'addToScene',false);

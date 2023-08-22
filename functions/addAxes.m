@@ -628,13 +628,16 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
                 trans=repmat(trans,J,1);
                 trans(:,direction(i,:))=tick_loc'*s(direction(i,:));
                 J=numel(ticklabelsV{direction(i,:)});
+                ticklabel_node{i}=nan(1,J);
                 for j=1:J
-                    if(skeleton)
-                        ticklabel_node{i}(j)=gltf.addNode('translation',trans(j,:)*base_rotation,'rotation',rot,'addToScene',false);
-                        skin_idx=gltf.addSkin(ticklabel_node{i}(j),'inverseBindMatrices',reshape(eye(4),16,1)');
-                        gltf.addNode('mesh',ticklabel_mesh{direction(i,:)}{j},'skin',skin_idx,'children',ticklabel_node{i}(j));
-                    else
-                        ticklabel_node{i}(j)=gltf.addNode('mesh',ticklabel_mesh{direction(i,:)}{j},'translation',trans(j,:)*base_rotation,'rotation',rot,'addToScene',false);
+                    if(~isempty(ticklabel_mesh{direction(i,:)}{j}))
+                        if(skeleton)
+                            ticklabel_node{i}(j)=gltf.addNode('translation',trans(j,:)*base_rotation,'rotation',rot,'addToScene',false);
+                            skin_idx=gltf.addSkin(ticklabel_node{i}(j),'inverseBindMatrices',reshape(eye(4),16,1)');
+                            gltf.addNode('mesh',ticklabel_mesh{direction(i,:)}{j},'skin',skin_idx,'children',ticklabel_node{i}(j));
+                        else
+                            ticklabel_node{i}(j)=gltf.addNode('mesh',ticklabel_mesh{direction(i,:)}{j},'translation',trans(j,:)*base_rotation,'rotation',rot,'addToScene',false);
+                        end
                     end
                 end
             end

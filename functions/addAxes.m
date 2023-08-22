@@ -78,6 +78,7 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
         ax_id=["x00";"x10";"x01";"x11";"0y0";"0y1";"1y0";"1y1";"00z";"10z";"01z";"11z"];
         grid_id=["xy0","xy1","x0z","x1z","0yz","1yz","xyz"];
         ips=inputParser;
+        ips.StructExpand=false;
         ips.addParameter('axis',[],@(x) isa(x,'matlab.graphics.axis.Axes'));
         ips.addParameter('baseRotation',eye(3),@(x) and(isnumeric(x),and(ismatrix(x),all(size(x)==[3 3]))));
         ips.addParameter('plotAspect',false,@islogical);

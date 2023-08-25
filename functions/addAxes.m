@@ -148,13 +148,33 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
         V=V*sqrt(3)/2+0.5;
         ax=axis(ax_h);
         ax=reshape(ax,2,3);
-        Vbox=V.*diff(ax)+ax(1,:);
 
         tick=string(char(88:90)')+"Tick";
         ticklabel=tick+"Label";
         axislabel=string(char(88:90)')+"Label";
         ticklabelrotation=ticklabel+"Rotation";
         colour=string(char(88:90)')+"Color";
+        scale=string(char(88:90)')+"Scale";
+        ruler=string(char(88:90)')+"Ruler";
+
+        ax_hticklabel=cell(3,1);
+        ax_htick_loc=cell(3,1);
+        for i=1:3
+            if(string(ax_h.(scale(i)))=="log")
+                % logX=true;
+                ax_htick_loc{i}=unique([ax_h.(tick(i)) ax_h.(ruler(i)).MinorTickValues],"sorted");
+                ax(:,i)=log10(ax(:,i));
+                ax_hticklabel{i}=repmat("",numel(ax_htick_loc{i}),1);
+                ax_hticklabel{i}(ismember(ax_h.(ruler(i)).MinorTickValues,ax_h.(tick(i))))=string(ax_h.(ticklabel(i)));
+                ax_htick_loc{i}=log10(ax_htick_loc{i});
+            else
+                % logX=false;
+                ax_htick_loc{i}=ax_h.(tick(i));
+                ax_hticklabel{i}=string(ax_h.(ticklabel(i)));
+            end
+        end
+
+        Vbox=V.*diff(ax)+ax(1,:);
 
         colourfactors=nan(6,3);
         for i=1:3
@@ -182,12 +202,12 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
             end
             gridlinesNodes=nan(1,7);
             if(any(ismember(["0yz","1yz"],gridIds)))
-                [A,B]=meshgrid(ax_h.(tick(2)),ax(:,3));
-                Vg1=[zeros(numel(ax_h.(tick(2)))*2,1) A(:) B(:)];
-                Eg1=reshape(1:numel(ax_h.(tick(2)))*2,2,numel(ax_h.(tick(2))))';
-                [A,B]=meshgrid(ax_h.(tick(3)),ax(:,2));
-                Vg2=[zeros(numel(ax_h.(tick(3)))*2,1) B(:) A(:)];
-                Eg2=reshape(1:numel(ax_h.(tick(3)))*2,2,numel(ax_h.(tick(3))))';
+                [A,B]=meshgrid(ax_htick_loc{2},ax(:,3));
+                Vg1=[zeros(numel(ax_htick_loc{2})*2,1) A(:) B(:)];
+                Eg1=reshape(1:numel(ax_htick_loc{2})*2,2,numel(ax_htick_loc{2}))';
+                [A,B]=meshgrid(ax_htick_loc{3},ax(:,2));
+                Vg2=[zeros(numel(ax_htick_loc{3})*2,1) B(:) A(:)];
+                Eg2=reshape(1:numel(ax_htick_loc{3})*2,2,numel(ax_htick_loc{3}))';
                 if(skeleton)
                     Js=zeros(size(Vg1,1),4);
                     Ws=[ones(size(Vg1,1),1) zeros(size(Vg1,1),3)];
@@ -217,12 +237,12 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
                 end
             end
             if(any(ismember(["x0z","x1z"],gridIds)))
-                [A,B]=meshgrid(ax_h.(tick(3)),ax(:,1));
-                Vg1=[B(:) zeros(numel(ax_h.(tick(3)))*2,1) A(:)];
-                Eg1=reshape(1:numel(ax_h.(tick(3)))*2,2,numel(ax_h.(tick(3))))';
-                [A,B]=meshgrid(ax_h.(tick(1)),ax(:,3));
-                Vg2=[A(:) zeros(numel(ax_h.(tick(1)))*2,1) B(:)];
-                Eg2=reshape(1:numel(ax_h.(tick(1)))*2,2,numel(ax_h.(tick(1))))';
+                [A,B]=meshgrid(ax_htick_loc{3},ax(:,1));
+                Vg1=[B(:) zeros(numel(ax_htick_loc{3})*2,1) A(:)];
+                Eg1=reshape(1:numel(ax_htick_loc{3})*2,2,numel(ax_htick_loc{3}))';
+                [A,B]=meshgrid(ax_htick_loc{1},ax(:,3));
+                Vg2=[A(:) zeros(numel(ax_htick_loc{1})*2,1) B(:)];
+                Eg2=reshape(1:numel(ax_htick_loc{1})*2,2,numel(ax_htick_loc{1}))';
                 if(skeleton)
                     Js=zeros(size(Vg1,1),4);
                     Ws=[ones(size(Vg1,1),1) zeros(size(Vg1,1),3)];
@@ -252,12 +272,12 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
                 end
             end
             if(any(ismember(["xy0","xy1"],gridIds)))
-                [A,B]=meshgrid(ax_h.(tick(1)),ax(:,2));
-                Vg1=[A(:) B(:) zeros(numel(ax_h.(tick(1)))*2,1)];
-                Eg1=reshape(1:numel(ax_h.(tick(1)))*2,2,numel(ax_h.(tick(1))))';
-                [A,B]=meshgrid(ax_h.(tick(2)),ax(:,1));
-                Vg2=[B(:) A(:) zeros(numel(ax_h.(tick(2)))*2,1)];
-                Eg2=reshape(1:numel(ax_h.(tick(2)))*2,2,numel(ax_h.(tick(2))))';
+                [A,B]=meshgrid(ax_htick_loc{1},ax(:,2));
+                Vg1=[A(:) B(:) zeros(numel(ax_htick_loc{1})*2,1)];
+                Eg1=reshape(1:numel(ax_htick_loc{1})*2,2,numel(ax_htick_loc{1}))';
+                [A,B]=meshgrid(ax_htick_loc{2},ax(:,1));
+                Vg2=[B(:) A(:) zeros(numel(ax_htick_loc{2})*2,1)];
+                Eg2=reshape(1:numel(ax_htick_loc{2})*2,2,numel(ax_htick_loc{2}))';
                 if(skeleton)
                     Js=zeros(size(Vg1,1),4);
                     Ws=[ones(size(Vg1,1),1) zeros(size(Vg1,1),3)];
@@ -287,15 +307,15 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
                 end
             end
             if(ismember("xyz",gridIds))
-                [C,A,B]=meshgrid(ax_h.(tick(3)),ax(:,1),ax_h.(tick(2)));
+                [C,A,B]=meshgrid(ax_htick_loc{3},ax(:,1),ax_htick_loc{2});
                 Vg1=[A(:) B(:) C(:)];
-                Eg1=reshape(1:2*numel(ax_h.(tick(2)))*numel(ax_h.(tick(3))),2,numel(ax_h.(tick(2)))*numel(ax_h.(tick(3))))';
-                [A,B,C]=meshgrid(ax_h.(tick(1)),ax(:,2),ax_h.(tick(3)));
+                Eg1=reshape(1:2*numel(ax_htick_loc{2})*numel(ax_htick_loc{3}),2,numel(ax_htick_loc{2})*numel(ax_htick_loc{3}))';
+                [A,B,C]=meshgrid(ax_htick_loc{1},ax(:,2),ax_htick_loc{3});
                 Vg2=[A(:) B(:) C(:)];
-                Eg2=reshape(1:2*numel(ax_h.(tick(1)))*numel(ax_h.(tick(3))),2,numel(ax_h.(tick(1)))*numel(ax_h.(tick(3))))';
-                [B,C,A]=meshgrid(ax_h.(tick(2)),ax(:,3),ax_h.(tick(1)));
+                Eg2=reshape(1:2*numel(ax_htick_loc{1})*numel(ax_htick_loc{3}),2,numel(ax_htick_loc{1})*numel(ax_htick_loc{3}))';
+                [B,C,A]=meshgrid(ax_htick_loc{2},ax(:,3),ax_htick_loc{1});
                 Vg3=[A(:) B(:) C(:)];
-                Eg3=reshape(1:2*numel(ax_h.(tick(1)))*numel(ax_h.(tick(2))),2,numel(ax_h.(tick(1)))*numel(ax_h.(tick(2))))';
+                Eg3=reshape(1:2*numel(ax_htick_loc{1})*numel(ax_htick_loc{2}),2,numel(ax_htick_loc{1})*numel(ax_htick_loc{2}))';
                 if(skeleton)
                     Js=zeros(size(Vg1,1),4);
                     Ws=[ones(size(Vg1,1),1) zeros(size(Vg1,1),3)];
@@ -468,12 +488,6 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
                 box_nodes(m)=gltf.addNode('mesh',gltf.addMesh(Vbox_i.*s*base_rotation,'indices',E1,'mode',"LINES",'material',mat(m)),'addToScene',false);
             end
         end
-%         if(skeleton)
-%             box_node2=gltf.addNode('children',box_nodes2,'addToScene',false);
-%             box_node=gltf.addNode('children',box_nodes,'addToScene',false);
-%         else
-%             box_node=gltf.addNode('children',box_nodes,'addToScene',false);
-%         end
 
         ticklabelsF=cell(3,1);
         ticklabelsV=cell(3,1);
@@ -482,7 +496,7 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
         VYmax=-Inf;
         VYmin=Inf;
         for i=1:3
-            tempstr=string(ax_h.(ticklabel(i)));
+            tempstr=ax_hticklabel{i};
             rot=ax_h.(ticklabelrotation(i))*pi/180;
             R=[cos(rot) sin(rot) 0;-sin(rot) cos(rot) 0;0 0 1];
             J=numel(tempstr);
@@ -610,7 +624,7 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
                         end
                     end
                 end
-                tick_loc=ax_h.(tick(direction(i,:)));
+                tick_loc=ax_htick_loc{direction(i,:)};
                 J=numel(tick_loc);
                 tickV{i}=repmat([zeros(1,3);tick_dir(i,:)],numel(tick_loc),1)*tick_l+(s.*ax(1,:)+s.*diff(ax).*double(tick_dir(i,:)>0));
                 tickV{i}(:,direction(i,:))=reshape(repmat(tick_loc,2,1),[],1)*s(direction(i,:));

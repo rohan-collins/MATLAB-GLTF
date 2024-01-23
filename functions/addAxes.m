@@ -344,7 +344,7 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
         if(~isempty(backPlanes))
             backplane_mat=gltf.addMaterial('baseColorFactor',ax_h.Color);
             backPlaneNodes=nan(1,6);
-            if(ismember("0yz",gridIds))
+            if(ismember("0yz",backPlanes))
                 [Vbox1,~,ic]=unique(Fbox(1:2,:));
                 Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5)*2.*diff(ax)*plane_delta;
                 F1=reshape(ic,2,3);
@@ -362,7 +362,7 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
                     backPlaneNodes(1)=gltf.addNode('mesh',gltf.addMesh(Vbox_i.*s*base_rotation,'indices',F1,'normals',true,'material',backplane_mat),'addToScene',false);
                 end
             end
-            if(ismember("1yz",gridIds))
+            if(ismember("1yz",backPlanes))
                 [Vbox1,~,ic]=unique(Fbox(3:4,:));
                 Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5)*2.*diff(ax)*plane_delta;
                 F1=reshape(ic,2,3);
@@ -380,7 +380,7 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
                     backPlaneNodes(2)=gltf.addNode('mesh',gltf.addMesh(Vbox_i.*s*base_rotation,'indices',F1,'normals',true,'material',backplane_mat),'addToScene',false);
                 end
             end
-            if(ismember("x0z",gridIds))
+            if(ismember("x0z",backPlanes))
                 [Vbox1,~,ic]=unique(Fbox(5:6,:));
                 Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5)*2.*diff(ax)*plane_delta;
                 F1=reshape(ic,2,3);
@@ -398,7 +398,7 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
                     backPlaneNodes(3)=gltf.addNode('mesh',gltf.addMesh(Vbox_i.*s*base_rotation,'indices',F1,'normals',true,'material',backplane_mat),'addToScene',false);
                 end
             end
-            if(ismember("x1z",gridIds))
+            if(ismember("x1z",backPlanes))
                 [Vbox1,~,ic]=unique(Fbox(7:8,:));
                 Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5)*2.*diff(ax)*plane_delta;
                 F1=reshape(ic,2,3);
@@ -416,7 +416,7 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
                     backPlaneNodes(4)=gltf.addNode('mesh',gltf.addMesh(Vbox_i.*s*base_rotation,'indices',F1,'normals',true,'material',backplane_mat),'addToScene',false);
                 end
             end
-            if(ismember("xy0",gridIds))
+            if(ismember("xy0",backPlanes))
                 [Vbox1,~,ic]=unique(Fbox(9:10,:));
                 Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5)*2.*diff(ax)*plane_delta;
                 F1=reshape(ic,2,3);
@@ -434,7 +434,7 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
                     backPlaneNodes(5)=gltf.addNode('mesh',gltf.addMesh(Vbox_i.*s*base_rotation,'indices',F1,'normals',true,'material',backplane_mat),'addToScene',false);
                 end
             end
-            if(ismember("xy1",gridIds))
+            if(ismember("xy1",backPlanes))
                 [Vbox1,~,ic]=unique(Fbox(11:12,:));
                 Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5)*2.*diff(ax)*plane_delta;
                 F1=reshape(ic,2,3);

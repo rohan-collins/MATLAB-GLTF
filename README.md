@@ -244,7 +244,7 @@ glTF is fully extensible and defines an extension mechanism that allows the base
 |Extension|Prefix|Category|Status|Notes|
 |---|---|---|---|---|
 |[`KHR_lights_punctual`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_lights_punctual)|KHR|Light|Ratified|Defines three "punctual" light sources: directional, point and spot. Punctual lights are defined as parameterized, infinitely small points that emit light in well-defined directions and intensities.|
-|[`KHR_materials_anisotropy`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_anisotropy)|KHR|Material|Ratification in Progress|Defines the anisotropic property of a material as observable with brushed metals for example.|
+|[`KHR_materials_anisotropy`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_anisotropy)|KHR|Material|Ratified|Defines the anisotropic property of a material as observable with brushed metals for example.|
 |[`KHR_materials_clearcoat`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_clearcoat)|KHR|Material|Ratified|Defines a clear coating that can be layered on top of an existing glTF material definition. A clear coat is a common technique used in Physically-Based Rendering to represent a protective layer applied to a base material.|
 |[`KHR_materials_emissive_strength`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_emissive_strength)|KHR|Material|Ratified|Defines a new emissiveStrength scalar factor that governs the upper limit of emissive strength per material, for use in PBR environments with high-dynamic range reflections and lighting, stronger emission effects may be desirable.|
 |[`KHR_materials_ior`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_ior)|KHR|Material|Ratified|Allows users to set the index of refraction to a certain value.|
@@ -255,9 +255,9 @@ glTF is fully extensible and defines an extension mechanism that allows the base
 |[`KHR_materials_unlit`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_unlit)|KHR|Material|Ratified|Defines an unlit shading model for use in glTF 2.0 materials, as an alternative to the Physically Based Rendering (PBR) shading models provided by the core specification.|
 |[`KHR_materials_variants`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_variants)|KHR|Variant|Ratified|Allows for a compact glTF representation of multiple material variants of an asset, structured to allow low-latency switching at runtime.|
 |[`KHR_materials_volume`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_volume)|KHR|Material|Ratified|When combined with KHR_materials_transmission, a refractive microfacet BTDF describes the transmission of light through the volume boundary, providing effects like refraction and absorption.|
-|[`EXT_mesh_gpu_instancing`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Vendor/EXT_mesh_gpu_instancing)|EXT|Performance|Experimental|Enables GPU instancing, rendering many copies of a single mesh at once using a small number of draw calls.|
-|[`KHR_animation_pointer`](https://github.com/KhronosGroup/glTF/pull/2147)|KHR|Animation|Draft| target any value in a glTF asset with animation data using [JSON Pointers](https://datatracker.ietf.org/doc/html/rfc6901).|
-|[`KHR_audio`](https://github.com/KhronosGroup/glTF/pull/2137)|KHR|Audio|Draft|Allows for the addition of spatialized and non-spatialized audio to glTF scenes.|
+|[`EXT_mesh_gpu_instancing`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Vendor/EXT_mesh_gpu_instancing)|EXT|Performance|Ratified|Enables GPU instancing, rendering many copies of a single mesh at once using a small number of draw calls.|
+|[`KHR_animation_pointer`](https://github.com/KhronosGroup/glTF/pull/2147)|KHR|Animation|Ready for testing| target any value in a glTF asset with animation data using [JSON Pointers](https://datatracker.ietf.org/doc/html/rfc6901).|
+|[`KHR_audio`](https://github.com/KhronosGroup/glTF/pull/2137)|KHR|Audio|Ready for testing|Allows for the addition of spatialized and non-spatialized audio to glTF scenes.|
 
 
 # MATLAB Graph Examples

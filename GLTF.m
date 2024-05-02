@@ -29,7 +29,7 @@ classdef GLTF < dynamicprops
         buffers     % Array of buffers
     end
     methods
-        function gltf=GLTF(varargin)
+        function gltf=GLTF(filename,varargin)
             % Class constructor.
             %
             % GLTF() creates and returns a blank GLTF model.
@@ -37,17 +37,16 @@ classdef GLTF < dynamicprops
             % GLTF(FILENAME) reads the GLTF file FILENAME and returns a
             % GLTF object.
             %
-            % GLTF(F,V) creates a GLTF model of one mesh with faces F and
-            % vertices V. V specifies vertex values and F defines which
-            % vertices to connect as triangles. The first colour given by
-            % the LINES function is used as material colour.
+            % GLTF(FILENAME,'readBuffer',FALSE) reads the GLTF file
+            % FILENAME but leaves referencing buffers as URI.
+            % GLTF object.
             %
-            % GLTF(F,V,C) creates a GLTF model of one mesh with faces F and
-            % vertices V. C determines the polygon colors. If C has the
-            % same number of rows as V, it is added as per-vertex colour.
-            % Otherwise, it is assumed to be 1x3 (RGB) or 1x4 (RGBA) vector
-            % for material colour.
-            %
+            ips=inputParser;
+            ips.addOptional('filename',missing);
+            ips.addParameter('readBuffer',true,@islogical);
+            ips.parse(varargin{:});
+            parameters=ips.Results;
+            readBuffer=parameters.readBuffer;
             gltf.asset=struct('version','2.0');
             gltf.scene=0;
             gltf.scenes{1}=struct('nodes',[]);
@@ -56,23 +55,7 @@ classdef GLTF < dynamicprops
             gltf.accessors=repmat({struct('bufferView',[],'componentType',[],'count',[],'type','')},0,1);
             gltf.bufferViews=repmat({struct('buffer',[],'byteLength',[],'byteOffset',[])},0,1);
             gltf.buffers=repmat({struct('byteLength',[],'uri',[])},0,1);
-            if(nargin>1)
-                F=varargin{1};
-                V=varargin{2};
-                if(nargin>2)
-                    C=varargin{3};
-                else
-                    C=lines(1);
-                end
-                if(and(or(size(C,2)==3,size(C,2)==4),size(C,1)==size(V,1)))
-                    gltf.addNode('mesh',gltf.addMesh(V,'indices',F,'COLOR',C));
-                elseif(and(or(size(C,2)==3,size(C,2)==4),size(C,1)==1))
-                    gltf.addNode('mesh',gltf.addMesh(V,'indices',F,'material',gltf.addMaterial('baseColorFactor',C)));
-                else
-                    gltf.addNode('mesh',gltf.addMesh(V,'indices',F,'material',gltf.addMaterial('baseColorFactor',lines(1))));
-                end
-            elseif(nargin>0)
-                filename=varargin{1};
+            if(nargin>0)
                 [~,~,ext]=fileparts(filename);
                 isurl=~isfile(filename);
                 if(or(ext==".glb",ext==".gltf"))
@@ -187,27 +170,33 @@ classdef GLTF < dynamicprops
                         end
                         gltf.bufferViews{i}=bufferView;
                     end
-                    for i=1:numel(gltf.buffers)
-                        buffer=gltf.buffers{i};
-                        if(isfield(buffer,'uri'))
-                            encoded=regexpi(buffer.uri,"data\:([\w\/\-]+\;)?(\w+)?,([A-Za-z0-9\/+\/=]*)",'tokens');
-                            if(isempty(encoded))
-                                [filepath,~,~]=fileparts(filename);
-                                if(isurl)
-                                    gltf.buffers{i}=webread(filepath+"/"+string(buffer.uri));
-                                else
-                                    if(filepath=="")
-                                        fid2=fopen(string(buffer.uri),'r');
+                    if(readBuffer)
+                        for i=1:numel(gltf.buffers)
+                            buffer=gltf.buffers{i};
+                            if(isfield(buffer,'uri'))
+                                encoded=regexpi(buffer.uri,"data\:([\w\/\-]+\;)?(\w+)?,([A-Za-z0-9\/+\/=]*)",'tokens');
+                                if(isempty(encoded))
+                                    [filepath,~,~]=fileparts(filename);
+                                    if(isurl)
+                                        gltf.buffers{i}=webread(filepath+"/"+string(buffer.uri));
                                     else
-                                        fid2=fopen(filepath+string(filesep)+string(buffer.uri),'r');
+                                        if(filepath=="")
+                                            fid2=fopen(string(buffer.uri),'r');
+                                        else
+                                            fid2=fopen(filepath+string(filesep)+string(buffer.uri),'r');
+                                        end
+                                        gltf.buffers{i}=uint8(fread(fid2));
+                                        fclose(fid2);
                                     end
-                                    gltf.buffers{i}=uint8(fread(fid2));
-                                    fclose(fid2);
+                                else
+                                    encoded=encoded{1}{3};
+                                    gltf.buffers{i}=matlab.net.base64decode(encoded);
                                 end
-                            else
-                                encoded=encoded{1}{3};
-                                gltf.buffers{i}=matlab.net.base64decode(encoded);
                             end
+                        end
+                    else
+                        for i=1:numel(gltf.buffers)
+                            gltf.buffers{i}.byteLength=uint32(gltf.buffers{i}.byteLength);
                         end
                     end
                     if(isprop(gltf,'animations'))
@@ -278,5 +267,6 @@ classdef GLTF < dynamicprops
         valid=validateStringWithIndex(input,possibilities,placeholder)
         out=joinString(strings)
         base64string=string2URI(filename)
+        [relative1,relative2]=getRelativePath(filename1,filename2)
     end
 end

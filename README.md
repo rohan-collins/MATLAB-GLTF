@@ -167,21 +167,6 @@ The node transformations and animation channel paths are 3D vectors or quaternio
 RGB color values use sRGB color primaries.
 
 ## FV to 3D Model
-1. Create a tetrahedron:  
-` V=[1 1 1;-1 -1 1;1 -1 -1;-1 1 -1];`  
-` F=[1 2 3;1 3 4;1 4 2;2 4 3];`  
-` C=[0 1 0]; % green`  
-
-2. Display it:  
-` patch('Faces',F,'Vertices',V,'FaceColor',C);`  
-` axis equal tight;`  
-` view(3);`  
-
-3. Create a GLTF file of it:  
-` GLTF(F,V,C).writeGLTF("test.gltf");`  
-
-## More Depth
-[FV to 3D Model](#fv-to-3d-model) showed the short-circuit way of creating models.  
 1. Initialise an instance of the GLTF class.  
 ` gltf=GLTF();`
 

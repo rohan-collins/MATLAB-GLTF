@@ -64,18 +64,20 @@ function writeGLB(gltf,filename,varargin)
     else
         if(numel(gltf.buffers)>1)
             [filepath,name,ext]=fileparts(bufferFile);
-            bufferFile=filepath+name+string(0:numel(gltf.buffers)-1)'+ext;
+            bufferFile=filepath+filesep+name+string(0:numel(gltf.buffers)-1)'+ext;
             for i=1:numel(gltf.buffers)
                 fid=fopen(bufferFile(i),'w');
                 fwrite(fid,gltf.buffers{i});
                 fclose(fid);
-                st.buffers{i}=struct('uri',bufferFile(i),'byteLength',uint32(numel(gltf.buffers{i})));
+                [~,relative2]=GLTF.getRelativePath(filename,bufferFile(i));
+                st.buffers{i}=struct('uri',relative2,'byteLength',uint32(numel(gltf.buffers{i})));
             end
         else
             fid=fopen(bufferFile,'w');
             fwrite(fid,gltf.buffers{1});
             fclose(fid);
-            st.buffers{1}=struct('uri',bufferFile,'byteLength',uint32(numel(gltf.buffers{1})));
+            [~,relative2]=GLTF.getRelativePath(filename,bufferFile);
+            st.buffers{1}=struct('uri',relative2,'byteLength',uint32(numel(gltf.buffers{1})));
         end
         jsonBuffer=jsonencode(st);
         jsonAlignedLength=ceil(numel(jsonBuffer)/4)*4;

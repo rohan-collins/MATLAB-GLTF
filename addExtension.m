@@ -1,8 +1,13 @@
-function addExtension(gltf,extension)
+function addExtension(gltf,extension,required)
     % Add an extension to be used.
     %
     % WRITEDAE(GLTF,EXTENSION) adds an extension to the GLTF object, if it
-    % has not already been added.
+    % has not already been added. It does not add the extension to the list
+    % of required extensions.
+    %
+    % WRITEDAE(GLTF,EXTENSION,TRUE) adds an extension to the GLTF object,
+    % if it has not already been added, and adds it to the list of required
+    % extensions as well.
     %
     % © Copyright 2014-2023 Rohan Chabukswar
     %
@@ -27,5 +32,16 @@ function addExtension(gltf,extension)
     extension=string(extension);
     if(isempty(gltf.extensionsUsed) || ~ismember(extension,gltf.extensionsUsed))
         gltf.extensionsUsed=[gltf.extensionsUsed {char(extension)}];
+    end
+    if(nargin<3)
+        required=false;
+    end
+    if(required)
+        if(~isprop(gltf,'extensionsRequired'))
+            gltf.addprop("extensionsRequired");
+        end
+        if(isempty(gltf.extensionsRequired) || ~ismember(extension,gltf.extensionsRequired))
+            gltf.extensionsRequired=[gltf.extensionsRequired {char(extension)}];
+        end
     end
 end

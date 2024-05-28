@@ -146,7 +146,7 @@ function node_idx=addNode(gltf,varargin)
         added=true;
     end
     if(or(or(~isempty(instancingTranslation),~isempty(instancingRotation)),~isempty(instancingScale)))
-        gltf.addExtension("EXT_mesh_gpu_instancing");
+        gltf.addExtension("EXT_mesh_gpu_instancing",true);
         if(~isempty(instancingTranslation))
             gltf.nodes{node_idx+1}.extensions.EXT_mesh_gpu_instancing.attributes.TRANSLATION=gltf.addBinaryData(instancingTranslation,"FLOAT","VEC3",true,"ARRAY_BUFFER");
         end

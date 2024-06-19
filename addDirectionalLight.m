@@ -12,7 +12,7 @@ function light_idx=addDirectionalLight(gltf,varargin)
     % ADDDIRECTIONALLIGHT(...,'intensity',INTENSITY) sets the intensity for
     % the light in lm/m^2.
     %
-    % © Copyright 2014-2023 Rohan Chabukswar
+    % © Copyright 2014-2024 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

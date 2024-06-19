@@ -13,7 +13,7 @@ function addTargetToPrimitive(gltf,mesh_idx,primitive_idx,V,varargin)
     % the handedness of the coordinate system used (+1 for NTB frame, -1
     % for TNB frame).
     %
-    % © Copyright 2014-2023 Rohan Chabukswar
+    % © Copyright 2014-2024 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

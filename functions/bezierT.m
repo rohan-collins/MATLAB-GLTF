@@ -11,7 +11,7 @@ function [manifold,varargout]=bezierT(points,t)
     % [CURVE,FIRST,SECOND,...]=BEZIERT(...) returns the first, second, etc.
     % derivatives of the curve.
     %
-    % © Copyright 2014-2023 Rohan Chabukswar
+    % © Copyright 2014-2024 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

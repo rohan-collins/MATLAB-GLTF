@@ -11,7 +11,7 @@ function addAnimation(gltf,samplers,channels,varargin)
     % ADDANIMATIONSAMPLER(...,'events',EVENTS) adds EVENTS as an array of
     % MSFT_audio_emitter events to the animation.
     %
-    % © Copyright 2014-2023 Rohan Chabukswar
+    % © Copyright 2014-2024 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

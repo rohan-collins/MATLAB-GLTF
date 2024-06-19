@@ -28,7 +28,7 @@ function [T,N,B,s,k,t,first,second,third,dsdt]=TNB(curve,varargin)
     % it is computed using central differences on CURVE where possible, and
     % forward and backward differences at the ends.
     %
-    % © Copyright 2014-2023 Rohan Chabukswar
+    % © Copyright 2014-2024 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

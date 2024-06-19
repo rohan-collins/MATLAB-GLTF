@@ -1,8 +1,11 @@
-function valid=validateString(input,possibilities)
+function valid=validateInteger(input,min,max)
     % Validate string inputs to functions.
     %
-    % VALIDATESTRING(INPUT,POSSIBILITIES) returns TRUE if INPUT is a member
-    % of POSSIBILITIES, and returns an error if it isn't.
+    % VALIDATEINTEGER(INPUT,POSSIBILITIES) returns TRUE if INPUT is an
+    % integer and one of POSSIBILITIES, and returns an error if it isn't.
+    %
+    % VALIDATEINTEGER(INPUT,MIN,MAX) returns TRUE if INPUT is an integer
+    % between MIN and MAX (inclusive), and returns an error if it isn't.
     %
     % © Copyright 2014-2024 Rohan Chabukswar.
     %
@@ -21,8 +24,18 @@ function valid=validateString(input,possibilities)
     % You should have received a copy of the GNU General Public License
     % along with MATLAB GLTF. If not, see <https://www.gnu.org/licenses/>.
     %
-    valid=ismissing(input) || ismember(input,possibilities);
-    if(~valid)
-        error("It must be " + GLTF.joinString(possibilities) + ".");
+    valid=isnumeric(input);
+    valid=valid && all(input==round(input));
+    if(nargin>2)
+        valid=valid && all(input>=min);
+        valid=valid && all(input<=max);
+        if(~valid)
+            error("Must be integer(s) greater than " + min + " and " + max + ".");
+        end
+    else
+        valid=all(ismember(input,min));
+        if(~valid)
+            error("Must be integer(s) " + GLTF.joinString(string(min)) + ".");
+        end
     end
 end

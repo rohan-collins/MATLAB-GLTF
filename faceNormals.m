@@ -9,7 +9,7 @@ function Nf=faceNormals(F,V)
     % the Free Software Foundation, either version 3 of the License, or (at
     % your option) any later version.
     %
-    % © Copyright 2014-2023 Rohan Chabukswar
+    % © Copyright 2014-2024 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

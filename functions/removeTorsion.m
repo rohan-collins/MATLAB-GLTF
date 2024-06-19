@@ -11,7 +11,7 @@ function [P,Q]=removeTorsion(N,B,t,s,dsdt,torsion,closed,stable)
     % stable is TRUE, the TPQ frames are calculated in a slower but
     % numerically stable fashion instead of algebraically.
     %
-    % © Copyright 2014-2023 Rohan Chabukswar
+    % © Copyright 2014-2024 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

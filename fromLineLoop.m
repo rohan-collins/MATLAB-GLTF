@@ -1,8 +1,9 @@
-function valid=validateString(input,possibilities)
-    % Validate string inputs to functions.
+function E=fromLineLoop(E)
+    % Converts data from an indices accessor to lines. FromLineLoop should
+    % be used when the mode for the mesh primitives is "LINE_LOOP" (2).
     %
-    % VALIDATESTRING(INPUT,POSSIBILITIES) returns TRUE if INPUT is a member
-    % of POSSIBILITIES, and returns an error if it isn't.
+    % FROMLINELOOP(GLTF,ACCESSOR_IDX) Converts data from an indices
+    % accessor to lines.
     %
     % © Copyright 2014-2024 Rohan Chabukswar.
     %
@@ -21,8 +22,5 @@ function valid=validateString(input,possibilities)
     % You should have received a copy of the GNU General Public License
     % along with MATLAB GLTF. If not, see <https://www.gnu.org/licenses/>.
     %
-    valid=ismissing(input) || ismember(input,possibilities);
-    if(~valid)
-        error("It must be " + GLTF.joinString(possibilities) + ".");
-    end
+    E=[E circshift(E,-1,1)]+1;
 end

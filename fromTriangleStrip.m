@@ -1,8 +1,10 @@
-function valid=validateString(input,possibilities)
-    % Validate string inputs to functions.
+function F=fromTriangleStrip(F)
+    % Converts data from an indices accessor to triangles.
+    % FromTriangleStrip should be used when the mode for the mesh
+    % primitives is "TRIANGLE_STRIP" (5).
     %
-    % VALIDATESTRING(INPUT,POSSIBILITIES) returns TRUE if INPUT is a member
-    % of POSSIBILITIES, and returns an error if it isn't.
+    % FROMTRIANGLESTRIP(GLTF,ACCESSOR_IDX) Converts data from an indices
+    % accessor to triangles.
     %
     % © Copyright 2014-2024 Rohan Chabukswar.
     %
@@ -21,8 +23,5 @@ function valid=validateString(input,possibilities)
     % You should have received a copy of the GNU General Public License
     % along with MATLAB GLTF. If not, see <https://www.gnu.org/licenses/>.
     %
-    valid=ismissing(input) || ismember(input,possibilities);
-    if(~valid)
-        error("It must be " + GLTF.joinString(possibilities) + ".");
-    end
+    F=[F(1:end-2) F(2:end-1) F(3:end)]+1;
 end

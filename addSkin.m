@@ -12,7 +12,7 @@ function skin_idx=addSkin(gltf,joints,varargin)
     % ADDNODE(...,'skeleton',SKELETON) specifies index of the node used as
     % a skeleton root.
     %
-    % © Copyright 2014-2023 Rohan Chabukswar
+    % © Copyright 2014-2024 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

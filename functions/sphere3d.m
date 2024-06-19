@@ -36,7 +36,7 @@ function [F,V,N,UV,T,B]=sphere3d(varargin)
     % vertex tangents, and vertex bitangents. If this option is TRUE,
     % setting 'STAGGERTRIANGLES' to TRUE does not affect the vertices.
     %
-    % © Copyright 2014-2023 Rohan Chabukswar
+    % © Copyright 2014-2024 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

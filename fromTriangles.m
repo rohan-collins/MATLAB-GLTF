@@ -1,9 +1,12 @@
 function F=fromTriangles(F)
-    % Converts triangles to polygons, assuming the implicit convention that
-    % the identifying vertex of each polygon is different from that of the
-    % previous polygon.
+    % Converts data from an indices accessor to triangles. FromTriangles
+    % should be used when the mode for the mesh primitives is "TRIANGLES"
+    % (4) or unspecified.
     %
-    % © Copyright 2014-2023 Rohan Chabukswar
+    % FROMTRIANGLES(GLTF,ACCESSOR_IDX) Converts data from an indices
+    % accessor to triangles.
+    %
+    % © Copyright 2014-2024 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %
@@ -20,22 +23,10 @@ function F=fromTriangles(F)
     % You should have received a copy of the GNU General Public License
     % along with MATLAB GLTF. If not, see <https://www.gnu.org/licenses/>.
     %
-    startIndex=0;
-    maxN=0;
-    newF=cell(size(F,1),1);
-    count=0;
-    for t=1:size(F,1)
-        if(F(t,1)~=startIndex)
-            if(count>0)
-                maxN=max(maxN,numel(newF{count}));
-            end
-            count=count+1;
-            newF{count}=F(t,:);
-            startIndex=F(t,1);
-        else
-            newF{count}=[newF{count} F(t,3)];
-        end
+    n=floor(numel(F)/3);
+    if(n>0)
+        F=reshape(F(1:3*n),3,[])'+1;
+    else
+        F=F(:)'+1;
     end
-    newF=newF(~cellfun(@isempty,newF));
-    F=cell2mat(cellfun(@(x) [x nan(1,maxN-numel(x))],newF,'UniformOutput',false));
 end

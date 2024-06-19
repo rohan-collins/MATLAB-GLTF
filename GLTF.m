@@ -1,7 +1,7 @@
 classdef GLTF < dynamicprops
     % Read and write GLTF 3D model and animation files.
     %
-    % © Copyright 2014-2023 Rohan Chabukswar
+    % © Copyright 2014-2024 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %
@@ -240,11 +240,12 @@ classdef GLTF < dynamicprops
         texture_idx=addTexture(gltf,image,varargin)
         [node,library_geometries,library_controllers,node_list]=getNode(gltf,documentNode,library_geometries,library_controllers,node_id,node_list,normals,tangents,binormals)
         [node,library_geometries,library_controllers,node_list]=getMeshNode(gltf,documentNode,library_geometries,library_controllers,node_id,node_list,normals,tangents,binormals)
-        [pred,isMesh]=nodeTree(gltf)
+        [pred,isMesh,hasSkin]=nodeTree(gltf)
         addExtension(gltf,extension)
         clip_id=addClip(gltf,filename,varargin)
         emitter_id=addEmitter(gltf,clips,varargin)
         eventStruct=createEventStruct(~,emitter,action,varargin)
+        writeOBJ(gltf,filename,varargin)
     end
 
     methods(Static)
@@ -252,6 +253,11 @@ classdef GLTF < dynamicprops
         out=toMat(cells)
         F=toTriangles(F)
         F=fromTriangles(F)
+        F=fromTriangleStrip(F)
+        F=fromTriangleFan(F)
+        E=fromLines(E)
+        E=fromLineLoop(E)
+        E=fromLineStrip(E)
         Nf=faceNormals(F,V)
         [Tf,Bf]=faceTangents(F,V,UV)
         [Nv,F,idx]=vertexNormals(F,V)
@@ -265,6 +271,7 @@ classdef GLTF < dynamicprops
         formatSpec_integer=formatSpec_integer()
         valid=validateString(input,possibilities)
         valid=validateStringWithIndex(input,possibilities,placeholder)
+        valid=validateInteger(input,min,max)
         out=joinString(strings)
         base64string=string2URI(filename)
         [relative1,relative2]=getRelativePath(filename1,filename2)

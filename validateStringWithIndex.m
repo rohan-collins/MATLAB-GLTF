@@ -5,7 +5,7 @@ function valid=validateStringWithIndex(input,possibilities,placeholder)
     % is a member of POSSIBILITIES, with any numerical index in place of
     % PLACEHOLDER, and returns an error if it isn't.
     %
-    % © Copyright 2014-2023 Rohan Chabukswar
+    % © Copyright 2014-2024 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

@@ -1,8 +1,10 @@
-function valid=validateString(input,possibilities)
-    % Validate string inputs to functions.
+function F=fromTriangleFan(F)
+    % Converts data from an indices accessor to triangles. FromTriangleFan
+    % should be used when the mode for the mesh primitives is
+    % "TRIANGLE_FAN" (6).
     %
-    % VALIDATESTRING(INPUT,POSSIBILITIES) returns TRUE if INPUT is a member
-    % of POSSIBILITIES, and returns an error if it isn't.
+    % FROMTRIANGLEFAN(GLTF,ACCESSOR_IDX) Converts data from an indices
+    % accessor to triangles.
     %
     % © Copyright 2014-2024 Rohan Chabukswar.
     %
@@ -21,8 +23,6 @@ function valid=validateString(input,possibilities)
     % You should have received a copy of the GNU General Public License
     % along with MATLAB GLTF. If not, see <https://www.gnu.org/licenses/>.
     %
-    valid=ismissing(input) || ismember(input,possibilities);
-    if(~valid)
-        error("It must be " + GLTF.joinString(possibilities) + ".");
-    end
+    n=floor((numel(F)-1)/2);
+    F=[repmat(F(1),n,1) reshape(F(2:2*n-1),2,n)']+1;
 end

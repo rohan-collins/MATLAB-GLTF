@@ -6,7 +6,7 @@ function [F,V]=text2FV(text,fontfile)
     % of filename, to avoid re-reading of large font files. The function
     % returns faces and vertices.
     %
-    % © Copyright 2014-2023 Rohan Chabukswar
+    % © Copyright 2014-2024 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

@@ -16,7 +16,7 @@ function addMorphTarget(gltf,mesh_idx,V,varargin)
     % ADDMORPHTARGET(...,'weight',W) specifies the morph weight for the
     % traget. The default weight is 0.
     %
-    % © Copyright 2014-2023 Rohan Chabukswar
+    % © Copyright 2014-2024 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

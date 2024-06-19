@@ -4,7 +4,7 @@ function axisangle=Q2AxisAngle(q)
     % Q2AxisAngle(Q) returns the axis and angle of the rotation associated
     % with the XYZW quaternion Q.
     %
-    % © Copyright 2014-2023 Rohan Chabukswar
+    % © Copyright 2014-2024 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

@@ -4,7 +4,7 @@ function [Nv,F,idx]=vertexNormals(F,V)
     % VERTEXNORMALS(F,V) calculates the vertex normals for each vertex of
     % the mesh of vertices V and faces F.
     %
-    % © Copyright 2014-2023 Rohan Chabukswar
+    % © Copyright 2014-2024 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

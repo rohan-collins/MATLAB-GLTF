@@ -1,12 +1,12 @@
-function [pred,isMesh]=nodeTree(gltf)
+function [pred,isMesh,hasSkin]=nodeTree(gltf)
     % Get the node hierarchy.
     %
     % NODETREE(GLTF) returns the tree of node hierarchy in GLTF. This is
     % given as the index of the parent for each node. Root nodes have 0 as
     % the index of the parent node. The second output is a boolean array of
-    % whether the node or any of its descendents are mesh nodes.
+    % whether the node or any of its descendents are mesh nodes. The third output is a boolean array of whether the node has a skin attached.
     %
-    % © Copyright 2014-2023 Rohan Chabukswar
+    % © Copyright 2014-2024 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %
@@ -25,12 +25,16 @@ function [pred,isMesh]=nodeTree(gltf)
     %
     pred=zeros(numel(gltf.nodes),1);
     isMesh=false(numel(gltf.nodes),1);
+    hasSkin=false(numel(gltf.nodes),1);
     for i=1:numel(gltf.nodes)
         if(isfield(gltf.nodes{i},'children'))
             pred(cell2mat(gltf.nodes{i}.children)+1)=i;
         end
         if(isfield(gltf.nodes{i},'mesh'))
             isMesh(i)=true;
+        end
+        if(isfield(gltf.nodes{i},'skin'))
+            hasSkin(i)=true;
         end
     end
     for i=1:numel(gltf.nodes)

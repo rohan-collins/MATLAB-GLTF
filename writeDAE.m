@@ -1,5 +1,5 @@
 function writeDAE(gltf,filename,varargin)
-    % Write a COLLADA file for Mac compatibility.
+    % Write a COLLADA file.
     %
     % WRITEDAE(GLTF,FILENAME) writes GLTF to a COLLADA file specified by
     % filename.
@@ -17,7 +17,7 @@ function writeDAE(gltf,filename,varargin)
     % WRITEDAE(...,'binormals',TRUE) forces calculation and inclusion of
     % binormals.
     %
-    % © Copyright 2014-2023 Rohan Chabukswar
+    % © Copyright 2014-2024 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

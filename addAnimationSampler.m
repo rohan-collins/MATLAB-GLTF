@@ -13,7 +13,7 @@ function samplerstruct=addAnimationSampler(~,input,output,varargin)
     % interpolation method to be used by the sampler. When specified,
     % METHOD needs to be one of "LINEAR", "STEP", or "CUBICSPLINE".
     %
-    % © Copyright 2014-2023 Rohan Chabukswar
+    % © Copyright 2014-2024 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

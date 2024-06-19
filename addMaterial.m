@@ -36,7 +36,7 @@ function material_idx=addMaterial(gltf,varargin)
     %
     % ADDMATERIAL(...,'baseColorTexture',IMAGE) uses IMAGE as the texture
     % for the material. IMAGE can be a JPG or PNG filename, or an index to
-    % an image. If it is an index, the value of 'embedTexture', if
+    % an image. If it is an index, the value of 'baseColorEmbedTexture', if
     % provided, is ignored.
     %
     % ADDMATERIAL(...,'baseColorTextureSet',SET) uses the TEXCOORD SET as
@@ -846,7 +846,7 @@ function material_idx=addMaterial(gltf,varargin)
     % ADDMATERIAL(...,'anisotropyEmbedTexture',FALSE) includes the
     % anisotropy texture image as a link inside the GLTF file.
     %
-    % © Copyright 2014-2023 Rohan Chabukswar
+    % © Copyright 2014-2024 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

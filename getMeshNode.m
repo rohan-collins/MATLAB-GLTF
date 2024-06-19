@@ -1,7 +1,7 @@
 function [node,library_geometries,library_controllers,node_list]=getMeshNode(gltf,documentNode,library_geometries,library_controllers,node_id,node_list,normals,tangents,binormals)
     % GETMESHNODE is a helper function for writing COLLADA files.
     %
-    % © Copyright 2014-2023 Rohan Chabukswar
+    % © Copyright 2014-2024 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

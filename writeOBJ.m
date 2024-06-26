@@ -69,24 +69,40 @@ function writeOBJ(gltf,filename,varargin)
     end
     if(~isempty(nodes))
         for node=nodes
-            if(isSkin(node))
-                ibm=gltf.getAccessor(gltf.skins{gltf.nodes{node}.skin+1}.inverseBindMatrices);
-                baseNode=gltf.nodes{node}.children{1};
-                ibm=ibm(:,:,gltf.skins{gltf.nodes{node}.skin+1}.joints==baseNode);
-                mat=gltf.getNodeTransformation(baseNode);
-                mesh_mat=mat(:,:,1);
-                mesh_mat=ibm*mesh_mat;
-            else
-                mat=gltf.getNodeTransformation(node-1);
-                mesh_mat=mat(:,:,1);
-            end
+            mesh_mat=gltf.getNodeTransformation(node-1);
             mesh=gltf.nodes{node}.mesh;
             np=numel(gltf.meshes{mesh+1}.primitives);
             for primitive=1:np
                 V=gltf.getAccessor(gltf.meshes{mesh+1}.primitives{primitive}.attributes.POSITION);
                 if(~isempty(V))
+                    if(isfield(gltf.meshes{mesh+1}.primitives{primitive}.attributes,'NORMAL'))
+                        N=gltf.getAccessor(gltf.meshes{mesh+1}.primitives{primitive}.attributes.NORMAL);
+                    end
+                    if(isSkin(node))
+                        IBM=gltf.getAccessor(gltf.skins{gltf.nodes{node}.skin+1}.inverseBindMatrices);
+                        W=gltf.getAccessor(gltf.meshes{mesh+1}.primitives{primitive}.attributes.WEIGHTS_0);
+                        J=gltf.getAccessor(gltf.meshes{mesh+1}.primitives{primitive}.attributes.JOINTS_0);
+                        j=gltf.skins{gltf.nodes{node}.skin+1}.joints;
+                        if(iscell(j))
+                            j=cell2mat(j);
+                        end
+                        nodeT=nan(4,4,numel(j));
+                        for i=1:numel(j)
+                            nodeT(:,:,i)=gltf.getNodeTransformation(j(i));
+                        end
+                        TJ=pagemtimes(nodeT,IBM);
+                        V=permute(sum(W.*permute(pagemtimes(permute([V ones(size(V,1),1)],[3 2 4 1]),'none',reshape(TJ(1:3,:,J'+1),3,4,size(J,2),size(J,1)),'transpose'),[4 3 2 1]),2),[1 3 2]);
+                        if(isfield(gltf.meshes{mesh+1}.primitives{primitive}.attributes,'NORMAL'))
+                            N=permute(sum(W.*permute(pagemtimes(permute([N zeros(size(N,1),1)],[3 2 4 1]),'none',reshape(TJ(1:3,:,J'+1),3,4,size(J,2),size(J,1)),'transpose'),[4 3 2 1]),2),[1 3 2]);
+                        end
+                    end
                     ct=ct+1;
                     nodeV{ct}=[V ones(size(V,1),1)]*mesh_mat(1:3,:)';
+                    if(isfield(gltf.meshes{mesh+1}.primitives{primitive}.attributes,'NORMAL'))
+                        nodeN{ct}=N*mesh_mat(1:3,1:3)';
+                    else
+                        nodeN{ct}=[];
+                    end
                     if(isfield(gltf.meshes{mesh+1}.primitives{primitive},'mode'))
                         mode_num=gltf.meshes{mesh+1}.primitives{primitive}.mode;
                     else
@@ -114,12 +130,6 @@ function writeOBJ(gltf,filename,varargin)
                             nodeF{ct}=GLTF.fromTriangleFan(F);
                         otherwise
                             nodeF{ct}=[];
-                    end
-                    if(isfield(gltf.meshes{mesh+1}.primitives{primitive}.attributes,'NORMAL'))
-                        N=gltf.getAccessor(gltf.meshes{mesh+1}.primitives{primitive}.attributes.NORMAL);
-                        nodeN{ct}=N*mesh_mat(1:3,1:3)';
-                    else
-                        nodeN{ct}=[];
                     end
                     if(isfield(gltf.meshes{mesh+1}.primitives{primitive}.attributes,'TEXCOORD_0'))
                         nodeUV{ct}=gltf.getAccessor(gltf.meshes{mesh+1}.primitives{primitive}.attributes.TEXCOORD_0);

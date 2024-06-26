@@ -24,10 +24,13 @@ function mat=getNodeTransformation(gltf,node_idx)
     pred=gltf.nodeTree();
     pred=pred(node_idx+1);
     if(pred==0)
-        mat=eye(4);
+        mat_pred=eye(4);
     else
-        mat=gltf.getNodeTransformation(pred-1);
+        mat_pred=gltf.getNodeTransformation(pred-1);
     end
+    % if(~ismatrix(mat_pred))
+    %     mat_pred=eye(4);
+    % end
     instancing=false;
     if(isfield(gltf.nodes{node_idx+1},'extensions'))
         if(isfield(gltf.nodes{node_idx+1}.extensions,'EXT_mesh_gpu_instancing'))
@@ -35,8 +38,9 @@ function mat=getNodeTransformation(gltf,node_idx)
         end
     end
     if(and(~instancing,isfield(gltf.nodes{node_idx+1},'matrix')))
-        mat=reshape(gltf.nodes{node_idx+1}.matrix,4,4)*mat;
+        mat=reshape(gltf.nodes{node_idx+1}.matrix,4,4);
     elseif(instancing)
+        mat=eye(4);
         if(isfield(gltf.nodes{node_idx+1}.extensions.EXT_mesh_gpu_instancing.attributes,'SCALE'))
             s=gltf.getAccessor(gltf.nodes{node_idx+1}.extensions.EXT_mesh_gpu_instancing.attributes.SCALE);
             s=cell2mat(permute(cellfun(@(x)diag([x(:);1]),mat2cell(s,ones(size(s,1),1),3),'UniformOutput',false),[2 3 1]));
@@ -52,16 +56,9 @@ function mat=getNodeTransformation(gltf,node_idx)
             t=cell2mat(permute(cellfun(@(x)[eye(3) x(:);zeros(1,3) 1],mat2cell(t,ones(size(t,1),1),3),'UniformOutput',false),[2 3 1]));
             mat=pagemtimes(t,mat);
         end
-        if(isfield(gltf.nodes{node_idx+1},'scale'))
-            mat=pagemtimes(diag([gltf.nodes{node_idx+1}.scale' 1]),mat);
-        end
-        if(isfield(gltf.nodes{node_idx+1},'rotation'))
-            mat=pagemtimes([GLTF.Q2PreR(gltf.nodes{node_idx+1}.rotation) [0;0;0];0 0 0 1],mat);
-        end
-        if(isfield(gltf.nodes{node_idx+1},'translation'))
-            mat=pagemtimes([eye(3) gltf.nodes{node_idx+1}.translation(:);0 0 0 1],mat);
-        end
+        mat=pagemtimes(mat_pred,mat);
     else
+        mat=eye(4);
         if(isfield(gltf.nodes{node_idx+1},'scale'))
             mat=diag([gltf.nodes{node_idx+1}.scale' 1])*mat;
         end
@@ -71,5 +68,7 @@ function mat=getNodeTransformation(gltf,node_idx)
         if(isfield(gltf.nodes{node_idx+1},'translation'))
             mat=[eye(3) gltf.nodes{node_idx+1}.translation(:);0 0 0 1]*mat;
         end
+        mat=pagemtimes(mat_pred,mat);
+        % mat=mat_pred*mat;
     end
 end

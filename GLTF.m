@@ -241,7 +241,7 @@ classdef GLTF < dynamicprops
         [node,library_geometries,library_controllers,node_list]=getNode(gltf,documentNode,library_geometries,library_controllers,node_id,node_list,normals,tangents,binormals)
         [node,library_geometries,library_controllers,node_list]=getMeshNode(gltf,documentNode,library_geometries,library_controllers,node_id,node_list,normals,tangents,binormals)
         [pred,isMesh,hasSkin]=nodeTree(gltf)
-        addExtension(gltf,extension)
+        addExtension(gltf,extension,required)
         clip_id=addClip(gltf,filename,varargin)
         emitter_id=addEmitter(gltf,clips,varargin)
         eventStruct=createEventStruct(~,emitter,action,varargin)

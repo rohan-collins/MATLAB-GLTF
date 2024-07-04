@@ -25,8 +25,7 @@ function [node,library_geometries,library_controllers,node_list]=getMeshNode(glt
         subnode=documentNode.createElement("node");
         subnode.setAttribute("id","node_"+string(node_id)+"_"+string(primitive_idx));
         vertex_data=gltf.getAccessor(gltf.meshes{mesh_idx}.primitives{primitive_idx}.attributes.POSITION);
-        faces_data=reshape(gltf.getAccessor(gltf.meshes{mesh_idx}.primitives{primitive_idx}.indices)+1,3,[])';
-        faces_data=GLTF.fromTriangles(faces_data);
+        faces_data=GLTF.fromTriangles(gltf.getAccessor(gltf.meshes{mesh_idx}.primitives{primitive_idx}.indices));
         if(isfield(gltf.meshes{mesh_idx}.primitives{primitive_idx},'material') && isfield(gltf.meshes{mesh_idx}.primitives{primitive_idx}.material,'doubleSided'))
             doubleSided=gltf.materials{gltf.meshes{mesh_idx}.primitives{primitive_idx}.material+1}.doubleSided;
         else

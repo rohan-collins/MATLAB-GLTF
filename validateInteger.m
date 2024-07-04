@@ -27,10 +27,22 @@ function valid=validateInteger(input,min,max)
     valid=isnumeric(input);
     valid=valid && all(input==round(input));
     if(nargin>2)
-        valid=valid && all(input>=min);
-        valid=valid && all(input<=max);
+        if(isfinite(min))
+            valid=valid && all(input>=min);
+        end
+        if(isfinite(max))
+            valid=valid && all(input<=max);
+        end
         if(~valid)
-            error("Must be integer(s) greater than " + min + " and " + max + ".");
+            if(and(isfinite(min),isfinite(max)))
+                error("Must be integer(s) from " + min + " to " + max + ".");
+            elseif(isfinite(min))
+                error("Must be integer(s) greater than or equal to " + min + ".");
+            elseif(isfinite(max))
+                error("Must be integer(s) less than or equal to " + max + ".");
+            else
+                error("Must be integer(s).");
+            end
         end
     else
         valid=all(ismember(input,min));

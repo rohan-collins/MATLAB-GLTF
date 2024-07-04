@@ -246,6 +246,7 @@ classdef GLTF < dynamicprops
         emitter_id=addEmitter(gltf,clips,varargin)
         eventStruct=createEventStruct(~,emitter,action,varargin)
         writeOBJ(gltf,filename,varargin)
+        writePLY(gltf,filename,varargin)
     end
 
     methods(Static)
@@ -264,6 +265,7 @@ classdef GLTF < dynamicprops
         [Tv,Bv,F,idx]=vertexTangents(F,V,UV)
         R=Q2PreR(q)
         axisangle=Q2AxisAngle(q)
+        [F,V,varargout]=catmullClark(F,V,varargin);
     end
 
     methods(Static,Access=private)

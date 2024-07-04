@@ -1,17 +1,18 @@
 function writeOBJ(gltf,filename,varargin)
-    % Write a COLLADA file.
+    % Write a Wavefront OBJ file.
     %
-    % WRITEDAE(GLTF,FILENAME) writes GLTF to a Wavefront OBJ file specified by filename.
+    % WRITEOBJ(GLTF,FILENAME) writes GLTF to a Wavefront OBJ file specified
+    % by filename.
     %
-    % WRITEDAE(GLTF,FILENAME,'nodes',NODES) writes the specified NODES in
+    % WRITEOBJ(GLTF,FILENAME,'nodes',NODES) writes the specified NODES in
     % the GLTF to a Wavefront OBJ file specified by filename. Each of the
     % specified nodes should be a mesh node.
     %
-    % WRITEDAE(GLTF,FILENAME,'meshes',MESHES) writes the specified MESHES
+    % WRITEOBJ(GLTF,FILENAME,'meshes',MESHES) writes the specified MESHES
     % in the GLTF to a Wavefront OBJ file specified by filename. This input
     % is ignored if NODES are specified.
     %
-    % WRITEDAE(...,'materialFile',materialFile) also exports the materials
+    % WRITEOBJ(...,'materialFile',materialFile) also exports the materials
     % in the specified nodes or meshes to the specified .mtl file, and adds
     % a reference to it in the .obj file.
     %
@@ -216,7 +217,7 @@ function writeOBJ(gltf,filename,varargin)
     end
 
     nodeE=nodeF;
-    edges=cellfun(@(x)size(x,2)==2,nodeF);
+    edges=cellfun(@(x)size(x,2)==2,nodeE);
     faces=cellfun(@(x)size(x,2)==3,nodeF);
     nodeE(~edges)=repmat({uint32(zeros(0,2))},size(nodeE(~edges)));
     nodeF(~faces)=repmat({uint32(zeros(0,3))},size(nodeF(~faces)));
@@ -230,13 +231,23 @@ function writeOBJ(gltf,filename,varargin)
     V=cell2mat(nodeV(:));
     N=cell2mat(nodeN(:));
     UV=cell2mat(nodeUV(:));
+    [V,~,icV]=unique(V,"rows","stable");
+    FV=cellfun(@(x)icV(x')',FV,'UniformOutput',false);
+    EV=cellfun(@(x)icV(x')',EV,'UniformOutput',false);
     if(isempty(N))
         FN=cellfun(@(x)nan(size(x)),FN,'UniformOutput',false);
-        EN=cellfun(@(x)nan(size(x)),EN,'UniformOutput',false);
+    else
+        [N,~,icN]=unique(N,"rows","stable");
+        FN=cellfun(@(x)icN(x')',FN,'UniformOutput',false);
     end
+    EN=cellfun(@(x)nan(size(x)),EN,'UniformOutput',false);
     if(isempty(UV))
         FT=cellfun(@(x)nan(size(x)),FT,'UniformOutput',false);
         ET=cellfun(@(x)nan(size(x)),ET,'UniformOutput',false);
+    else
+        [UV,~,icUV]=unique(UV,"rows","stable");
+        FT=cellfun(@(x)icUV(x')',FT,'UniformOutput',false);
+        ET=cellfun(@(x)icUV(x')',ET,'UniformOutput',false);
     end
     vtext="v "+join(string(V));
     ntext="vn "+join(string(N));

@@ -2,7 +2,7 @@
 
 GLTF is a MATLAB class to export 3D graphs and other content into the GL Transmission Format (glTF).
 
-Last updated: July 4, 2024.
+Last updated: July 8, 2024.
 
 > © Copyright 2014-2024 Rohan Chabukswar.
 >
@@ -567,6 +567,13 @@ And similar for shaft and handle. (This says that all vertices depend only on on
 ` gltf.writeGLTF("ballvalve.gltf");`  
 
 # Helper Functions
+## `catmullClark`
+![catmull-clark](docs/catmullclark.png)
+
+The [Catmull–Clark algorithm](https://en.wikipedia.org/wiki/Catmull%E2%80%93Clark_subdivision_surface) is a technique used in 3D computer graphics to create curved surfaces by using [subdivision surface modelling](https://en.wikipedia.org/wiki/Subdivision_surface). The implementation should be able to handle texture mapping vertices with same XYZ coordinates but different UV coordinates. It also optionally returns the influence of the original vertices as joints and weights for skinned animation.
+
+**Careful**: As is default for the Catmull-Clark algorithm, faces will be returned as quadrilaterals, which in general will not be planar. They need to be converted to triangles before writing to a GLTF file. Passing the `triangulate` parameter as `true` when creating meshes, primitives, or morph targets accomplishes this.
+
 ## `addAxes`
 ![addAxes](docs/axes.png)
 

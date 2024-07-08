@@ -51,19 +51,13 @@ function [F,V,varargout]=catmullClark(F,V,varargin)
     else
         JW=[];
     end
-    if(nargin<5)
-        level=1;
-    end
-    if(nargin<4)
-        JW=[];
-    end
-    if(nargin<3)
-        UV=nan(size(V,1),0);
-    end
     for l=1:level
         F1=F;
         if(isempty(UV))
             V1=V;
+            if(isempty(JW))
+                JW=eye(size(V1,1));
+            end
         else
             [V1,ia,ic]=unique(V,"rows","stable");
             VV1=speye(size(V1,1));
@@ -216,6 +210,8 @@ function [J,W]=fromJW(JW)
     J=repmat((1:size(tempW,1))',1,size(tempW,2));
     J=sub2ind(size(tempW),J,I);
     J=tempJ(J);
+    W=full(W);
+    J=full(J);
     W=reshape([W zeros(size(W,1),4-mod(size(W,2)-1,4)-1)],size(W,1),4,[]);
     J=reshape([J zeros(size(J,1),4-mod(size(J,2)-1,4)-1)],size(J,1),4,[]);
 end

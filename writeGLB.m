@@ -42,7 +42,7 @@ function writeGLB(gltf,filename,varargin)
             end
         end
     end
-    if(isfield(st.extensions,'MSFT_audio_emitter') && isfield(st.extensions.MSFT_audio_emitter,'clips'))
+    if(isfield(st,'extensions') && isfield(st.extensions,'MSFT_audio_emitter') && isfield(st.extensions.MSFT_audio_emitter,'clips'))
         for i=1:numel(st.extensions.MSFT_audio_emitter.clips)
             if(~startsWith(st.extensions.MSFT_audio_emitter.clips,"data:"))
                 [~,relative2]=GLTF.getRelativePath(filename,st.extensions.MSFT_audio_emitter.clips{i}.uri);

@@ -35,6 +35,22 @@ function writeGLTF(gltf,filename,varargin)
     warning('off','MATLAB:structOnObject');
     st=struct(gltf);
     warning('on','MATLAB:structOnObject');
+    if(isfield(st,"images"))
+        for i=1:numel(st.images)
+            if(~startsWith(st.images{i}.uri,"data:"))
+                [~,relative2]=GLTF.getRelativePath(filename,st.images{i}.uri);
+                st.images{i}.uri=relative2;
+            end
+        end
+    end
+    if(isfield(st.extensions,'MSFT_audio_emitter') && isfield(st.extensions.MSFT_audio_emitter,'clips'))
+        for i=1:numel(st.extensions.MSFT_audio_emitter.clips)
+            if(~startsWith(st.extensions.MSFT_audio_emitter.clips,"data:"))
+                [~,relative2]=GLTF.getRelativePath(filename,st.extensions.MSFT_audio_emitter.clips{i}.uri);
+                st.extensions.MSFT_audio_emitter.clips{i}.uri=relative2;
+            end
+        end
+    end
     if(ismissing(bufferFile))
         for i=1:numel(gltf.buffers)
             if(~isstruct(st.buffers{i}))

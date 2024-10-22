@@ -256,7 +256,7 @@ glTF is fully extensible and defines an extension mechanism that allows the base
 |[`KHR_materials_variants`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_variants)|KHR|Variant|Ratified|Allows for a compact glTF representation of multiple material variants of an asset, structured to allow low-latency switching at runtime.|
 |[`KHR_materials_volume`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_volume)|KHR|Material|Ratified|When combined with KHR_materials_transmission, a refractive microfacet BTDF describes the transmission of light through the volume boundary, providing effects like refraction and absorption.|
 |[`EXT_mesh_gpu_instancing`](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Vendor/EXT_mesh_gpu_instancing)|EXT|Performance|Ratified|Enables GPU instancing, rendering many copies of a single mesh at once using a small number of draw calls.|
-|[`KHR_animation_pointer`](https://github.com/KhronosGroup/glTF/pull/2147)|KHR|Animation|Ready for testing| target any value in a glTF asset with animation data using [JSON Pointers](https://datatracker.ietf.org/doc/html/rfc6901).|
+|[`KHR_animation_pointer`](https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Khronos/KHR_animation_pointer)|KHR|Animation|Ratified| target any value in a glTF asset with animation data using [JSON Pointers](https://datatracker.ietf.org/doc/html/rfc6901).|
 |[`KHR_audio`](https://github.com/KhronosGroup/glTF/pull/2137)|KHR|Audio|Ready for testing|Allows for the addition of spatialized and non-spatialized audio to glTF scenes.|
 
 

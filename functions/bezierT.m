@@ -35,7 +35,7 @@ function [manifold,varargout]=bezierT(points,t)
     n=n(2:end);
     degree=n-1;
     N=unique(degree);
-    if(numel(N)==1)
+    if(isscalar(N))
         if(n_inputs<1)
             t=repmat({linspace(0,1,101)'},1,dims);
         else
@@ -112,7 +112,7 @@ function out=beziert_base(points,t)
     n=[n ones(1,numel(t)-numel(n))];
     degree=n-1;
     N=unique(degree);
-    if(numel(N)==1)
+    if(isscalar(N))
         T=0;
         for d=1:dims
             permdims=zeros(1,dims);

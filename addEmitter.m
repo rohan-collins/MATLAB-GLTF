@@ -122,7 +122,7 @@ function emitter_id=addEmitter(gltf,clips,varargin)
                 emitter_clips{i}.clip=clips(i);
             end
         end
-        if(numel(emitter_clips)==1)
+        if(isscalar(emitter_clips))
             emitter_struct=struct('clips',{emitter_clips});
         else
             emitter_struct=struct('clips',emitter_clips);

@@ -261,7 +261,7 @@ function writePLY(gltf,filename,varargin)
         I=find(nonormals);
         for i=1:numel(I)
             if(edges(I(i)))
-                N=zeros(size(nodeV{I(i)},1),3);
+                N=zeros(size(nodeV{I(i)},1),3); %#ok<PREALL>
                 % nodeN{I(i)}=N./vecnorm(N,2,2);
             else
                 [N,F,idx]=GLTF.vertexNormals(nodeF{I(i)},nodeV{I(i)});

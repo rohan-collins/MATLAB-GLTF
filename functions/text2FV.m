@@ -816,7 +816,7 @@ function matrix=svgTransform(transformString)
         switch(allTransforms{j}(1))
             case "rotate"
                 params=regexp(allTransforms{j}(2),'[\d\-\.]*','match');
-                if(numel(params)==1)
+                if(isscalar(params))
                     a=str2double(params(1))*pi/180;
                     matrix=[cos(a) -sin(a) 0;sin(a) cos(a) 0;0 0 1]*matrix;
                 elseif(numel(params)==3)

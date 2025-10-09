@@ -30,7 +30,7 @@ function addAnimation(gltf,samplers,channels,varargin)
     %
     ips=inputParser;
     ips.addParameter('name',missing,@isstring);
-    ips.addParameter('events',[],@isstruct);
+    ips.addParameter('events',[]);
     ips.parse(varargin{:});
     parameters=ips.Results;
     name=parameters.name;

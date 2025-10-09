@@ -21,52 +21,97 @@ function [relative1,relative2]=getRelativePath(filename1,filename2)
     % You should have received a copy of the GNU General Public License
     % along with MATLAB GLTF. If not, see <https://www.gnu.org/licenses/>.
     %
-    [filepath1,name1,ext1]=fileparts(filename1);
-    [filepath2,name2,ext2]=fileparts(filename2);
-    p1=split(filepath1,filesep);
-    p2=split(filepath2,filesep);
-    if(filesep=="\")
-        a1=contains(p1(1),":");
-        a2=contains(p2(1),":");
-    elseif(filesep=="/")
-        a1=p1(1)=="";
-        a2=p2(1)=="";
-    end
-    if(and(~a1,a2))
-        temp=find(p1~="..",1,"first");
-        p1=[p2(1:end-(temp-1));p1(temp:end)];
-    elseif(and(a1,~a2))
-        temp=find(p2~="..",1,"first");
-        p2=[p1(1:end-(temp-1));p2(temp:end)];
-    elseif(and(~a1,~a2))
-        temp1=find(p1~="..",1,"first");
-        temp2=find(p2~="..",1,"first");
-        temp0=max(temp1,temp2);
-        PWDlist="PWD"+(temp0:-1:1)';
-        p1new=[PWDlist;p2(1:end-(temp1-1));p1(temp1:end)];
-        p2new=[PWDlist;p1(1:end-(temp2-1));p2(temp2:end)];
-        p1=resolveParents(p1new);
-        p2=resolveParents(p2new);
-    end
-    lastcommon=find(p1(1:min(numel(p1),numel(p2)))==p2(1:min(numel(p1),numel(p2))),1,"last");
-    if(or(and(filesep=="\",isempty(lastcommon)),and(filesep=="/",lastcommon==1)))
-        relative1=filename1;
-        relative2=filename2;
+    if(isUrl(filename1) || isUrl(filename2))
+        [relative1,relative2]=urlMode(filename1,filename2);
     else
-        relative1=join([repmat("..",numel(p2)-lastcommon,1);p1(lastcommon+1:end);name1],filesep)+ext1;
-        relative2=join([repmat("..",numel(p1)-lastcommon,1);p2(lastcommon+1:end);name2],filesep)+ext2;
+        [relative1,relative2]=fileMode(filename1,filename2);
     end
 end
 
-function p=resolveParents(p)
-    while(nnz(p(find(p~="..",1,"first"):end)=="..")>0)
-        p=resolveLastParent(p);
+function tf=isUrl(str)
+    tf=~isempty(regexp(str,"^[a-zA-Z][a-zA-Z0-9+.-]*://","once"));
+end
+
+function [rel1,rel2]=urlMode(url1,url2)
+    u1=splitUrl(url1);
+    u2=splitUrl(url2);
+    if(strcmpi(u1.scheme,u2.scheme) && strcmpi(u1.authority,u2.authority))
+        rel1=computeRelative(u2.path,u1.path,false);
+        rel2=computeRelative(u1.path,u2.path,false);
+    else
+        rel1=url1;
+        rel2=url2;
     end
 end
 
-function p=resolveLastParent(p)
-    i=find(p=="..",1,"first");
-    if(~isempty(i) && i>1)
-        p=p([1:i-2 i+1:end]);
+function parts=splitUrl(u)
+    m=regexp(u,"^([a-zA-Z][a-zA-Z0-9+.-]*://)([^/]*)(/.*)?$","tokens","once");
+    if(isempty(m))
+        error("relativePaths:BadURL","Invalid URL: %s",u);
+    end
+    parts.scheme=erase(m{1},"://");
+    parts.authority=string(m{2});
+    if(numel(m)<3 || isempty(m{3}))
+        parts.path="/";
+    else
+        parts.path=string(m{3});
+    end
+end
+
+function [rel1,rel2]=fileMode(f1,f2)
+    f1=fullfile(string(f1));
+    f2=fullfile(string(f2));
+    rel1=computeRelative(f2,f1,true); % f1 relative to f2
+    rel2=computeRelative(f1,f2,true); % f2 relative to f1
+end
+
+function rel=computeRelative(fromTarget,toTarget,normaliseDrives)
+    fromTarget=convertToUnix(fromTarget);
+    toTarget=convertToUnix(toTarget);
+    [fromDir,~,~]=fileparts(fromTarget);
+    [toDir,toName,toExt]=fileparts(toTarget);
+    if(strlength(fromDir)==0)
+        fromDir=".";
+    end
+    if(strlength(toDir)==0)
+        toDir=".";
+    end
+    fromParts=erase(split(string(fromDir),"/"),"");
+    fromParts=fromParts(fromParts ~="" & fromParts ~=".");
+    toParts=erase(split(string(toDir),"/"),"");
+    toParts=toParts(toParts   ~="" & toParts   ~=".");
+    if(normaliseDrives && ~isempty(fromParts) && ~isempty(toParts))
+        if(contains(fromParts(1),":") || contains(toParts(1),":"))
+            if(~strcmpi(fromParts(1),toParts(1)))
+                rel=toTarget;
+                return;
+            end
+            fromParts=fromParts(2:end);
+            toParts=toParts(2:end);
+        end
+    end
+    minLen=min(numel(fromParts),numel(toParts));
+    diffIdx=find(~strcmp(fromParts(1:minLen),toParts(1:minLen)),1);
+    if(isempty(diffIdx))
+        common=minLen;
+    else
+        common=diffIdx-1;
+    end
+    numUp=numel(fromParts)-common;
+    upParts=repmat("..",1,numUp);
+    downParts=toParts(common+1:end);
+    relParts=[upParts,downParts,toName+toExt];
+    relParts=relParts(relParts ~="");
+    if(isempty(relParts))
+        rel="./"+toName+toExt; % Same directory
+    else
+        rel=strjoin(relParts,"/");
+    end
+end
+
+function p=convertToUnix(p)
+    p=strrep(p,"\","/");
+    if(strlength(p)>1 && endsWith(p,"/"))
+        p=extractBefore(p,strlength(p));
     end
 end

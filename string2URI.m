@@ -22,42 +22,25 @@ function base64string=string2URI(filename)
     % along with MATLAB GLTF. If not, see <https://www.gnu.org/licenses/>.
     %
     [~,~,ext]=fileparts(string(filename));
-    isurl=~isfile(filename);
     if(ext==".png")
-        if(isurl)
-            bytes=webread(filename,weboptions("ContentType","binary"));
-        else
-            fid=fopen(filename,'rb');
-            bytes=fread(fid);
-            fclose(fid);
-        end
+        fid=fopen(filename,'rb');
+        bytes=fread(fid);
+        fclose(fid);
         base64string=['data:image/png;base64,' matlab.net.base64encode(uint8(bytes))];
     elseif(or(ext==".jpg",ext==".jpeg"))
-        if(isurl)
-            bytes=webread(filename,weboptions("ContentType","binary"));
-        else
-            fid=fopen(filename,'rb');
-            bytes=fread(fid);
-            fclose(fid);
-        end
+        fid=fopen(filename,'rb');
+        bytes=fread(fid);
+        fclose(fid);
         base64string=['data:image/jpeg;base64,' matlab.net.base64encode(uint8(bytes))];
     elseif(ext==".wav")
-        if(isurl)
-            bytes=webread(filename,weboptions("ContentType","binary"));
-        else
-            fid=fopen(filename,'rb');
-            bytes=fread(fid);
-            fclose(fid);
-        end
+        fid=fopen(filename,'rb');
+        bytes=fread(fid);
+        fclose(fid);
         base64string=['data:audio/wav;base64,' matlab.net.base64encode(uint8(bytes))];
     elseif(ext==".webp")
-        if(isurl)
-            bytes=webread(filename,weboptions("ContentType","binary"));
-        else
-            fid=fopen(filename,'rb');
-            bytes=fread(fid);
-            fclose(fid);
-        end
+        fid=fopen(filename,'rb');
+        bytes=fread(fid);
+        fclose(fid);
         base64string=['data:image/webp;base64,' matlab.net.base64encode(uint8(bytes))];
     else
         base64string=filename;

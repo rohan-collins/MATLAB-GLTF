@@ -59,9 +59,7 @@ classdef GLTF < dynamicprops
                 [~,~,ext]=fileparts(filename);
                 if(or(ext==".glb",ext==".gltf"))
                     if(ext==".glb")
-                        fid=fopen(filename,'r');
-                        finalBuffer=uint8(fread(fid));
-                        fclose(fid);
+                        finalBuffer=GLTF.read_file(filename,"b");
                         glb=and(typecast(finalBuffer(1:4),'uint32')==hex2dec('46546C67'),typecast(finalBuffer(5:8),'uint32')==2);
                         jsonChunkType=typecast(finalBuffer(17:20),'uint32')==hex2dec('4E4F534A');
                         jsonAlignedLength=typecast(finalBuffer(13:16),'uint32');
@@ -94,7 +92,7 @@ classdef GLTF < dynamicprops
                             end
                         end
                     elseif(ext==".gltf")
-                        finalBuffer=fileread(filename);
+                        finalBuffer=GLTF.read_file(filename);
                         gltf2=jsondecode(finalBuffer);
                         fnames=fieldnames(gltf2);
                         if(isfield(gltf2,'scene'))
@@ -168,14 +166,16 @@ classdef GLTF < dynamicprops
                                 encoded=regexpi(buffer.uri,"data\:([\w\/\-]+\;)?(\w+)?,([A-Za-z0-9\/+\/=]*)",'tokens');
                                 if(isempty(encoded))
                                     [filepath,name,~]=fileparts(filename);
-                                    if(filepath=="")
-                                        fid2=fopen(string(buffer.uri),'r');
+                                    if(GLTF.is_url(filename))
+                                        gltf.buffers{i}=GLTF.read_file(filepath+"/"+string(buffer.uri),"b");
                                     else
-                                        sep_local=extractBefore(extractAfter(filename,filepath),name);
-                                        fid2=fopen(filepath+sep_local+string(buffer.uri),'r');
+                                        if(filepath=="")
+                                            gltf.buffers{i}=GLTF.read_file(string(buffer.uri),"b");
+                                        else
+                                            sep_local=extractBefore(extractAfter(filename,filepath),name);
+                                            gltf.buffers{i}=GLTF.read_file(filepath+sep_local+string(buffer.uri),"b");
+                                        end
                                     end
-                                    gltf.buffers{i}=uint8(fread(fid2));
-                                    fclose(fid2);
                                 else
                                     encoded=encoded{1}{3};
                                     gltf.buffers{i}=matlab.net.base64decode(encoded);
@@ -257,6 +257,11 @@ classdef GLTF < dynamicprops
     end
 
     methods(Static,Access=private)
+        reg=url_regex()
+        tf=is_url(str)
+        reg=filepath_regex()
+        tf=is_filepath(str)
+        out=read_file(filename,varargin)
         formatSpec_float=formatSpec_float()
         formatSpec_integer=formatSpec_integer()
         valid=validateString(input,possibilities)

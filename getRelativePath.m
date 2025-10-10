@@ -21,51 +21,50 @@ function [relative1,relative2]=getRelativePath(filename1,filename2)
     % You should have received a copy of the GNU General Public License
     % along with MATLAB GLTF. If not, see <https://www.gnu.org/licenses/>.
     %
-    if(isUrl(filename1) || isUrl(filename2))
-        [relative1,relative2]=urlMode(filename1,filename2);
+    if(and(GLTF.is_url(filename1),GLTF.is_url(filename2)))
+        [relative1,relative2]=url_mode(filename1,filename2);
+    elseif(and(GLTF.is_filepath(filename1),GLTF.is_filepath(filename2)))
+        [relative1,relative2]=file_mode(filename1,filename2);
     else
-        [relative1,relative2]=fileMode(filename1,filename2);
+        relative1=filename1;
+        relative2=filename2;
     end
 end
 
-function tf=isUrl(str)
-    tf=~isempty(regexp(str,"^[a-zA-Z][a-zA-Z0-9+.-]*://","once"));
-end
-
-function [rel1,rel2]=urlMode(url1,url2)
-    u1=splitUrl(url1);
-    u2=splitUrl(url2);
-    if(strcmpi(u1.scheme,u2.scheme) && strcmpi(u1.authority,u2.authority))
-        rel1=computeRelative(u2.path,u1.path,false);
-        rel2=computeRelative(u1.path,u2.path,false);
+function [rel1,rel2]=url_mode(url1,url2)
+    u1=split_url(url1);
+    u2=split_url(url2);
+    if(and(strcmpi(u1.scheme,u2.scheme),strcmpi(u1.authority,u2.authority)))
+        rel1=compute_relative(u2.path,u1.path,false);
+        rel2=compute_relative(u1.path,u2.path,false);
     else
         rel1=url1;
         rel2=url2;
     end
 end
 
-function parts=splitUrl(u)
-    m=regexp(u,"^([a-zA-Z][a-zA-Z0-9+.-]*://)([^/]*)(/.*)?$","tokens","once");
-    if(isempty(m))
-        error("relativePaths:BadURL","Invalid URL: %s",u);
-    end
-    parts.scheme=erase(m{1},"://");
-    parts.authority=string(m{2});
-    if(numel(m)<3 || isempty(m{3}))
-        parts.path="/";
-    else
-        parts.path=string(m{3});
+function parts=split_url(u)
+    reg=url_regex();
+    m=regexp(u,reg,"tokens","once");
+    if(~isempty(m))
+        parts.scheme=erase(m{1},"://");
+        parts.authority=string(m{2});
+        if(numel(m)<3 || isempty(m{3}))
+            parts.path="/";
+        else
+            parts.path=string(m{3});
+        end
     end
 end
 
-function [rel1,rel2]=fileMode(f1,f2)
+function [rel1,rel2]=file_mode(f1,f2)
     f1=fullfile(string(f1));
     f2=fullfile(string(f2));
-    rel1=computeRelative(f2,f1,true); % f1 relative to f2
-    rel2=computeRelative(f1,f2,true); % f2 relative to f1
+    rel1=compute_relative(f2,f1,true); % f1 relative to f2
+    rel2=compute_relative(f1,f2,true); % f2 relative to f1
 end
 
-function rel=computeRelative(fromTarget,toTarget,normaliseDrives)
+function rel=compute_relative(fromTarget,toTarget,normaliseDrives)
     fromTarget=convertToUnix(fromTarget);
     toTarget=convertToUnix(toTarget);
     [fromDir,~,~]=fileparts(fromTarget);
@@ -103,7 +102,7 @@ function rel=computeRelative(fromTarget,toTarget,normaliseDrives)
     relParts=[upParts,downParts,toName+toExt];
     relParts=relParts(relParts ~="");
     if(isempty(relParts))
-        rel="./"+toName+toExt; % Same directory
+        rel="./"+toName+toExt;
     else
         rel=strjoin(relParts,"/");
     end

@@ -24,7 +24,7 @@ function sampler_idx=addTextureSampler(gltf,varargin)
     % coordinate of texture coordinates as per OpenGL. WRAPT should be one
     % of "CLAMP_TO_EDGE", "MIRRORED_REPEAT", or "REPEAT".
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

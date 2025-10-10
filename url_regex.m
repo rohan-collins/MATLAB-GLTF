@@ -1,7 +1,7 @@
 function reg=url_regex()
     % The regular expression for getting parts of a URL.
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

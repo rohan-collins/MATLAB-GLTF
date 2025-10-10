@@ -14,7 +14,7 @@ function [curve,varargout]=bezier(points,varargin)
     % [CURVE,FIRST,SECOND,...]=BEZIER(...) returns the first, second, etc.
     % derivatives of the curve.
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

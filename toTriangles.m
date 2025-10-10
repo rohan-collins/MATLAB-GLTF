@@ -5,7 +5,7 @@ function F=toTriangles(F)
     % TOTRIANGLES(F) Converts polygons in F to triangles, so that each
     % polygon is converted to a triangle fan.
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

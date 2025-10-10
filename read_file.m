@@ -2,7 +2,7 @@ function out=read_file(filename,varargin)
     % Reads file from given filename, either from the web or from local
     % file. Reads the file as bytes if fmt is "b".
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

@@ -64,7 +64,7 @@ function mesh_idx=addMesh(gltf,V,varargin)
     % given as an array of structs
     % ('material',material_idx,'variants',list_of_variant_indices).
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

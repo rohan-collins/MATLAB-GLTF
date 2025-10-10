@@ -74,7 +74,7 @@ function [gltf,ax_node]=addAxes(gltf,varargin)
     % ADDAXES(...,'axisLabelDistance',axisLabelDistance) specifies the
     % distance of the axis label from the axis for a unit cube.
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

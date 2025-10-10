@@ -33,7 +33,7 @@
     %                           matrices, etc.
     % "ELEMENT_ARRAY_BUFFER ":  Used for indices etc.
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

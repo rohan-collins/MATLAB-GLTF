@@ -5,7 +5,7 @@ function E=fromLineStrip(E)
     % FROMLINESTRIP(GLTF,ACCESSOR_IDX) Converts data from an indices
     % accessor to lines.
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

@@ -1,7 +1,7 @@
 classdef GLTF < dynamicprops
     % Read and write GLTF 3D model and animation files.
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

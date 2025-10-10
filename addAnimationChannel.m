@@ -10,7 +10,7 @@ function channelstruct=addAnimationChannel(~,sampler,target_node,target_path)
     % when passed to ADDANIMATION. TARGET_PATH needs to be one of
     % "translation", "rotation", "scale", or "weights".
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

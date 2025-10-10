@@ -4,7 +4,7 @@ function out=joinString(strings)
     % JOINSTRING(STRINGS) joins STRINGS in a grammatically correct manner
     % by adding Oxford commas.
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

@@ -40,7 +40,7 @@ function texture_idx=addTexture(gltf,image,varargin)
     % used, the GLTF object does not have to be recreated whenever texture
     % images are changed.
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

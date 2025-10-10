@@ -4,7 +4,7 @@ function varargout=polytope(varargin)
     % constructs (when available) for the regular polytope defined by the
     % Schläfli symbol {p,q,...}.
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

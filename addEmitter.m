@@ -54,7 +54,7 @@ function emitter_id=addEmitter(gltf,clips,varargin)
     %
     % ADDEMITTER(...,'name',NAME) sets the name of the emitter.
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

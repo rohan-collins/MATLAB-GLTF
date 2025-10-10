@@ -23,7 +23,7 @@ function light_idx=addSpotLight(gltf,varargin)
     % angle, in radians, from centre of spotlight where fall-off ends. Must
     % be greater than innerConeAngle and less than or equal to pi/2.
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

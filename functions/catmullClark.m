@@ -18,7 +18,7 @@ function [F,V,varargout]=catmullClark(F,V,varargin)
     % mesh and returns the influence of the original vertices as joints and
     % weights for skinned animation.
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

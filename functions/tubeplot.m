@@ -67,7 +67,7 @@ function varargout=tubeplot(curve,varargin)
     % the start of the tube angle instead of 0. This can make a difference
     % in orienting ribbons or polygonal tubes.
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

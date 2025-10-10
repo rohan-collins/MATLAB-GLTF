@@ -6,7 +6,7 @@ function [pred,isMesh,hasSkin]=nodeTree(gltf)
     % the index of the parent node. The second output is a boolean array of
     % whether the node or any of its descendents are mesh nodes. The third output is a boolean array of whether the node has a skin attached.
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

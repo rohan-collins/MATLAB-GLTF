@@ -4,7 +4,7 @@ function valid=validateString(input,possibilities)
     % VALIDATESTRING(INPUT,POSSIBILITIES) returns TRUE if INPUT is a member
     % of POSSIBILITIES, and returns an error if it isn't.
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

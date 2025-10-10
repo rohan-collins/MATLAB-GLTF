@@ -18,7 +18,7 @@ function camera_idx=addPerspectiveCamera(gltf,varargin)
     % ADDPERSPECTIVECAMERA(...,'znear',znear) specifies the near cutoff
     % distance for the camera. By default, znear is 0.01.
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

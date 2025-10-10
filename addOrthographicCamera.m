@@ -18,7 +18,7 @@ function camera_idx=addOrthographicCamera(gltf,varargin)
     % ADDORTHOGRAPHICCAMERA(...,'znear',znear) specifies the near cutoff
     % distance for the camera. By default, zfar is 0.01.
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

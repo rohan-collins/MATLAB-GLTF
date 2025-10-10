@@ -11,7 +11,7 @@ function eventStruct=createEventStruct(~,emitter,action,varargin)
     % specific time in seconds. This setting nly used when ACTION is
     % "play".
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

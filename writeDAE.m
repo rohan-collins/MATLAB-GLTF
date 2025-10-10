@@ -17,7 +17,7 @@ function writeDAE(gltf,filename,varargin)
     % WRITEDAE(...,'binormals',TRUE) forces calculation and inclusion of
     % binormals.
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

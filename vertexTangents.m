@@ -5,7 +5,7 @@ function [Tv,Bv,F,idx]=vertexTangents(F,V,UV)
     % for each vertex of the mesh of vertices V, faces F, and texture
     % coordinates UV.
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

@@ -4,7 +4,7 @@ function base64string=string2URI(filename)
     % STRINGTOURI(FILENAME) converts the PNG or JPG image specified by
     % FILENAME to a base-64 representation for embedding.
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

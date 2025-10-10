@@ -13,7 +13,7 @@ function [F,V,UV,N,T,B]=bezierSurface(points,varargin)
     % [F,V,UV,N,T,B]=BEZIERSURFACE(POINTS,U,V) uses the parametric
     % variables U and V to generate the points.
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

@@ -49,7 +49,7 @@ function node_idx=addNode(gltf,varargin)
     % ADDNODE(...,'instancingScale',INSTANCINGSCALE) generates N instances
     % of the mesh with scale given by the Nx3 matrix INSTANCINGSCALE.
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

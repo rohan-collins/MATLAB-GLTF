@@ -846,7 +846,7 @@ function material_idx=addMaterial(gltf,varargin)
     % ADDMATERIAL(...,'anisotropyEmbedTexture',FALSE) includes the
     % anisotropy texture image as a link inside the GLTF file.
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

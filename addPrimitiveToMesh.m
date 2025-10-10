@@ -68,7 +68,7 @@ function primitive_idx=addPrimitiveToMesh(gltf,mesh_idx,V,varargin)
     % the primitive, given as an array of structs
     % ('material',material_idx,'variants',list_of_variant_indices).
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

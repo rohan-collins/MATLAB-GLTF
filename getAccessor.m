@@ -4,7 +4,7 @@ function data=getAccessor(gltf,accessor_idx)
     % GETACCESSOR(GLTF,ACCESSOR_IDX) returns the data referenced by the
     % accessor with index ACCESSOR_IDX.
     %
-    % © Copyright 2014-2024 Rohan Chabukswar.
+    % © Copyright 2014-2025 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
     %

@@ -1,20 +1,16 @@
-function writeOBJ(gltf,filename,varargin)
-    % Write a Wavefront OBJ file.
+function showGLTF(gltf,varargin)
+    % Display a GLTF object.
     %
-    % WRITEOBJ(GLTF,FILENAME) writes GLTF to a Wavefront OBJ file specified
-    % by filename.
+    % SHOWGLTF(GLTF) shows the GLTF object in a new axis and figure.
     %
-    % WRITEOBJ(GLTF,FILENAME,'nodes',NODES) writes the specified NODES in
-    % the GLTF to a Wavefront OBJ file specified by filename. Each of the
-    % specified nodes should be a mesh node.
+    % SHOWGLTF(GLTF,'axis',ax) shows the GLTF object in the specified axis
+    % handle.
     %
-    % WRITEOBJ(GLTF,FILENAME,'meshes',MESHES) writes the specified MESHES
-    % in the GLTF to a Wavefront OBJ file specified by filename. This input
-    % is ignored if NODES are specified.
+    % SHOWGLTF(GLTF,'nodes',NODES) shows the specified NODES in the GLTF.
+    % Each of the specified nodes should be a mesh node.
     %
-    % WRITEOBJ(...,'materialFile',materialFile) also exports the materials
-    % in the specified nodes or meshes to the specified .mtl file, and adds
-    % a reference to it in the .obj file.
+    % SHOWGLTF(GLTF,'meshes',MESHES) shows the specified MESHES in the
+    % GLTF. This input is ignored if NODES are specified.
     %
     % © Copyright 2014-2025 Rohan Chabukswar.
     %
@@ -36,13 +32,13 @@ function writeOBJ(gltf,filename,varargin)
     [~,isMesh,isSkin]=gltf.nodeTree();
     nodes=find(isMesh)';
     ips=inputParser;
-    ips.addParameter('nodes',[],@(x)GLTF.validateInteger(x,nodes));
-    ips.addParameter('meshes',[],@(x)GLTF.validateInteger(x,0,numel(gltf.meshes)-1));
-    ips.addParameter('materialFile',missing,@isstring);
+    ips.addParameter('nodes',[],@(x)validateInteger(x,nodes));
+    ips.addParameter('meshes',[],@(x)validateInteger(x,0,numel(gltf.meshes)-1));
+    ips.addParameter('axis',[],@(x) isa(x,'matlab.graphics.axis.Axes'));
     ips.parse(varargin{:});
     parameters=ips.Results;
-    materialFile=parameters.materialFile;
     nodes=parameters.nodes;
+    ax_h=parameters.axis;
     if(isempty(nodes))
         meshes=parameters.meshes;
     else
@@ -55,18 +51,13 @@ function writeOBJ(gltf,filename,varargin)
     nodeF=cell(0,1);
     nodeV=cell(0,1);
     nodeN=cell(0,1);
-    nodeUV=cell(0,1);
+    nodeFC=cell(0,1);
     ct=0;
     mode_str_values=["POINTS","LINES","LINE_LOOP","LINE_STRIP","TRIANGLES","TRIANGLE_STRIP","TRIANGLE_FAN"];
     mode_num_values=[       0,      1,          2,           3,          4,               5,             6];
     use_materials=true;
-    if(or(ismissing(materialFile),~isprop(gltf,'materials')))
+    if(~isprop(gltf,'materials'))
         use_materials=false;
-    end
-    if(use_materials)
-        used_materials=false(numel(gltf.materials),1);        
-        nodeM=cell(0,1);
-        matct=0;
     end
     if(~isempty(nodes))
         for node=nodes
@@ -132,20 +123,11 @@ function writeOBJ(gltf,filename,varargin)
                         otherwise
                             nodeF{ct}=[];
                     end
-                    if(isfield(gltf.meshes{mesh+1}.primitives{primitive}.attributes,'TEXCOORD_0'))
-                        nodeUV{ct}=gltf.getAccessor(gltf.meshes{mesh+1}.primitives{primitive}.attributes.TEXCOORD_0);
-                    else
-                        nodeUV{ct}=[];
-                    end
                     if(use_materials)
                         if(isfield(gltf.meshes{mesh+1}.primitives{primitive},'material'))
                             mat=gltf.meshes{mesh+1}.primitives{primitive}.material;
-                            used_materials(mat+1)=true;
-                            if(isfield(gltf.materials{mat+1},'name'))
-                                nodeM{ct}=gltf.materials{mat+1}.name;
-                            else
-                                matct=matct+1;
-                                nodeM{ct}="material_"+matct;
+                            if(isfield(gltf.materials{mat+1}.pbrMetallicRoughness,'baseColorFactor'))
+                                nodeFC{ct}=gltf.materials{mat+1}.pbrMetallicRoughness.baseColorFactor;
                             end
                         end
                     end
@@ -194,20 +176,11 @@ function writeOBJ(gltf,filename,varargin)
                     else
                         nodeN{ct}=[];
                     end
-                    if(isfield(gltf.meshes{mesh+1}.primitives{primitive}.attributes,'TEXCOORD_0'))
-                        nodeUV{ct}=gltf.getAccessor(gltf.meshes{mesh+1}.primitives{primitive}.attributes.TEXCOORD_0);
-                    else
-                        nodeUV{ct}=[];
-                    end
                     if(use_materials)
                         if(isfield(gltf.meshes{mesh+1}.primitives{primitive},'material'))
                             mat=gltf.meshes{mesh+1}.primitives{primitive}.material;
-                            used_materials(mat+1)=true;
-                            if(isfield(gltf.materials{mat+1},'name'))
-                                nodeM{ct}=gltf.materials{mat+1}.name;
-                            else
-                                matct=matct+1;
-                                nodeM{ct}="material_"+matct;
+                            if(isfield(gltf.materials{mat+1}.pbrMetallicRoughness,'baseColorFactor'))
+                                nodeFC{ct}=gltf.materials{mat+1}.pbrMetallicRoughness.baseColorFactor;
                             end
                         end
                     end
@@ -215,112 +188,77 @@ function writeOBJ(gltf,filename,varargin)
             end
         end
     end
-
-    nodeE=nodeF;
-    edges=cellfun(@(x)size(x,2)==2,nodeE);
-    faces=cellfun(@(x)size(x,2)==3,nodeF);
-    nodeE(~edges)=repmat({uint32(zeros(0,2))},size(nodeE(~edges)));
-    nodeF(~faces)=repmat({uint32(zeros(0,3))},size(nodeF(~faces)));
-    
-    FV=cellfun(@(x,y)x+y,nodeF(:),num2cell([0;cumsum(cellfun(@(x)size(x,1),nodeV(1:end-1)'))]),"UniformOutput",false);
-    FN=cellfun(@(x,y)x+y,nodeF(:),num2cell([0;cumsum(cellfun(@(x)size(x,1),nodeN(1:end-1)'))]),"UniformOutput",false);
-    FT=cellfun(@(x,y)x+y,nodeF(:),num2cell([0;cumsum(cellfun(@(x)size(x,1),nodeUV(1:end-1)'))]),"UniformOutput",false);
-    EV=cellfun(@(x,y)x+y,nodeE(:),num2cell([0;cumsum(cellfun(@(x)size(x,1),nodeV(1:end-1)'))]),"UniformOutput",false);
-    EN=cellfun(@(x,y)x+y,nodeE(:),num2cell([0;cumsum(cellfun(@(x)size(x,1),nodeN(1:end-1)'))]),"UniformOutput",false);
-    ET=cellfun(@(x,y)x+y,nodeE(:),num2cell([0;cumsum(cellfun(@(x)size(x,1),nodeUV(1:end-1)'))]),"UniformOutput",false);
-    V=cell2mat(nodeV(:));
-    N=cell2mat(nodeN(:));
-    UV=cell2mat(nodeUV(:));
-    [V,~,icV]=unique(V,"rows","stable");
-    FV=cellfun(@(x)icV(x')',FV,'UniformOutput',false);
-    EV=cellfun(@(x)icV(x')',EV,'UniformOutput',false);
-    if(isempty(N))
-        FN=cellfun(@(x)nan(size(x)),FN,'UniformOutput',false);
-    else
-        [N,~,icN]=unique(N,"rows","stable");
-        FN=cellfun(@(x)icN(x')',FN,'UniformOutput',false);
+    if(isempty(ax_h))
+        ax_h=gca;
     end
-    EN=cellfun(@(x)nan(size(x)),EN,'UniformOutput',false);
-    if(isempty(UV))
-        FT=cellfun(@(x)nan(size(x)),FT,'UniformOutput',false);
-        ET=cellfun(@(x)nan(size(x)),ET,'UniformOutput',false);
-    else
-        [UV,~,icUV]=unique(UV,"rows","stable");
-        FT=cellfun(@(x)icUV(x')',FT,'UniformOutput',false);
-        ET=cellfun(@(x)icUV(x')',ET,'UniformOutput',false);
-    end
-    vtext="v "+join(string(V));
-    ntext="vn "+join(string(N));
-    ttext="vt "+join(string(UV));
-    ftext=cellfun(@(x,y,z)cat(3,string(x),string(y),string(z)),FV,FT,FN,'UniformOutput',false);
-    for i=1:numel(ftext)
-        ftext{i}(ismissing(ftext{i}))="";
-    end
-    ftext=cellfun(@(x)join("f "+strip(join(strip(join(x,"/",3),"/"),2)),newline),ftext,'UniformOutput',false);
-    etext=cellfun(@(x,y,z)cat(3,string(x),string(y),string(z)),EV,ET,EN,'UniformOutput',false);
-    for i=1:numel(etext)
-        etext{i}(ismissing(etext{i}))="";
-    end
-    etext=cellfun(@(x)join("l "+strip(join(strip(join(x,"/",3),"/"),2)),newline),etext,'UniformOutput',false);
-    if(use_materials)
-        if(any(used_materials))
-            ftext=cellfun(@(x,y)"g"+newline+"usemtl "+x+newline+y,nodeM(:),ftext);
-            etext=cellfun(@(x,y)"g"+newline+"usemtl "+x+newline+y,nodeM(:),etext);
-        else
-            ftext=cellfun(@(x)"g"+newline+x,ftext);
-            etext=cellfun(@(x)"g"+newline+x,etext);
-        end
-    else
-        ftext=cellfun(@(x)"g"+newline+x,ftext);
-        etext=cellfun(@(x)"g"+newline+x,etext);
-    end
-    ftext=ftext(~ismissing(ftext));
-    etext=etext(~ismissing(etext));
-    if(use_materials)
-        if(any(used_materials))
-            [~,relative2]=GLTF.getRelativePath(filename,materialFile);
-            matline="mtllib "+relative2;
-            writelines([matline;vtext;ttext;ntext;ftext;etext],filename);
-        else
-            writelines([vtext;ttext;ntext;ftext;etext],filename);
-        end
-    else
-        writelines([vtext;ttext;ntext;ftext;etext],filename);
-    end
-    
-    if(use_materials)
-        if(any(used_materials))
-            matcell=cell(nnz(used_materials),1);
-            used_materials=find(used_materials);
-            for m=1:numel(used_materials)
-                mat=used_materials(m);
-                matcell{m}="newmtl "+nodeM{m};
-                if(isfield(gltf.materials{mat},'pbrMetallicRoughness'))
-                    if(isfield(gltf.materials{mat}.pbrMetallicRoughness,'baseColorFactor'))
-                        matcell{m}=[matcell{m};"Kd"+sprintf(" %0-9.7f",gltf.materials{mat}.pbrMetallicRoughness.baseColorFactor(1:3))];
+    for ict=1:ct
+        if(isempty(nodeN{ict}))
+            if(isempty(nodeFC{ict}))
+                patch('Parent',ax_h,'Faces',nodeF{ict},'Vertices',nodeV{ict});
+            else
+                if(nodeFC{ict}(4)<4)
+                    if(size(nodeF{ict},2)==2)
+                        patch('Parent',ax_h,'Faces',nodeF{ict},'Vertices',nodeV{ict},'FaceColor','none','EdgeColor',nodeFC{ict}(1:3),'EdgeAlpha',nodeFC{ict}(4));
+                    else
+                        patch('Parent',ax_h,'Faces',nodeF{ict},'Vertices',nodeV{ict},'FaceColor',nodeFC{ict}(1:3),'FaceAlpha',nodeFC{ict}(4),'EdgeColor','none');
                     end
-                    if(isfield(gltf.materials{mat}.pbrMetallicRoughness,'metallicFactor'))
-                        matcell{m}=[matcell{m};"Ks"+sprintf(" %0-9.7f",repmat(gltf.materials{mat}.pbrMetallicRoughness.metallicFactor,1,3))];
+                else
+                    if(size(nodeF{ict},2)==2)
+                        patch('Parent',ax_h,'Faces',nodeF{ict},'Vertices',nodeV{ict},'FaceColor','none','EdgeColor',nodeFC{ict}(1:3));
+                    else
+                        patch('Parent',ax_h,'Faces',nodeF{ict},'Vertices',nodeV{ict},'FaceColor',nodeFC{ict}(1:3),'EdgeColor','none');
                     end
-                    if(isfield(gltf.materials{mat}.pbrMetallicRoughness,'roughnessFactor'))
-                        matcell{m}=[matcell{m};"Ns"+sprintf(" %0-9.7f",repmat(gltf.materials{mat}.pbrMetallicRoughness.metallicFactor,1,3))];
-                    end
-                    if(isfield(gltf.materials{mat},'alphaMode') && gltf.materials{mat}.alphaMode~="OPAQUE" && isfield(gltf.materials{mat}.pbrMetallicRoughness,'baseColorFactor'))
-                        matcell{m}=[matcell{m};"d"+sprintf(" %0-9.7f",gltf.materials{mat}.pbrMetallicRoughness.baseColorFactor(4))];
-                    end
-                    if(isfield(gltf.materials{mat},'alphaMode') && gltf.materials{mat}.alphaMode~="OPAQUE" && isfield(gltf.materials{mat}.pbrMetallicRoughness,'baseColorFactor'))
-                        matcell{m}=[matcell{m};"Tr"+sprintf(" %0-9.7f",1-gltf.materials{mat}.pbrMetallicRoughness.baseColorFactor(4))];
-                    end
-                    if(isfield(gltf.materials{mat}.pbrMetallicRoughness,'baseColorTexture'))
-                        matcell{m}=[matcell{m};"map_Kd"+string(gltf.images{gltf.textures{gltf.materials{mat}.pbrMetallicRoughness.baseColorTexture.index+1}.source+1}.uri)];
-                    end
-                end
-                if(isfield(gltf.materials{mat},'emissiveFactor'))
-                    matcell{m}=[matcell{m};"Ke"+sprintf(" %0-9.7f",gltf.materials{mat}.emissiveFactor)];
                 end
             end
-            mat=[matcell{:}];
-            writelines(mat,materialFile);
+        else
+            if(isempty(nodeFC{ict}))
+                patch('Parent',ax_h,'Faces',nodeF{ict},'Vertices',nodeV{ict},'VertexNormals',-nodeN{ict});
+            else
+                if(nodeFC{ict}(4)<4)
+                    if(size(nodeF{ict},2)==2)
+                        patch('Parent',ax_h,'Faces',nodeF{ict},'Vertices',nodeV{ict},'FaceColor','none','EdgeColor',nodeFC{ict}(1:3),'EdgeAlpha',nodeFC{ict}(4));
+                    else
+                        patch('Parent',ax_h,'Faces',nodeF{ict},'Vertices',nodeV{ict},'FaceColor',nodeFC{ict}(1:3),'FaceAlpha',nodeFC{ict}(4),'EdgeColor','none');
+                    end
+                else
+                    if(size(nodeF{ict},2)==2)
+                        patch('Parent',ax_h,'Faces',nodeF{ict},'Vertices',nodeV{ict},'VertexNormals',-nodeN{ict},'FaceColor','none','EdgeColor',nodeFC{ict}(1:3));
+                    else
+                        patch('Parent',ax_h,'Faces',nodeF{ict},'Vertices',nodeV{ict},'VertexNormals',-nodeN{ict},'FaceColor',nodeFC{ict}(1:3),'EdgeColor','none');
+                    end
+                end
+            end
+        end
+    end
+    axis(ax_h,'equal');
+    view(ax_h,3);
+end
+
+function valid=validateInteger(input,min,max)
+    valid=isnumeric(input);
+    valid=valid && all(input==round(input));
+    if(nargin>2)
+        if(isfinite(min))
+            valid=valid && all(input>=min);
+        end
+        if(isfinite(max))
+            valid=valid && all(input<=max);
+        end
+        if(~valid)
+            if(and(isfinite(min),isfinite(max)))
+                error("Must be integer(s) from " + min + " to " + max + ".");
+            elseif(isfinite(min))
+                error("Must be integer(s) greater than or equal to " + min + ".");
+            elseif(isfinite(max))
+                error("Must be integer(s) less than or equal to " + max + ".");
+            else
+                error("Must be integer(s).");
+            end
+        end
+    else
+        valid=all(ismember(input,min));
+        if(~valid)
+            error("Must be integer(s) " + GLTF.joinString(string(min)) + ".");
         end
     end
 end

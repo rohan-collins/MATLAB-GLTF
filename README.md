@@ -46,6 +46,7 @@ Last updated: October 10, 2025.
     * [Step-By-Step](#step-by-step)
     * [Step-by-Step for Skeletal Animation](#step-by-step-for-skeletal-animation)
 * [Helper Functions](#helper-functions)
+    * [`showGLTF`](#showGLTF)
     * [`addAxes`](#addAxes)
     * [`sphere3d`](#sphere3d)
     * [`polytope`](#polytope)
@@ -573,6 +574,13 @@ And similar for shaft and handle. (This says that all vertices depend only on on
 The [Catmull–Clark algorithm](https://en.wikipedia.org/wiki/Catmull%E2%80%93Clark_subdivision_surface) is a technique used in 3D computer graphics to create curved surfaces by using [subdivision surface modelling](https://en.wikipedia.org/wiki/Subdivision_surface). The implementation should be able to handle texture mapping vertices with same XYZ coordinates but different UV coordinates. It also optionally returns the influence of the original vertices as joints and weights for skinned animation.
 
 **Careful**: As is default for the Catmull-Clark algorithm, faces will be returned as quadrilaterals, which in general will not be planar. They need to be converted to triangles before writing to a GLTF file. Passing the `triangulate` parameter as `true` when creating meshes, primitives, or morph targets accomplishes this.
+
+## `showGLTF`
+This function shows the GLTF object as a MATLAB figure.
+
+This function is **experimental**, but should suffice for most purposes. MATLAB isn't meant to be a full graphics renderer — currently the function only supports colours and transparency in materials.
+
+![burningbus](docs/burningbus.png)
 
 ## `addAxes`
 ![addAxes](docs/axes.png)

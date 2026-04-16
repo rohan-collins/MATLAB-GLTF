@@ -1,0 +1,40 @@
+function base64string=string2URI(filename)
+    % Convert image file to base-64 representation.
+    %
+    % STRINGTOURI(FILENAME) converts the PNG or JPG image specified by
+    % FILENAME to a base-64 representation for embedding.
+    %
+    % © Copyright 2014-2026 Rohan Chabukswar.
+    %
+    % This file is part of MATLAB GLTF.
+    %
+    % MATLAB GLTF is free software: you can redistribute it and/or modify
+    % it under the terms of the GNU General Public License as published by
+    % the Free Software Foundation, either version 3 of the License, or (at
+    % your option) any later version.
+    %
+    % MATLAB GLTF is distributed in the hope that it will be useful, but
+    % WITHOUT ANY WARRANTY; without even the implied warranty of
+    % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    % General Public License for more details.
+    %
+    % You should have received a copy of the GNU General Public License
+    % along with MATLAB GLTF. If not, see <https://www.gnu.org/licenses/>.
+    %
+    [~,~,ext]=fileparts(string(filename));
+    if(ext==".png")
+        bytes=gltf.GLTF.read_file(filename,"b");
+        base64string=['data:image/png;base64,' matlab.net.base64encode(uint8(bytes))];
+    elseif(or(ext==".jpg",ext==".jpeg"))
+        bytes=gltf.GLTF.read_file(filename,"b");
+        base64string=['data:image/jpeg;base64,' matlab.net.base64encode(uint8(bytes))];
+    elseif(ext==".wav")
+        bytes=gltf.GLTF.read_file(filename,"b");
+        base64string=['data:audio/wav;base64,' matlab.net.base64encode(uint8(bytes))];
+    elseif(ext==".webp")
+        bytes=gltf.GLTF.read_file(filename,"b");
+        base64string=['data:image/webp;base64,' matlab.net.base64encode(uint8(bytes))];
+    else
+        base64string=filename;
+    end
+end

@@ -1,18 +1,18 @@
-![GLTF](docs/gltf.png)![MATLAB](docs/matlab.png)
+![GLTF](docs/obj.png)![MATLAB](docs/matlab.png)
 
 GLTF is a MATLAB class to export 3D graphs and other content into the GL Transmission Format (glTF).
 
-Last updated: October 10, 2025.
+Last updated: April 16, 2026.
 
-> © Copyright 2014-2025 Rohan Chabukswar.
+> © Copyright 2014-2026 Rohan Chabukswar.
 >
-> This file is part of MATLAB GLTF.
+> This file is part of MATLAB obj.
 >
 > MATLAB GLTF is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 >
 > MATLAB GLTF is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 >
-> You should have received a copy of the GNU General Public License along with MATLAB GLTF. If not, see <https://www.gnu.org/licenses/>.
+> You should have received a copy of the GNU General Public License along with MATLAB obj. If not, see <https://www.gnu.org/licenses/>.
 >
 > Comic panels with their characters are © [xkcd](https://xkcd.com/) and used under [Creative Commons Attribution-NonCommercial 2.5 License](https://xkcd.com/license.html).
 
@@ -46,16 +46,16 @@ Last updated: October 10, 2025.
     * [Step-By-Step](#step-by-step)
     * [Step-by-Step for Skeletal Animation](#step-by-step-for-skeletal-animation)
 * [Helper Functions](#helper-functions)
-    * [`showGLTF`](#showGLTF)
-    * [`addAxes`](#addAxes)
-    * [`sphere3d`](#sphere3d)
-    * [`polytope`](#polytope)
-    * [`bezier`](#bezier)
-    * [`bezierT`](#bezierT)
-    * [`bezierSurface`](#bezierSurface)
-    * [`TNB`](#tnb)
-    * [`tubeplot`](#tubeplot)
-    * [`removeTorsion`](#removeTorsion)
+    * [`gltf.utilities.showGLTF`](#showGLTF)
+    * [`gltf.utilities.addAxes`](#addAxes)
+    * [`gltf.utilities.sphere3d`](#sphere3d)
+    * [`gltf.utilities.polytope`](#polytope)
+    * [`gltf.utilities.bezier`](#bezier)
+    * [`gltf.utilities.bezierT`](#bezierT)
+    * [`gltf.utilities.bezierSurface`](#bezierSurface)
+    * [`gltf.utilities.TNB`](#tnb)
+    * [`gltf.utilities.tubeplot`](#tubeplot)
+    * [`gltf.utilities.removeTorsion`](#removeTorsion)
 * [Appendix](#appendix)
     * [Some Common Terminology](#some-common-terminology)
 
@@ -103,7 +103,7 @@ Using Blender or MeshLab to create the models or graphics would lose the mathema
 
 Over the last few years, one project required 3D objects and using OpenGL concepts, and some projects used 3D visualisations. The scripts were collected to make this 4000-line class (~850 are documentation).
 
-**Caveat emptor. Get help by typing `help GLTF`, or `help GLTF.method` (where `method` is a GLTF class method) or `help function` (where `function` is one of the helper functions included with the class).**
+**Caveat emptor. Get help by typing `help GLTF`, or `help obj.method` (where `method` is a GLTF class method) or `help function` (where `function` is one of the helper functions included with the class).**
 
 ![deadbody](docs/deadbody.png)
 
@@ -129,9 +129,7 @@ The [COMSOL Multiphysics](https://www.comsol.com/blogs/how-to-export-and-share-y
 Many times, to understand some implementation details, you might be further redirected to [OpenGL Specifications](https://www.khronos.org/opengl/wiki/). If you cannot find something in the GLTF Specifications and you aren't redirected to the OpenGL ones, try looking directly in the OpenGL specs. If nothing else helps, [StackOverflow](https://stackoverflow.com/questions/tagged/gltf) should have something.
 
 ## Setup
-Clone the contents of this repository into a folder called `@GLTF` (yes, the "@" is essential). This folder can be anywhere inside another folder that is already on the MATLAB path, but the `@GLTF` folder itself should not be added to the path. The `samples` and `functions` folders inside the class folder cannot be added to path. The sample scripts and functions respectively in those folders can be accessed by running them from within the folder. Alternatively, you can copy those folders to somewhere outside the class folder and add them to the MATLAB path.
-
-For more information, please refer to ["Using Class Folders"](https://mathworks.com/help/matlab/matlab_oop/organizing-classes-in-folders.html) in MATLAB documentation.
+Clone the contents of this repository into a folder, and add it to the MATLAB path.
 
 ## Basics of 3D Models
 Base 3D models are stored as a list of vertices, where sets of three make a triangle. Vertices can be reused between triangles. All that is needed is this N×3 array of vertices (V), and M×3 array of faces (F).
@@ -169,20 +167,20 @@ RGB color values use sRGB color primaries.
 
 ## FV to 3D Model
 1. Initialise an instance of the GLTF class.  
-` gltf=GLTF();`
+` obj=gltf.GLTF();`
 
 2. Add material with the base colour C.  
-` mat=gltf.addMaterial('baseColorFactor',C);`
+` mat=obj.addMaterial('baseColorFactor',C);`
 
 3. Add mesh with vertices V, faces F, and the new material.  
-` mesh=gltf.addMesh(V,'indices',F,'material',mat);`
+` mesh=obj.addMesh(V,'indices',F,'material',mat);`
 
 4. Add a node that contains the mesh to the scene.  
-` node=gltf.addNode('mesh',mesh);`  
+` node=obj.addNode('mesh',mesh);`  
 Adding the node with the mesh is necessary as otherwise the mesh won't be instantiated. The node can also have transformations like translation, rotation, etc. By default the node is added to the scene, but if you want to do some more complicated stuff you can block this step by setting `'addToScene'` as `false`.
 
 5. Write the scene to the specified GLTF file.  
-` gltf.writeGLTF("tetrahedron.gtlf");`  
+` obj.writeGLTF("tetrahedron.gtlf");`  
 
 # Adding Texture
 A texture is an image that is overlaid on the surface of a 3D object.
@@ -202,15 +200,15 @@ The image can be stretched or otherwise deformed in a piece-wise (face-wise) lin
 `% Create faces`  
 `F=[1 2 3;3 14 1;3 4 5;5 6 3;11 6 7;7 10 11;9 10 7;7 8 9;11 12 13;13 14 11;11 14 3;3 6 11];`  
 `F=F(:,[1 3 2]);`  
-`gltf=GLTF();`  
+`obj=gltf.GLTF();`  
 `% Add material with image texture`  
-`material_idx=gltf.addMaterial('baseColorTexture',"rubik.png");`  
+`material_idx=obj.addMaterial('baseColorTexture',"rubik.png");`  
 `% Add mesh with UV coordinates`  
-`mesh_idx=gltf.addMesh(V,'indices',F,'material',material_idx,'TEXCOORD',UV);`  
+`mesh_idx=obj.addMesh(V,'indices',F,'material',material_idx,'TEXCOORD',UV);`  
 `% Add node`  
-`gltf.addNode('mesh',mesh_idx);`  
+`obj.addNode('mesh',mesh_idx);`  
 `% Write GLTF file`  
-`gltf.writeGLTF("rubik.gltf");`  
+`obj.writeGLTF("rubik.gltf");`  
 
 # Extra Features
 **This is not an exhaustive list, and GLTF specification allows for more features, especially via extensions.**
@@ -283,15 +281,15 @@ Convert to GLTF:
 `% Get the colour of the line.`  
 `C=p.Color;`  
 `% Create the GLTF object.`  
-`gltf=GLTF();`  
+`obj=gltf.GLTF();`  
 `% Add the material of the line color.`  
-`material_idx=gltf.addMaterial('baseColorFactor',C);`  
+`material_idx=obj.addMaterial('baseColorFactor',C);`  
 `% Add a mesh with the vertices and edges. Use mode "LINES" and material.`  
-`mesh_idx=gltf.addMesh(V,'indices',E,'mode',"LINES",'material',material_idx);`  
+`mesh_idx=obj.addMesh(V,'indices',E,'mode',"LINES",'material',material_idx);`  
 `% Instantiate the mesh in a node`  
-`gltf.addNode('mesh',mesh_idx);`  
+`obj.addNode('mesh',mesh_idx);`  
 `% Write the GLTF file.`  
-`gltf.writeGLTF("plot3.gltf");`  
+`obj.writeGLTF("plot3.gltf");`  
 
 ## `surf`
 
@@ -322,21 +320,21 @@ Convert to GLTF:
 `% Rotate the vertices since we are more used to Z-axis being "up" and Y-axis being "back".`  
 `V=V*[0 0 1;1 0 0;0 1 0];`  
 `% Create the GLTF object.`  
-`gltf=GLTF();`  
+`obj=gltf.GLTF();`  
 `% Add a white material which will act as the "base coat" over which the vertex colours will be painted. There is no real need to do this, except that we want the material to be visible from both sides.`  
-`white_idx=gltf.addMaterial('baseColorFactor',ones(1,3),'doubleSided',true);`  
+`white_idx=obj.addMaterial('baseColorFactor',ones(1,3),'doubleSided',true);`  
 `% Add a mesh with the vertices, faces, and colours. Use the white material.`  
-`mesh_idx=gltf.addMesh(V,'indices',F,'COLOR',C,'material',white_idx);`  
+`mesh_idx=obj.addMesh(V,'indices',F,'COLOR',C,'material',white_idx);`  
 `% Get the edge colour.`  
 `C=s.EdgeColor;`  
 `% Add the material which we will use to display edges.`  
-`edge_colour_idx=gltf.addMaterial('baseColorFactor',C);`  
+`edge_colour_idx=obj.addMaterial('baseColorFactor',C);`  
 `% Add a second primitive to the same mesh with vertices and edges. Use mode "LINES" and the edge colour material.`  
-`gltf.addPrimitiveToMesh(mesh_idx,V,'indices',E,'mode',"LINES",'material',edge_colour_idx);`  
+`obj.addPrimitiveToMesh(mesh_idx,V,'indices',E,'mode',"LINES",'material',edge_colour_idx);`  
 `% Instantiate the mesh in a node.`  
-`gltf.addNode('mesh',mesh_idx);`  
+`obj.addNode('mesh',mesh_idx);`  
 `% Write the GLTF file.`  
-`gltf.writeGLTF("surf.gltf");`  
+`obj.writeGLTF("surf.gltf");`  
 
 ## `mesh`
 
@@ -371,17 +369,17 @@ Convert to GLTF:
 `% Rotate the vertices since we are more used to Z-axis being "up" and Y-axis being "back".`  
 `V=V*[0 0 1;1 0 0;0 1 0];`  
 `% Create the GLTF object.`  
-`gltf=GLTF();`  
+`obj=gltf.GLTF();`  
 `% Add a white material which will prevent the mesh from being see-through.`  
-`white_idx=gltf.addMaterial('baseColorFactor',ones(1,3),'doubleSided',true);`  
+`white_idx=obj.addMaterial('baseColorFactor',ones(1,3),'doubleSided',true);`  
 `% Add a mesh with the vertices and faces. Use the white material.`  
-`mesh_idx=gltf.addMesh(V,'indices',F,'material',white_idx);`  
+`mesh_idx=obj.addMesh(V,'indices',F,'material',white_idx);`  
 `% Add a second primitive to the same mesh with vertices, edges, and colours. Use mode "LINES".`  
-`gltf.addPrimitiveToMesh(mesh_idx,V,'indices',E,'COLOR',C,'mode',"LINES");`  
+`obj.addPrimitiveToMesh(mesh_idx,V,'indices',E,'COLOR',C,'mode',"LINES");`  
 `% Instantiate the mesh in a node.`  
-`gltf.addNode('mesh',mesh_idx);`  
+`obj.addNode('mesh',mesh_idx);`  
 `% Write the GLTF file.`  
-`gltf.writeGLTF("mesh.gltf");`  
+`obj.writeGLTF("mesh.gltf");`  
 
 ## `bar3`
 
@@ -398,11 +396,11 @@ Convert to GLTF:
 `% Default colours are based on index using default colormap.`  
 `C=parula(size(Z,2));`  
 `% Create the GLTF object.`  
-`gltf=GLTF();`  
+`obj=gltf.GLTF();`  
 `% Get the edge colour.`  
 `edge_colour=s(1).EdgeColor;`  
 `% Add a common material for the edges.`  
-`edge_material=gltf.addMaterial('baseColorFactor',edge_colour);`  
+`edge_material=obj.addMaterial('baseColorFactor',edge_colour);`  
 `% For each surface in the plot`  
 `for i=1:3`  
 `    % Get the faces, vertices, and the corresponding colours.`  
@@ -438,16 +436,16 @@ Convert to GLTF:
 `    % Since the axis system is left handed, we need to flip the triangles so that they face outwards again.`  
 `    F=F(:,[1 3 2]);`  
 `    % Add a material with the face colour.`  
-`    face_material(i)=gltf.addMaterial('baseColorFactor',C(i,:)); %#ok<SAGROW>`  
+`    face_material(i)=obj.addMaterial('baseColorFactor',C(i,:)); %#ok<SAGROW>`  
 `    % Add a mesh with the vertices, faces, and colours. Use the face colour material.`  
-`    mesh_idx=gltf.addMesh(V,'indices',F,'material',face_material(i));`  
+`    mesh_idx=obj.addMesh(V,'indices',F,'material',face_material(i));`  
 `    % Add a second primitive to the same mesh with vertices and edges. Use mode "LINES" and the edge colour material.`  
-`    gltf.addPrimitiveToMesh(mesh_idx,V,'indices',E2,'mode',"LINES",'material',edge_material);`  
+`    obj.addPrimitiveToMesh(mesh_idx,V,'indices',E2,'mode',"LINES",'material',edge_material);`  
 `    % Instantiate the mesh in a node.`  
-`    gltf.addNode('mesh',mesh_idx);`  
+`    obj.addNode('mesh',mesh_idx);`  
 `end`  
 `% Write the GLTF file.`  
-`gltf.writeGLTF("bar3.gltf");`  
+`obj.writeGLTF("bar3.gltf");`  
 
 # Animation Example
 
@@ -469,24 +467,24 @@ The creation of mesh vertices and faces is detailed in [samples/ballvalve.m](sam
 ## Step-by-Step
 
 1. Add all the materials first (to prevent having to go back and add later, which you can do, if needed):  
-` mat(1)=gltf.addMaterial('baseColorFactor',[0.000 0.447 0.741 0.5]);`  
-` mat(2)=gltf.addMaterial('baseColorFactor',[0.466 0.674 0.188]);`  
-` mat(3)=gltf.addMaterial('baseColorFactor',[0.929 0.694 0.125]);`  
-` mat(4)=gltf.addMaterial('baseColorFactor',[0.635 0.078 0.184]);`
+` mat(1)=obj.addMaterial('baseColorFactor',[0.000 0.447 0.741 0.5]);`  
+` mat(2)=obj.addMaterial('baseColorFactor',[0.466 0.674 0.188]);`  
+` mat(3)=obj.addMaterial('baseColorFactor',[0.929 0.694 0.125]);`  
+` mat(4)=obj.addMaterial('baseColorFactor',[0.635 0.078 0.184]);`
 
 2. Add the tube mesh and corresponding node:  
-` tube_mesh=gltf.addMesh(V_tube,'indices',F_tube,'material',mat(1));`  
-` tube_node=gltf.addNode('mesh',tube_mesh);`
+` tube_mesh=obj.addMesh(V_tube,'indices',F_tube,'material',mat(1));`  
+` tube_node=obj.addNode('mesh',tube_mesh);`
 
 3. Add the ball mesh:  
-` ball_mesh=gltf.addMesh(V_ball,'indices',F_ball,'material',mat(2));`  
+` ball_mesh=obj.addMesh(V_ball,'indices',F_ball,'material',mat(2));`  
 
 4. We want the shaft and handle to be considered to be part of the same structure, but with different materials. We can do that by adding them as more primitives to the same mesh:  
-` gltf.addPrimitiveToMesh(ball_mesh,V_shaft,'indices',F_shaft,'material',mat(3));`  
-` gltf.addPrimitiveToMesh(ball_mesh,V_handle,'indices',F_handle,'material',mat(4));`  
+` obj.addPrimitiveToMesh(ball_mesh,V_shaft,'indices',F_shaft,'material',mat(3));`  
+` obj.addPrimitiveToMesh(ball_mesh,V_handle,'indices',F_handle,'material',mat(4));`  
 
 5. Now add the node containing this compound mesh:  
-` ball_node=gltf.addNode('mesh',ball_mesh);`  
+` ball_node=obj.addNode('mesh',ball_mesh);`  
 
 6. Create the array of times (in seconds):  
 ` t=0:4;`  
@@ -497,20 +495,20 @@ The creation of mesh vertices and faces is detailed in [samples/ballvalve.m](sam
 ` q=[q0;q0;q90;q90;q0];`  
 
 8. Create input and output samplers (this tells OpenGL how to interpret the data):  
-` inputSampler=gltf.addBinaryData(t,"FLOAT","SCALAR",true);`  
-` outputSampler=gltf.addBinaryData(q,"FLOAT","VEC4",true);`  
+` inputSampler=obj.addBinaryData(t,"FLOAT","SCALAR",true);`  
+` outputSampler=obj.addBinaryData(q,"FLOAT","VEC4",true);`  
 
 9. Create the sampler (this tells OpenGL how to interpolate (default is linear)):
-` sampler=gltf.addAnimationSampler(inputSampler,outputSampler);`  
+` sampler=obj.addAnimationSampler(inputSampler,outputSampler);`  
 
 10. Create the channel (this tells OpenGL which sampler to use, for which node, and what to animate):
-` channel=gltf.addAnimationChannel(0,ball_node,"rotation");`  
+` channel=obj.addAnimationChannel(0,ball_node,"rotation");`  
 
 11. Add the animation specifying sampler and channels (each animation can have multiple of each):  
-` gltf.addAnimation(sampler,channel);`  
+` obj.addAnimation(sampler,channel);`  
 
 12. Write the file:
-` gltf.writeGLTF("ballvalve.gltf");`  
+` obj.writeGLTF("ballvalve.gltf");`  
 
 ## Step-by-Step for Skeletal Animation
 Powerpoint only supports skeletal animation for now. Animating nodes directly will not work. Adding a skeletal animation is a little bit more complicated, but not terribly. We need an extra node, and we need to say how vertices depend on that node:  
@@ -522,26 +520,26 @@ And similar for shaft and handle. (This says that all vertices depend only on on
 ` ibm=reshape(eye(4),16,1)';`  
 
 1. Add all the materials first (to prevent having to go back and add later, which you can do, if needed):  
-` mat(1)=gltf.addMaterial('baseColorFactor',[0.000 0.447 0.741 0.5]);`  
-` mat(2)=gltf.addMaterial('baseColorFactor',[0.466 0.674 0.188]);`  
-` mat(3)=gltf.addMaterial('baseColorFactor',[0.929 0.694 0.125]);`  
-` mat(4)=gltf.addMaterial('baseColorFactor',[0.635 0.078 0.184]);`
+` mat(1)=obj.addMaterial('baseColorFactor',[0.000 0.447 0.741 0.5]);`  
+` mat(2)=obj.addMaterial('baseColorFactor',[0.466 0.674 0.188]);`  
+` mat(3)=obj.addMaterial('baseColorFactor',[0.929 0.694 0.125]);`  
+` mat(4)=obj.addMaterial('baseColorFactor',[0.635 0.078 0.184]);`
 
 2. Add the tube mesh and corresponding node:  
-` tube_mesh=gltf.addMesh(V_tube,'indices',F_tube,'material',mat(1));`  
-` tube_node=gltf.addNode('mesh',tube_mesh);`
+` tube_mesh=obj.addMesh(V_tube,'indices',F_tube,'material',mat(1));`  
+` tube_node=obj.addNode('mesh',tube_mesh);`
 
 3. Add the meshes with the weights and joints this time:  
-` ball_mesh=gltf.addMesh(V_ball,'indices',F_ball,'material',mat(2),'WEIGHTS_0',w_ball,'JOINTS_0',j_ball);`  
-` shaft_mesh=gltf.addPrimitiveToMesh(ball_mesh,V_shaft,'indices',F_shaft,'material',mat(3),'WEIGHTS_0',w_shaft,'JOINTS_0',j_shaft);`  
-` handle_mesh=gltf.addPrimitiveToMesh(ball_mesh,V_handle,'indices',F_handle,'material',mat(4),'WEIGHTS_0',w_handle,'JOINTS_0',j_handle);`  
+` ball_mesh=obj.addMesh(V_ball,'indices',F_ball,'material',mat(2),'WEIGHTS_0',w_ball,'JOINTS_0',j_ball);`  
+` shaft_mesh=obj.addPrimitiveToMesh(ball_mesh,V_shaft,'indices',F_shaft,'material',mat(3),'WEIGHTS_0',w_shaft,'JOINTS_0',j_shaft);`  
+` handle_mesh=obj.addPrimitiveToMesh(ball_mesh,V_handle,'indices',F_handle,'material',mat(4),'WEIGHTS_0',w_handle,'JOINTS_0',j_handle);`  
 
 4. Add the extra node and the skin (with the inverse bind matrix):  
-` base_node=gltf.addNode('addToScene',false);`  
-` skin_idx=gltf.addSkin(base_node,'inverseBindMatrices',ibm);`  
+` base_node=obj.addNode('addToScene',false);`  
+` skin_idx=obj.addSkin(base_node,'inverseBindMatrices',ibm);`  
 
 5. Add the mesh node, with the extra node as a child:  
-` gltf.addNode('mesh',ball_mesh,'skin',skin_idx,'children',base_node);`  
+` obj.addNode('mesh',ball_mesh,'skin',skin_idx,'children',base_node);`  
 
 6. Create the array of times (in seconds):  
 ` t=0:4;`  
@@ -552,40 +550,40 @@ And similar for shaft and handle. (This says that all vertices depend only on on
 ` q=[q0;q0;q90;q90;q0];`  
 
 8. Create input and output samplers (this tells OpenGL how to interpret the data):  
-` inputSampler=gltf.addBinaryData(t,"FLOAT","SCALAR",true);`  
-` outputSampler=gltf.addBinaryData(q,"FLOAT","VEC4",true);`  
+` inputSampler=obj.addBinaryData(t,"FLOAT","SCALAR",true);`  
+` outputSampler=obj.addBinaryData(q,"FLOAT","VEC4",true);`  
 
 9. Create the sampler (this tells OpenGL how to interpolate (default is linear)):
-` sampler=gltf.addAnimationSampler(inputSampler,outputSampler);`  
+` sampler=obj.addAnimationSampler(inputSampler,outputSampler);`  
 
 10. Create the channel (but use the extra node for animation):  
-` channel=gltf.addAnimationChannel(0,base_node,"rotation");`  
+` channel=obj.addAnimationChannel(0,base_node,"rotation");`  
 
 11. Add the animation specifying sampler and channels (each animation can have multiple of each):  
-` gltf.addAnimation(sampler,channel);`  
+` obj.addAnimation(sampler,channel);`  
 
 12. Write the file:
-` gltf.writeGLTF("ballvalve.gltf");`  
+` obj.writeGLTF("ballvalve.gltf");`  
 
 # Helper Functions
-## `catmullClark`
+## `gltf.utilities.catmullClark`
 ![catmull-clark](docs/catmullclark.png)
 
 The [Catmull–Clark algorithm](https://en.wikipedia.org/wiki/Catmull%E2%80%93Clark_subdivision_surface) is a technique used in 3D computer graphics to create curved surfaces by using [subdivision surface modelling](https://en.wikipedia.org/wiki/Subdivision_surface). The implementation should be able to handle texture mapping vertices with same XYZ coordinates but different UV coordinates. It also optionally returns the influence of the original vertices as joints and weights for skinned animation.
 
 **Careful**: As is default for the Catmull-Clark algorithm, faces will be returned as quadrilaterals, which in general will not be planar. They need to be converted to triangles before writing to a GLTF file. Passing the `triangulate` parameter as `true` when creating meshes, primitives, or morph targets accomplishes this.
 
-## `showGLTF`
+## `gltf.utilities.showGLTF`
 This function shows the GLTF object as a MATLAB figure.
 
 This function is **experimental**, but should suffice for most purposes. MATLAB isn't meant to be a full graphics renderer — currently the function only supports colours and transparency in materials.
 
 ![burningbus](docs/burningbus.png)
 
-## `addAxes`
+## `gltf.utilities.addAxes`
 ![addAxes](docs/axes.png)
 
-This function adds axes with axis labels, ticks, tick labels, grid lines, back planes, using the properties of the MATLAB axis object. Any or all of the 12 axes, 6 back planes, and 7 grids (back planes as well as space-filling) can be chosen by name. The naming details can be found by typing `help addAxes`.
+This function adds axes with axis labels, ticks, tick labels, grid lines, back planes, using the properties of the MATLAB axis object. Any or all of the 12 axes, 6 back planes, and 7 grids (back planes as well as space-filling) can be chosen by name. The naming details can be found by typing `help gltf.utilities.addAxes`.
 
 **Note**: Adding text using this function requires a [Unicode](https://en.wikipedia.org/wiki/Unicode_font) [SVG](https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/SVG_fonts) Font file. Online tools like [`Convertico`](https://convertio.co) and [`Cloud Convert`](https://cloudconvert.com) can be used to convert your favourite Unicode font to SVG. No font file is distributed with this repository to avoid infringing copyright and violating licences.
 
@@ -593,47 +591,47 @@ This function is **experimental**, but should suffice for most purposes. You mig
 
 ![burningbus](docs/burningbus.png)
 
-## `sphere3D`
+## `gltf.utilities.sphere3D`
 ![sphere3d](docs/sphere.png)
 
 One of the most used 3D elements is a sphere. This function creates a spheres of given resolution, along with normals, UV mapping, tangents, and bitangents. There are a few different choices of triangulation, including uniform, latitude-longitude, etc.
 
-## `polytope`
+## `gltf.utilities.polytope`
 ![polytope](docs/polytope.png)
 
 This function generates regular polytopes given [Schläfli symbol](https://en.wikipedia.org/wiki/Schl%C3%A4fli_symbol) {p,q}.
 
 **Careful**: The function returns faces as regular polygons to facilitate mathematical processing. They need to be converted to triangles before writing to a GLTF file. Passing the `triangulate` parameter as `true` when creating meshes, primitives, or morph targets accomplishes this. Polygons that cannot be decomposed into a triangle fan (for example, non-convex polygons) must first be cut into ones that can.
 
-## `bezier`
+## `gltf.utilities.bezier`
 ![bezier](docs/bezier.png)
 
 This function returns Bézier manifolds of any dimension (curves, surfaces, etc.), embedded in any dimension (2, 3, etc.), along with as many derivatives as requested (first, second, etc.). The degree of the manifold is based on number of control points given (all points in each dimension are always used).
 
 For example, 3 2D points will return a quadratic curve in the 2D XY plane, 4x4 3D points will return a cubic-cubic surface in 3D space, etc.)
 
-## `bezierT`
+## `gltf.utilities.bezierT`
 
-Similar to [`bezier`](#bezier), this function generates a Bézier triangle (simplex in higher dimensions) of any dimension, embedded in any dimension (2, 3, etc.), along with as many derivatives as requested (first, second, etc.). The degree of the manifold is based on number of control points given (all points are always used). The number of control points has to be the same in each dimension. The way points are given is the same as [`bezier`](#bezier), however, only the "upper-triangular" part of the points are used. The rest of the points can be set to `NaN`.
+Similar to [`gltf.utilities.bezier`](#bezier), this function generates a Bézier triangle (simplex in higher dimensions) of any dimension, embedded in any dimension (2, 3, etc.), along with as many derivatives as requested (first, second, etc.). The degree of the manifold is based on number of control points given (all points are always used). The number of control points has to be the same in each dimension. The way points are given is the same as [`bezier`](#bezier), however, only the "upper-triangular" part of the points are used. The rest of the points can be set to `NaN`.
 
-## `bezierSurface`
+## `gltf.utilities.bezierSurface`
 
 ![beziersurface](docs/beziersurface.png) ![beziertriangle](docs/beziertriangle.png)
 1. Bézier Surface
 2. Bézier Triangle
 
-This function uses either [`bezier`](#bezier) or [`bezierT`](#bezierT) to generate a Bézier surface in 3-dimensional space, returning faces, vertices, and optionally texture coordinates, along with normals, tangents, and bitangents. The vectors are calculated using first derivatives of Bézier surfaces
+This function uses either [`gltf.utilities.bezier`](#bezier) or [`gltf.utilities.bezierT`](#bezierT) to generate a Bézier surface in 3-dimensional space, returning faces, vertices, and optionally texture coordinates, along with normals, tangents, and bitangents. The vectors are calculated using first derivatives of Bézier surfaces
 
 To force surfaces to be Bézier triangles, all control points not in the upper-triangular part should be `NaN`.
 
-## `TNB`
+## `gltf.utilities.TNB`
 ![TNB](docs/tnb.png)
 
 This function returns the tangent-normal-binormal (TNB) frame, also known as the [Frenet-Serret apparatus](https://en.wikipedia.org/wiki/Frenet%E2%80%93Serret_formulas), along a curve given and return the tangent, normal, binormal, curve length, curvature, torsion, and the speed along the curve parametrisation. Any of first, second, and third derivatives can be provided (this is useful if the curve is algebraic and they are easy to calculate). If the derivatives are not provided, or only some of them are provided, the others are calculated using central differences.
 
 This function is useful to convert curves to tubes and ribbons.
 
-## `tubeplot`
+## `gltf.utilities.tubeplot`
 
 ![curve](docs/curve.png) ![ribbon](docs/ribbon.png) ![tube](docs/tube.png)
 1. Line curve
@@ -642,7 +640,7 @@ This function is useful to convert curves to tubes and ribbons.
 
 This function expands the given curve to a tube, and return the faces, vertices, normals, tangents, and bitangents. Any of first, second, and third derivatives can be provided (this is useful if the curve is algebraic and they are easy to calculate). If the derivatives are not provided, or only some of them are provided, the others are calculated using central differences. A variable can be attached to each point on the curve, and the appropriate value for the tube vertices will be returned. This is useful to plot a variable as tube colour, or generate joints. A radius can be chosen, or the function will automatically choose the maximum radius possible so that the curve does not intersect itself (**locally**) using curvature. It will also return this radius. The ends can be chosen to be closed or left open (for applying texture – the variable along the circumference is also returned), and whether the ends should be capped with hemispheres. The resolution along the circumference can also be chosen: choosing 2 gives a ribbon, 3 gives a triangular surface, etc.
 
-## `removeTorsion`
+## `gltf.utilities.removeTorsion`
 ![Pinching](docs/pinching.png)
 
 It might be useful especially when showing lines on a tube, to preserve torsion. However, a combination of high torsion and low resolution causes a “pinching” effect in 3D tubes. As torsion increases, straight lines joining the points remain straight, faces remain planar, but the 3D shape varies from cylinder to hyperboloid and back.

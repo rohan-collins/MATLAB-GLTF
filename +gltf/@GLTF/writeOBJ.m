@@ -1,0 +1,326 @@
+function writeOBJ(obj,filename,varargin)
+    % Write a Wavefront OBJ file.
+    %
+    % WRITEOBJ(OBJ,FILENAME) writes GLTF to a Wavefront OBJ file specified
+    % by filename.
+    %
+    % WRITEOBJ(OBJ,FILENAME,'nodes',NODES) writes the specified NODES in
+    % the GLTF to a Wavefront OBJ file specified by filename. Each of the
+    % specified nodes should be a mesh node.
+    %
+    % WRITEOBJ(OBJ,FILENAME,'meshes',MESHES) writes the specified MESHES
+    % in the GLTF to a Wavefront OBJ file specified by filename. This input
+    % is ignored if NODES are specified.
+    %
+    % WRITEOBJ(...,'materialFile',materialFile) also exports the materials
+    % in the specified nodes or meshes to the specified .mtl file, and adds
+    % a reference to it in the .obj file.
+    %
+    % © Copyright 2014-2026 Rohan Chabukswar.
+    %
+    % This file is part of MATLAB GLTF.
+    %
+    % MATLAB GLTF is free software: you can redistribute it and/or modify
+    % it under the terms of the GNU General Public License as published by
+    % the Free Software Foundation, either version 3 of the License, or (at
+    % your option) any later version.
+    %
+    % MATLAB GLTF is distributed in the hope that it will be useful, but
+    % WITHOUT ANY WARRANTY; without even the implied warranty of
+    % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    % General Public License for more details.
+    %
+    % You should have received a copy of the GNU General Public License
+    % along with MATLAB GLTF. If not, see <https://www.gnu.org/licenses/>.
+    %
+    [~,isMesh,isSkin]=obj.nodeTree();
+    nodes=find(isMesh)';
+    ips=inputParser;
+    ips.addParameter('nodes',[],@(x)gltf.GLTF.validateInteger(x,nodes));
+    ips.addParameter('meshes',[],@(x)gltf.GLTF.validateInteger(x,0,numel(obj.meshes)-1));
+    ips.addParameter('materialFile',missing,@isstring);
+    ips.parse(varargin{:});
+    parameters=ips.Results;
+    materialFile=parameters.materialFile;
+    nodes=parameters.nodes;
+    if(isempty(nodes))
+        meshes=parameters.meshes;
+    else
+        meshes=[];
+    end
+    if(and(isempty(nodes),isempty(meshes)))
+        [~,isMesh,isSkin]=obj.nodeTree();
+        nodes=find(isMesh)';
+    end
+    nodeF=cell(0,1);
+    nodeV=cell(0,1);
+    nodeN=cell(0,1);
+    nodeUV=cell(0,1);
+    ct=0;
+    mode_str_values=["POINTS","LINES","LINE_LOOP","LINE_STRIP","TRIANGLES","TRIANGLE_STRIP","TRIANGLE_FAN"];
+    mode_num_values=[       0,      1,          2,           3,          4,               5,             6];
+    use_materials=true;
+    if(or(ismissing(materialFile),~isprop(obj,'materials')))
+        use_materials=false;
+    end
+    if(use_materials)
+        used_materials=false(numel(obj.materials),1);        
+        nodeM=cell(0,1);
+        matct=0;
+    end
+    if(~isempty(nodes))
+        for node=nodes
+            mesh_mat=obj.getNodeTransformation(node-1);
+            mesh=obj.nodes{node}.mesh;
+            np=numel(obj.meshes{mesh+1}.primitives);
+            for primitive=1:np
+                V=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.attributes.POSITION);
+                if(~isempty(V))
+                    if(isfield(obj.meshes{mesh+1}.primitives{primitive}.attributes,'NORMAL'))
+                        N=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.attributes.NORMAL);
+                    end
+                    if(isSkin(node))
+                        IBM=obj.getAccessor(obj.skins{obj.nodes{node}.skin+1}.inverseBindMatrices);
+                        W=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.attributes.WEIGHTS_0);
+                        J=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.attributes.JOINTS_0);
+                        j=obj.skins{obj.nodes{node}.skin+1}.joints;
+                        if(iscell(j))
+                            j=cell2mat(j);
+                        end
+                        nodeT=nan(4,4,numel(j));
+                        for i=1:numel(j)
+                            nodeT(:,:,i)=obj.getNodeTransformation(j(i));
+                        end
+                        TJ=pagemtimes(nodeT,IBM);
+                        V=permute(sum(W.*permute(pagemtimes(permute([V ones(size(V,1),1)],[3 2 4 1]),'none',reshape(TJ(1:3,:,J'+1),3,4,size(J,2),size(J,1)),'transpose'),[4 3 2 1]),2),[1 3 2]);
+                        if(isfield(obj.meshes{mesh+1}.primitives{primitive}.attributes,'NORMAL'))
+                            N=permute(sum(W.*permute(pagemtimes(permute([N zeros(size(N,1),1)],[3 2 4 1]),'none',reshape(TJ(1:3,:,J'+1),3,4,size(J,2),size(J,1)),'transpose'),[4 3 2 1]),2),[1 3 2]);
+                        end
+                    end
+                    ct=ct+1;
+                    nodeV{ct}=[V ones(size(V,1),1)]*mesh_mat(1:3,:)';
+                    if(isfield(obj.meshes{mesh+1}.primitives{primitive}.attributes,'NORMAL'))
+                        nodeN{ct}=N*mesh_mat(1:3,1:3)';
+                    else
+                        nodeN{ct}=[];
+                    end
+                    if(isfield(obj.meshes{mesh+1}.primitives{primitive},'mode'))
+                        mode_num=obj.meshes{mesh+1}.primitives{primitive}.mode;
+                    else
+                        mode_num=4;
+                    end
+                    mode_str=mode_str_values(mode_num_values==mode_num);
+                    switch(mode_str)
+                        case "LINES"
+                            E=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.indices);
+                            nodeF{ct}=gltf.GLTF.fromLines(E);
+                        case "LINE_LOOP"
+                            E=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.indices);
+                            nodeF{ct}=gltf.GLTF.fromLineLoop(E);
+                        case "LINE_STRIP"
+                            E=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.indices);
+                            nodeF{ct}=gltf.GLTF.fromLineStrip(E);
+                        case "TRIANGLES"
+                            F=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.indices);
+                            nodeF{ct}=gltf.GLTF.fromTriangles(F);
+                        case "TRIANGLE_STRIP"
+                            F=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.indices);
+                            nodeF{ct}=gltf.GLTF.fromTriangleStrip(F);
+                        case "TRIANGLE_FAN"
+                            F=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.indices);
+                            nodeF{ct}=gltf.GLTF.fromTriangleFan(F);
+                        otherwise
+                            nodeF{ct}=[];
+                    end
+                    if(isfield(obj.meshes{mesh+1}.primitives{primitive}.attributes,'TEXCOORD_0'))
+                        nodeUV{ct}=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.attributes.TEXCOORD_0);
+                    else
+                        nodeUV{ct}=[];
+                    end
+                    if(use_materials)
+                        if(isfield(obj.meshes{mesh+1}.primitives{primitive},'material'))
+                            mat=obj.meshes{mesh+1}.primitives{primitive}.material;
+                            used_materials(mat+1)=true;
+                            if(isfield(obj.materials{mat+1},'name'))
+                                nodeM{ct}=obj.materials{mat+1}.name;
+                            else
+                                matct=matct+1;
+                                nodeM{ct}="material_"+matct;
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    elseif(~isempty(meshes))
+        for mesh=meshes
+            np=numel(obj.meshes{mesh+1}.primitives);
+            for primitive=1:np
+                V=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.attributes.POSITION);
+                if(~isempty(V))
+                    ct=ct+1;
+                    nodeV{ct}=V;
+                    if(isfield(obj.meshes{mesh+1}.primitives{primitive},'mode'))
+                        mode_num=obj.meshes{mesh+1}.primitives{primitive}.mode;
+                    else
+                        mode_num=4;
+                    end
+                    mode_str=mode_str_values(mode_num_values==mode_num);
+                    switch(mode_str)
+                        case "LINES"
+                            E=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.indices);
+                            nodeF{ct}=gltf.GLTF.fromLines(E);
+                        case "LINE_LOOP"
+                            E=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.indices);
+                            nodeF{ct}=gltf.GLTF.fromLineLoop(E);
+                        case "LINE_STRIP"
+                            E=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.indices);
+                            nodeF{ct}=gltf.GLTF.fromLineStrip(E);
+                        case "TRIANGLES"
+                            F=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.indices);
+                            nodeF{ct}=gltf.GLTF.fromTriangles(F);
+                        case "TRIANGLE_STRIP"
+                            F=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.indices);
+                            nodeF{ct}=gltf.GLTF.fromTriangleStrip(F);
+                        case "TRIANGLE_FAN"
+                            F=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.indices);
+                            nodeF{ct}=gltf.GLTF.fromTriangleFan(F);
+                        otherwise
+                            nodeF{ct}=[];
+                    end
+                    if(isfield(obj.meshes{mesh+1}.primitives{primitive}.attributes,'NORMAL'))
+                        N=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.attributes.NORMAL);
+                        nodeN{ct}=N;
+                    else
+                        nodeN{ct}=[];
+                    end
+                    if(isfield(obj.meshes{mesh+1}.primitives{primitive}.attributes,'TEXCOORD_0'))
+                        nodeUV{ct}=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.attributes.TEXCOORD_0);
+                    else
+                        nodeUV{ct}=[];
+                    end
+                    if(use_materials)
+                        if(isfield(obj.meshes{mesh+1}.primitives{primitive},'material'))
+                            mat=obj.meshes{mesh+1}.primitives{primitive}.material;
+                            used_materials(mat+1)=true;
+                            if(isfield(obj.materials{mat+1},'name'))
+                                nodeM{ct}=obj.materials{mat+1}.name;
+                            else
+                                matct=matct+1;
+                                nodeM{ct}="material_"+matct;
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    nodeE=nodeF;
+    edges=cellfun(@(x)size(x,2)==2,nodeE);
+    faces=cellfun(@(x)size(x,2)==3,nodeF);
+    nodeE(~edges)=repmat({uint32(zeros(0,2))},size(nodeE(~edges)));
+    nodeF(~faces)=repmat({uint32(zeros(0,3))},size(nodeF(~faces)));
+    
+    FV=cellfun(@(x,y)x+y,nodeF(:),num2cell([0;cumsum(cellfun(@(x)size(x,1),nodeV(1:end-1)'))]),"UniformOutput",false);
+    FN=cellfun(@(x,y)x+y,nodeF(:),num2cell([0;cumsum(cellfun(@(x)size(x,1),nodeN(1:end-1)'))]),"UniformOutput",false);
+    FT=cellfun(@(x,y)x+y,nodeF(:),num2cell([0;cumsum(cellfun(@(x)size(x,1),nodeUV(1:end-1)'))]),"UniformOutput",false);
+    EV=cellfun(@(x,y)x+y,nodeE(:),num2cell([0;cumsum(cellfun(@(x)size(x,1),nodeV(1:end-1)'))]),"UniformOutput",false);
+    EN=cellfun(@(x,y)x+y,nodeE(:),num2cell([0;cumsum(cellfun(@(x)size(x,1),nodeN(1:end-1)'))]),"UniformOutput",false);
+    ET=cellfun(@(x,y)x+y,nodeE(:),num2cell([0;cumsum(cellfun(@(x)size(x,1),nodeUV(1:end-1)'))]),"UniformOutput",false);
+    V=cell2mat(nodeV(:));
+    N=cell2mat(nodeN(:));
+    UV=cell2mat(nodeUV(:));
+    [V,~,icV]=unique(V,"rows","stable");
+    FV=cellfun(@(x)icV(x')',FV,'UniformOutput',false);
+    EV=cellfun(@(x)icV(x')',EV,'UniformOutput',false);
+    if(isempty(N))
+        FN=cellfun(@(x)nan(size(x)),FN,'UniformOutput',false);
+    else
+        [N,~,icN]=unique(N,"rows","stable");
+        FN=cellfun(@(x)icN(x')',FN,'UniformOutput',false);
+    end
+    EN=cellfun(@(x)nan(size(x)),EN,'UniformOutput',false);
+    if(isempty(UV))
+        FT=cellfun(@(x)nan(size(x)),FT,'UniformOutput',false);
+        ET=cellfun(@(x)nan(size(x)),ET,'UniformOutput',false);
+    else
+        [UV,~,icUV]=unique(UV,"rows","stable");
+        FT=cellfun(@(x)icUV(x')',FT,'UniformOutput',false);
+        ET=cellfun(@(x)icUV(x')',ET,'UniformOutput',false);
+    end
+    vtext="v "+join(string(V));
+    ntext="vn "+join(string(N));
+    ttext="vt "+join(string(UV));
+    ftext=cellfun(@(x,y,z)cat(3,string(x),string(y),string(z)),FV,FT,FN,'UniformOutput',false);
+    for i=1:numel(ftext)
+        ftext{i}(ismissing(ftext{i}))="";
+    end
+    ftext=cellfun(@(x)join("f "+strip(join(strip(join(x,"/",3),"/"),2)),newline),ftext,'UniformOutput',false);
+    etext=cellfun(@(x,y,z)cat(3,string(x),string(y),string(z)),EV,ET,EN,'UniformOutput',false);
+    for i=1:numel(etext)
+        etext{i}(ismissing(etext{i}))="";
+    end
+    etext=cellfun(@(x)join("l "+strip(join(strip(join(x,"/",3),"/"),2)),newline),etext,'UniformOutput',false);
+    if(use_materials)
+        if(any(used_materials))
+            ftext=cellfun(@(x,y)"g"+newline+"usemtl "+x+newline+y,nodeM(:),ftext);
+            etext=cellfun(@(x,y)"g"+newline+"usemtl "+x+newline+y,nodeM(:),etext);
+        else
+            ftext=cellfun(@(x)"g"+newline+x,ftext);
+            etext=cellfun(@(x)"g"+newline+x,etext);
+        end
+    else
+        ftext=cellfun(@(x)"g"+newline+x,ftext);
+        etext=cellfun(@(x)"g"+newline+x,etext);
+    end
+    ftext=ftext(~ismissing(ftext));
+    etext=etext(~ismissing(etext));
+    if(use_materials)
+        if(any(used_materials))
+            [~,relative2]=gltf.GLTF.getRelativePath(filename,materialFile);
+            matline="mtllib "+relative2;
+            writelines([matline;vtext;ttext;ntext;ftext;etext],filename);
+        else
+            writelines([vtext;ttext;ntext;ftext;etext],filename);
+        end
+    else
+        writelines([vtext;ttext;ntext;ftext;etext],filename);
+    end
+    
+    if(use_materials)
+        if(any(used_materials))
+            matcell=cell(nnz(used_materials),1);
+            used_materials=find(used_materials);
+            for m=1:numel(used_materials)
+                mat=used_materials(m);
+                matcell{m}="newmtl "+nodeM{m};
+                if(isfield(obj.materials{mat},'pbrMetallicRoughness'))
+                    if(isfield(obj.materials{mat}.pbrMetallicRoughness,'baseColorFactor'))
+                        matcell{m}=[matcell{m};"Kd"+sprintf(" %0-9.7f",obj.materials{mat}.pbrMetallicRoughness.baseColorFactor(1:3))];
+                    end
+                    if(isfield(obj.materials{mat}.pbrMetallicRoughness,'metallicFactor'))
+                        matcell{m}=[matcell{m};"Ks"+sprintf(" %0-9.7f",repmat(obj.materials{mat}.pbrMetallicRoughness.metallicFactor,1,3))];
+                    end
+                    if(isfield(obj.materials{mat}.pbrMetallicRoughness,'roughnessFactor'))
+                        matcell{m}=[matcell{m};"Ns"+sprintf(" %0-9.7f",repmat(obj.materials{mat}.pbrMetallicRoughness.metallicFactor,1,3))];
+                    end
+                    if(isfield(obj.materials{mat},'alphaMode') && obj.materials{mat}.alphaMode~="OPAQUE" && isfield(obj.materials{mat}.pbrMetallicRoughness,'baseColorFactor'))
+                        matcell{m}=[matcell{m};"d"+sprintf(" %0-9.7f",obj.materials{mat}.pbrMetallicRoughness.baseColorFactor(4))];
+                    end
+                    if(isfield(obj.materials{mat},'alphaMode') && obj.materials{mat}.alphaMode~="OPAQUE" && isfield(obj.materials{mat}.pbrMetallicRoughness,'baseColorFactor'))
+                        matcell{m}=[matcell{m};"Tr"+sprintf(" %0-9.7f",1-obj.materials{mat}.pbrMetallicRoughness.baseColorFactor(4))];
+                    end
+                    if(isfield(obj.materials{mat}.pbrMetallicRoughness,'baseColorTexture'))
+                        matcell{m}=[matcell{m};"map_Kd"+string(obj.images{obj.textures{obj.materials{mat}.pbrMetallicRoughness.baseColorTexture.index+1}.source+1}.uri)];
+                    end
+                end
+                if(isfield(obj.materials{mat},'emissiveFactor'))
+                    matcell{m}=[matcell{m};"Ke"+sprintf(" %0-9.7f",obj.materials{mat}.emissiveFactor)];
+                end
+            end
+            mat=[matcell{:}];
+            writelines(mat,materialFile);
+        end
+    end
+end

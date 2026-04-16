@@ -1,4 +1,4 @@
-![GLTF](docs/obj.png)![MATLAB](docs/matlab.png)
+![GLTF](docs/gltf.png)![MATLAB](docs/matlab.png)
 
 GLTF is a MATLAB class to export 3D graphs and other content into the GL Transmission Format (glTF).
 

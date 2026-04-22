@@ -12,7 +12,7 @@ Last updated: April 16, 2026.
 >
 > MATLAB GLTF is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 >
-> You should have received a copy of the GNU General Public License along with MATLAB obj. If not, see <https://www.gnu.org/licenses/>.
+> You should have received a copy of the GNU General Public License along with MATLAB GLTF. If not, see <https://www.gnu.org/licenses/>.
 >
 > Comic panels with their characters are © [xkcd](https://xkcd.com/) and used under [Creative Commons Attribution-NonCommercial 2.5 License](https://xkcd.com/license.html).
 
@@ -103,7 +103,7 @@ Using Blender or MeshLab to create the models or graphics would lose the mathema
 
 Over the last few years, one project required 3D objects and using OpenGL concepts, and some projects used 3D visualisations. The scripts were collected to make this 4000-line class (~850 are documentation).
 
-**Caveat emptor. Get help by typing `help GLTF`, or `help obj.method` (where `method` is a GLTF class method) or `help function` (where `function` is one of the helper functions included with the class).**
+**Caveat emptor. Get help by typing `help GLTF`, or `help gltf.method` (where `method` is a GLTF class method) or `help function` (where `function` is one of the helper functions included with the class).**
 
 ![deadbody](docs/deadbody.png)
 

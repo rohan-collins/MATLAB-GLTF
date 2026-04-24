@@ -60,8 +60,8 @@ function writeGLB(obj,filename,varargin)
             st.buffers{i}=struct('byteLength',uint32(numel(obj.buffers{i})));
         end
         for i=1:numel(obj.bufferViews)
-            obj.bufferViews{i}.buffer=0;
-            obj.bufferViews{i}.byteOffset=obj.bufferViews{i}.byteOffset+sum(bufferLength(1:obj.bufferViews{i}.buffer));
+            st.bufferViews{i}.byteOffset=obj.bufferViews{i}.byteOffset+sum(bufferLength(1:obj.bufferViews{i}.buffer));
+            st.bufferViews{i}.buffer=0;
         end
         jsonBuffer=jsonencode(st);
         jsonAlignedLength=ceil(numel(jsonBuffer)/4)*4;
@@ -80,15 +80,27 @@ function writeGLB(obj,filename,varargin)
         fclose(fid);
     else
         if(numel(obj.buffers)>1)
-            [filepath,name,ext]=fileparts(bufferFile);
-            bufferFile=filepath+filesep+name+string(0:numel(obj.buffers)-1)'+ext;
+            bufferChunk=cell(numel(obj.buffers),1);
+            bufferLength=zeros(numel(obj.buffers),1);
             for i=1:numel(obj.buffers)
-                fid=fopen(bufferFile(i),'w');
-                fwrite(fid,obj.buffers{i});
-                fclose(fid);
-                [~,relative2]=gltf.GLTF.getRelativePath(filename,bufferFile(i));
-                st.buffers{i}=struct('uri',relative2,'byteLength',uint32(numel(obj.buffers{i})));
+                bufferChunk{i}=obj.buffers{i};
+                bufferLength(i)=uint32(numel(obj.buffers{i}));
+                st.buffers{i}=struct('byteLength',uint32(numel(obj.buffers{i})));
             end
+            for i=1:numel(obj.bufferViews)
+                st.bufferViews{i}.byteOffset=obj.bufferViews{i}.byteOffset+sum(bufferLength(1:obj.bufferViews{i}.buffer));
+                st.bufferViews{i}.buffer=0;
+            end
+    
+            binBuffer=cell2mat(bufferChunk);
+            binAlignedLength=ceil(numel(binBuffer)/4)*4;
+            binPadding=binAlignedLength-numel(binBuffer);
+            binBuffer=[binBuffer;repmat(uint8(0),binPadding,1)];
+            fid=fopen(bufferFile,'w');
+            fwrite(fid,binBuffer);
+            fclose(fid);
+            [~,relative2]=gltf.GLTF.getRelativePath(filename,bufferFile);
+            st.buffers={struct('uri',relative2,'byteLength',uint32(numel(binBuffer)))};
         else
             fid=fopen(bufferFile,'w');
             fwrite(fid,obj.buffers{1});

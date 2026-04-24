@@ -128,6 +128,8 @@ function showGLTF(obj,varargin)
                             mat=obj.meshes{mesh+1}.primitives{primitive}.material;
                             if(isfield(obj.materials{mat+1}.pbrMetallicRoughness,'baseColorFactor'))
                                 nodeFC{ct}=obj.materials{mat+1}.pbrMetallicRoughness.baseColorFactor;
+                            else
+                                nodeFC{ct}=[ones(1,3)/2 1];
                             end
                         end
                     end

@@ -1,0 +1,59 @@
+[Event "3rd Kingston Invitational"]
+[Site "London ENG"]
+[Date "2024.08.15"]
+[EventDate "?"]
+[Round "7"]
+[Result "0-1"]
+[White "Billy Fellowes"]
+[Black "Peter D Lalic"]
+[ECO "A07"]
+[WhiteElo "2006"]
+[BlackElo "2181"]
+[Source "Lichess"]
+[PlyCount "544"]
+
+1. g3 d5 2. Nf3 Nc6 3. Bg2 e5 4. d3 f6 5. O-O Be6 6. Nbd2 Qd7 7. e4 d4 8. a4
+O-O-O 9. Nc4 g5 10. Bd2 h5 11. h4 g4 12. Ne1 Nh6 13. Qe2 Nf7 14. Bh1 Be7 15. b3
+b6 16. Nb2 a5 17. Ng2 Bb4 18. Bxb4 Nxb4 19. Rfc1 Nd6 20. Ne1 Nb7 21. Bg2 Nc5 22.
+Rd1 Kb8 23. Bh1 Qf7 24. Ng2 Bc8 25. Ne1 Bb7 26. Nc4 Ba6 27. Nb2 Ka7 28. Bg2 Qe6
+29. Rd2 Kb8 30. Kh2 Rdg8 31. Ra3 Rg7 32. Nc4 Qe7 33. Ra1 Ne6 34. Nb2 Qc5 35. Nc4
+Qf8 36. Nb2 Nc5 37. Nc4 Rhg8 38. Bh1 Ne6 39. Nb2 Ka7 40. Bg2 Qc5 41. Nc4 Bb7 42.
+Rdd1 Qe7 43. Rd2 Bc8 44. Kg1 Nc5 45. Kh2 Kb8 46. Kg1 Bb7 47. Kh2 Rg6 48. Kg1 Bc8
+49. Kh2 Be6 50. Kg1 Bd7 51. Kh2 Ka7 52. Kg1 Bc8 53. Kh2 Bb7 54. Kg1 Ba6 55. Kh2
+Ne6 56. Nb2 Qf7 57. Kg1 Bc8 58. Nc4 Qe8 59. Kh2 Bb7 60. Kg1 Qd8 61. Kh2 Ba6 62.
+Nb2 R6g7 63. Kg1 Qe7 64. Kh2 Nc5 65. Kg1 Bb7 66. Nc4 c6 67. Kh2 Ba6 68. Nb2 Ne6
+69. Kg1 Bc8 70. Nc4 Kb7 71. Kf1 Ka7 72. Kg1 Rg6 73. Kf1 Bb7 74. Kg1 Ba8 75. Kf1
+Qc5 76. Kg1 R6g7 77. Kf1 Bb7 78. Kg1 Bc8 79. Ra3 Qe7 80. Ra1 Nc5 81. Kh2 Bd7 82.
+Kg1 Be8 83. Kh2 Bf7 84. Nb2 Be6 85. Kg1 Bd7 86. Nc4 Qf8 87. Kh2 Bc8 88. Kg1 Bb7
+89. Kh2 Ba8 90. Kg1 Rg6 91. Kh2 Bb7 92. Kg1 Ba6 93. Nb2 Bc8 94. Nc4 Bd7 95. Kh2
+R8g7 96. Kg1 Be8 97. Kh2 Bf7 98. Nb2 Qe7 99. Kg1 Bg8 100. Kh2 Be6 101. Kg1 Bd7
+102. Nc4 Bc8 103. Kh2 Bb7 104. Kg1 Ba6 105. Nb2 Ne6 106. Kf1 Kb7 107. Kg1 Qf8
+108. Kf1 Qd8 109. Kg1 Qa8 110. Ra3 Qf8 111. Ra1 Rg8 112. Kf1 R6g7 113. Kg1 Ka7
+114. Kf1 c5 115. Kg1 Nc6 116. Nc4 Bb7 117. Ra2 Rd7 118. Ra1 Ne7 119. Ra2 Ng6
+120. Ra1 Qh6 121. Rdd1 Ba6 122. Qd2 Qg7 123. Ra2 Ne7 124. Qe2 Nc6 125. Nb2 Qh6
+126. Qd2 Qg6 127. Qe2 Rdg7 128. Raa1 Kb7 129. Rab1 Kc7 130. Ra1 Bb7 131. Nc4 Qh6
+132. Qd2 Qg6 133. Qe2 Nb4 134. Qd2 Rd8 135. Ra3 Ba6 136. Nb2 Kb7 137. Raa1 Ka7
+138. Qe2 Qh6 139. Qd2 Qxd2 140. Rxd2 Rdg8 141. Re2 Kb8 142. Kh2 Kc7 143. Bh1 Bc8
+144. Nc4 Bd7 145. Bg2 Nd8 146. Ra3 Bc8 147. Ra1 Ba6 148. Na3 Nb7 149. Bh1 Nd6
+150. Ng2 Rg6 151. Ree1 Nf7 152. Re2 R6g7 153. Ree1 Nc6 154. Re2 Nd6 155. Ne1 Rg6
+156. Bg2 R8g7 157. Bh1 Nc8 158. Kg1 N8e7 159. Bg2 Ng8 160. Bh1 Nh6 161. Bg2 Nf7
+162. Bh1 Rg8 163. Ng2 Nb4 164. Kh2 R6g7 165. Rd2 Nd6 166. Re2 Kb7 167. Rd2 Rg6
+168. Kg1 Nc8 169. Kh2 Kc7 170. Kg1 Nc6 171. Kh2 Nd6 172. Re2 Kd7 173. Ne1 Nb4
+174. Ng2 Ne8 175. Ne1 Nc7 176. Bg2 Ne6 177. Bh1 Nd8 178. Bg2 Nf7 179. Bh1 R6g7
+180. Ng2 Kc7 181. Rd2 Nd6 182. Ne1 Nc6 183. Re2 b5 184. axb5 Bxb5 185. Ng2 Kb6
+186. Rf1 Nb4 187. Ra1 Ba6 188. Ree1 Bc8 189. Rf1 Rg6 190. Rfe1 Be6 191. Re2 Nf7
+192. Ree1 Nd8 193. Rf1 Nb7 194. Ne1 Nd6 195. Ng2 R8g7 196. Rfe1 Nf7 197. Rf1 Nh6
+198. Rfe1 Bg8 199. Re2 Bf7 200. Ree1 Rg8 201. Re2 Be6 202. Ree1 Nc6 203. Re2 Nb4
+204. Ree1 Nf7 205. Rf1 Nd6 206. Rfc1 Nb5 207. Nxb5 Kxb5 208. Ne1 Ra8 209. Ra3
+Rg7 210. Rca1 Rga7 211. Ra4 Kb6 212. Bg2 Bd7 213. R4a3 Kc7 214. f3 Kd6 215. fxg4
+hxg4 216. Bf1 a4 217. Be2 axb3 218. Rxa7 Rxa7 219. Rxa7 b2 220. h5 b1=Q 221. Ng2
+Qc1 222. Nh4 Qd2 223. h6 Qxe2+ 224. Ng2 Qd2 225. h7 Qh6+ 226. Nh4 Qxh7 227. Kg2
+Nxc2 228. Ra6+ Ke7 229. Ra7 Ne3+ 230. Kf2 Kd6 231. Ra6+ Bc6 232. Ra1 Bb7 233.
+Rb1 Kc7 234. Ra1 Qf7 235. Ra3 Kb6 236. Ke2 Ba6 237. Kd2 c4 238. Nf5 Nxf5 239.
+exf5 c3+ 240. Kc2 Qh7 241. Rb3+ Bb5 242. Ra3 Qxf5 243. Ra2 Qf2+ 244. Kb3 Qxg3
+245. Kc2 f5 246. Kb3 f4 247. Kc2 f3 248. Kb3 f2 249. Ra1 Qxd3 250. Rh1 g3 251.
+Rh6+ Bc6 252. Rf6 e4 253. Rf8 e3 254. Rb8+ Kc7 255. Rf8 e2 256. Rf7+ Kd8 257.
+Kb4 c2 258. Kc5 Qc3+ 259. Kd6 Be8 260. Ra7 Qb4+ 261. Kd5 d3 262. Ra8+ Ke7 263.
+Ra7+ Kf8 264. Rh7 d2 265. Rh8+ Kf7 266. Rh7+ Kg8 267. Rh5 Qb5+ 268. Kd6 Qxh5
+269. Kc7 Qf7+ 270. Kb8 Bc6 271. Kc8 Qb7+ 272. Kd8 Qd7# 0-1
+

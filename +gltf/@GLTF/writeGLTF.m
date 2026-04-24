@@ -60,7 +60,7 @@ function writeGLTF(obj,filename,varargin)
     else
         if(numel(obj.buffers)>1)
             [filepath,name,ext]=fileparts(bufferFile);
-            bufferFile=filepath+filesep+name+string(0:numel(obj.buffers)-1)'+ext;
+            bufferFile=fullfile(filepath,name+string(0:numel(obj.buffers)-1)'+ext);
             for i=1:numel(obj.buffers)
                 fid=fopen(bufferFile(i),'w');
                 fwrite(fid,obj.buffers{i});

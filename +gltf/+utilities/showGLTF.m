@@ -46,7 +46,7 @@ function showGLTF(obj,varargin)
     end
     if(and(isempty(nodes),isempty(meshes)))
         [~,isMesh,isSkin]=obj.nodeTree();
-        nodes=find(isMesh)';
+        nodes=find(and(isMesh,pred>0))';
     end
     nodeF=cell(0,1);
     nodeV=cell(0,1);

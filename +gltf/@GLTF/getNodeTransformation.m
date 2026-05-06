@@ -28,9 +28,6 @@ function mat=getNodeTransformation(obj,node_idx)
     else
         mat_pred=obj.getNodeTransformation(pred-1);
     end
-    % if(~ismatrix(mat_pred))
-    %     mat_pred=eye(4);
-    % end
     instancing=false;
     if(isfield(obj.nodes{node_idx+1},'extensions'))
         if(isfield(obj.nodes{node_idx+1}.extensions,'EXT_mesh_gpu_instancing'))
@@ -69,6 +66,5 @@ function mat=getNodeTransformation(obj,node_idx)
             mat=[eye(3) obj.nodes{node_idx+1}.translation(:);0 0 0 1]*mat;
         end
         mat=pagemtimes(mat_pred,mat);
-        % mat=mat_pred*mat;
     end
 end

@@ -49,7 +49,7 @@ function writeOBJ(obj,filename,varargin)
         meshes=[];
     end
     if(and(isempty(nodes),isempty(meshes)))
-        [~,isMesh,isSkin]=obj.nodeTree();
+        [pred,isMesh,isSkin]=obj.nodeTree();
         nodes=find(isMesh)';
     end
     nodeF=cell(0,1);

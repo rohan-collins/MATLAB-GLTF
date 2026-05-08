@@ -45,8 +45,8 @@ function showGLTF(obj,varargin)
         meshes=[];
     end
     if(and(isempty(nodes),isempty(meshes)))
-        [pred,isMesh,isSkin]=obj.nodeTree();
-        nodes=find(and(isMesh,pred>0))';
+        [~,isMesh,isSkin]=obj.nodeTree();
+        nodes=find(isMesh)';
     end
     nodeF=cell(0,1);
     nodeV=cell(0,1);
@@ -61,75 +61,77 @@ function showGLTF(obj,varargin)
     end
     if(~isempty(nodes))
         for node=nodes
-            mesh_mat=obj.getNodeTransformation(node-1);
-            mesh=obj.nodes{node}.mesh;
-            np=numel(obj.meshes{mesh+1}.primitives);
-            for primitive=1:np
-                V=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.attributes.POSITION);
-                if(~isempty(V))
-                    if(isfield(obj.meshes{mesh+1}.primitives{primitive}.attributes,'NORMAL'))
-                        N=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.attributes.NORMAL);
-                    end
-                    if(isSkin(node))
-                        IBM=obj.getAccessor(obj.skins{obj.nodes{node}.skin+1}.inverseBindMatrices);
-                        W=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.attributes.WEIGHTS_0);
-                        J=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.attributes.JOINTS_0);
-                        j=obj.skins{obj.nodes{node}.skin+1}.joints;
-                        if(iscell(j))
-                            j=cell2mat(j);
-                        end
-                        nodeT=nan(4,4,numel(j));
-                        for i=1:numel(j)
-                            nodeT(:,:,i)=obj.getNodeTransformation(j(i));
-                        end
-                        TJ=pagemtimes(nodeT,IBM);
-                        V=permute(sum(W.*permute(pagemtimes(permute([V ones(size(V,1),1)],[3 2 4 1]),'none',reshape(TJ(1:3,:,J'+1),3,4,size(J,2),size(J,1)),'transpose'),[4 3 2 1]),2),[1 3 2]);
+            if(isfield(obj.nodes{node},'mesh'))
+                mesh_mat=obj.getNodeTransformation(node-1);
+                mesh=obj.nodes{node}.mesh;
+                np=numel(obj.meshes{mesh+1}.primitives);
+                for primitive=1:np
+                    V=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.attributes.POSITION);
+                    if(~isempty(V))
                         if(isfield(obj.meshes{mesh+1}.primitives{primitive}.attributes,'NORMAL'))
-                            N=permute(sum(W.*permute(pagemtimes(permute([N zeros(size(N,1),1)],[3 2 4 1]),'none',reshape(TJ(1:3,:,J'+1),3,4,size(J,2),size(J,1)),'transpose'),[4 3 2 1]),2),[1 3 2]);
+                            N=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.attributes.NORMAL);
                         end
-                    end
-                    ct=ct+1;
-                    nodeV{ct}=[V ones(size(V,1),1)]*mesh_mat(1:3,:)';
-                    if(isfield(obj.meshes{mesh+1}.primitives{primitive}.attributes,'NORMAL'))
-                        nodeN{ct}=N*mesh_mat(1:3,1:3)';
-                    else
-                        nodeN{ct}=[];
-                    end
-                    if(isfield(obj.meshes{mesh+1}.primitives{primitive},'mode'))
-                        mode_num=obj.meshes{mesh+1}.primitives{primitive}.mode;
-                    else
-                        mode_num=4;
-                    end
-                    mode_str=mode_str_values(mode_num_values==mode_num);
-                    switch(mode_str)
-                        case "LINES"
-                            E=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.indices);
-                            nodeF{ct}=gltf.GLTF.fromLines(E);
-                        case "LINE_LOOP"
-                            E=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.indices);
-                            nodeF{ct}=gltf.GLTF.fromLineLoop(E);
-                        case "LINE_STRIP"
-                            E=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.indices);
-                            nodeF{ct}=gltf.GLTF.fromLineStrip(E);
-                        case "TRIANGLES"
-                            F=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.indices);
-                            nodeF{ct}=gltf.GLTF.fromTriangles(F);
-                        case "TRIANGLE_STRIP"
-                            F=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.indices);
-                            nodeF{ct}=gltf.GLTF.fromTriangleStrip(F);
-                        case "TRIANGLE_FAN"
-                            F=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.indices);
-                            nodeF{ct}=gltf.GLTF.fromTriangleFan(F);
-                        otherwise
-                            nodeF{ct}=[];
-                    end
-                    if(use_materials)
-                        if(isfield(obj.meshes{mesh+1}.primitives{primitive},'material'))
-                            mat=obj.meshes{mesh+1}.primitives{primitive}.material;
-                            if(isfield(obj.materials{mat+1}.pbrMetallicRoughness,'baseColorFactor'))
-                                nodeFC{ct}=obj.materials{mat+1}.pbrMetallicRoughness.baseColorFactor;
-                            else
-                                nodeFC{ct}=[ones(1,3)/2 1];
+                        if(isSkin(node))
+                            IBM=obj.getAccessor(obj.skins{obj.nodes{node}.skin+1}.inverseBindMatrices);
+                            W=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.attributes.WEIGHTS_0);
+                            J=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.attributes.JOINTS_0);
+                            j=obj.skins{obj.nodes{node}.skin+1}.joints;
+                            if(iscell(j))
+                                j=cell2mat(j);
+                            end
+                            nodeT=nan(4,4,numel(j));
+                            for i=1:numel(j)
+                                nodeT(:,:,i)=obj.getNodeTransformation(j(i));
+                            end
+                            TJ=pagemtimes(nodeT,IBM);
+                            V=permute(sum(W.*permute(pagemtimes(permute([V ones(size(V,1),1)],[3 2 4 1]),'none',reshape(TJ(1:3,:,J'+1),3,4,size(J,2),size(J,1)),'transpose'),[4 3 2 1]),2),[1 3 2]);
+                            if(isfield(obj.meshes{mesh+1}.primitives{primitive}.attributes,'NORMAL'))
+                                N=permute(sum(W.*permute(pagemtimes(permute([N zeros(size(N,1),1)],[3 2 4 1]),'none',reshape(TJ(1:3,:,J'+1),3,4,size(J,2),size(J,1)),'transpose'),[4 3 2 1]),2),[1 3 2]);
+                            end
+                        end
+                        ct=ct+1;
+                        nodeV{ct}=[V ones(size(V,1),1)]*mesh_mat(1:3,:)';
+                        if(isfield(obj.meshes{mesh+1}.primitives{primitive}.attributes,'NORMAL'))
+                            nodeN{ct}=N*mesh_mat(1:3,1:3)';
+                        else
+                            nodeN{ct}=[];
+                        end
+                        if(isfield(obj.meshes{mesh+1}.primitives{primitive},'mode'))
+                            mode_num=obj.meshes{mesh+1}.primitives{primitive}.mode;
+                        else
+                            mode_num=4;
+                        end
+                        mode_str=mode_str_values(mode_num_values==mode_num);
+                        switch(mode_str)
+                            case "LINES"
+                                E=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.indices);
+                                nodeF{ct}=gltf.GLTF.fromLines(E);
+                            case "LINE_LOOP"
+                                E=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.indices);
+                                nodeF{ct}=gltf.GLTF.fromLineLoop(E);
+                            case "LINE_STRIP"
+                                E=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.indices);
+                                nodeF{ct}=gltf.GLTF.fromLineStrip(E);
+                            case "TRIANGLES"
+                                F=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.indices);
+                                nodeF{ct}=gltf.GLTF.fromTriangles(F);
+                            case "TRIANGLE_STRIP"
+                                F=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.indices);
+                                nodeF{ct}=gltf.GLTF.fromTriangleStrip(F);
+                            case "TRIANGLE_FAN"
+                                F=obj.getAccessor(obj.meshes{mesh+1}.primitives{primitive}.indices);
+                                nodeF{ct}=gltf.GLTF.fromTriangleFan(F);
+                            otherwise
+                                nodeF{ct}=[];
+                        end
+                        if(use_materials)
+                            if(isfield(obj.meshes{mesh+1}.primitives{primitive},'material'))
+                                mat=obj.meshes{mesh+1}.primitives{primitive}.material;
+                                if(isfield(obj.materials{mat+1}.pbrMetallicRoughness,'baseColorFactor'))
+                                    nodeFC{ct}=obj.materials{mat+1}.pbrMetallicRoughness.baseColorFactor;
+                                else
+                                    nodeFC{ct}=[ones(1,3)/2 1];
+                                end
                             end
                         end
                     end

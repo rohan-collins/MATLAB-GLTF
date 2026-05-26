@@ -1,4 +1,4 @@
-function addMorphTarget(mesh_idx,V,varargin)
+function addMorphTarget(obj,mesh_idx,V,varargin)
     % Add a target for morphing animation.
     %
     % ADDMORPHTARGET(OBJ,MESH_IDX,V) adds a morph target to the first

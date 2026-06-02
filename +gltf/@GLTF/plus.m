@@ -142,7 +142,7 @@ function obj=plus(obj1,obj2)
             end
         end
     end
-    obj=GLTF();
+    obj=gltf.GLTF();
     fnames1=string(fieldnames(obj1));
     fnames2=string(fieldnames(obj2));
     fnames=setdiff(intersect(fnames1,fnames2),"asset");

@@ -1,18 +1,18 @@
 ![GLTF](docs/gltf.png)![MATLAB](docs/matlab.png)
 
-GLTF is a MATLAB class to export 3D graphs and other content into the GL Transmission Format (glTF).
+GLTF for MATLAB is a MATLAB class to export 3D graphs and other content into the GL Transmission Format (glTF).
 
-Last updated: June 2, 2026.
+Last updated: June 11, 2026.
 
 > © Copyright 2014-2026 Rohan Chabukswar.
 >
-> This file is part of MATLAB GLTF.
+> This file is part of GLTF for MATLAB.
 >
-> MATLAB GLTF is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+> GLTF for MATLAB is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 >
-> MATLAB GLTF is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+> GLTF for MATLAB is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 >
-> You should have received a copy of the GNU General Public License along with MATLAB GLTF. If not, see <https://www.gnu.org/licenses/>.
+> You should have received a copy of the GNU General Public License along with GLTF for MATLAB. If not, see <https://www.gnu.org/licenses/>.
 >
 > Comic panels with their characters are © [xkcd](https://xkcd.com/) and used under [Creative Commons Attribution-NonCommercial 2.5 License](https://xkcd.com/license.html).
 
@@ -65,13 +65,7 @@ GLTF is a MATLAB class to export 3D graphs and other content into the GL Transmi
 glTF is an efficient, extensible, interoperable, API-neutral runtime asset delivery format for the transmission and loading of 3D content. It is a last-mile format to be passed directly to any rendering engine ([OpenGL](https://www.opengl.org/), [Microsoft Direct3D](https://docs.microsoft.com/en-us/windows/win32/direct3d), [Apple Metal](https://developer.apple.com/metal/), [WebGL](https://www.khronos.org/webgl/), [Vulkan](https://www.vulkan.org/), etc.). It is not meant to simulate physics, or reactive animations, or playing a video game. For example, if you create a lens using `KHR_materials_ior` and `KHR_materials_volume`, do not expect any renderer to display the correct (or even reasonably correct) optics. It is the 3D equivalent of JPEG, PNG, or GIF.
 
 ## Motivation
-### Frequently Mentioned Oppositions
-* **It's unnecessary, and it's not our job.** The information content is the same as the output of the algorithm using graphs and tables, only stupid people need extra visualisations to understand them. Neither we nor our customers are stupid, thank you very much. Our job is to research the algorithms themselves, not sell them to customers. All we need to do is provide the MATLAB or Python code. This is a frivolous endeavour.
-    * You get __two__ new dimensions to play with – Z and time.
-    * Our products are real world, even if our algorithms aren't, and should be seen working in the real world.
-    * Sometimes we work in three dimensions, it is more intuitive to visualise the output and intermediate steps in 3D.
-* **It's too much work.** It requires people specialised in 3D modelling and animations, and the associated software to make something visually engaging. We simply don't have the resources to employ new people and buy software for something that has limited use in one single project.
-    * **But, is it really?**
+You get __two__ new dimensions to play with – Z and time.
 
 ### Creation Tools
 MATLAB already has functions to display data in 3D:

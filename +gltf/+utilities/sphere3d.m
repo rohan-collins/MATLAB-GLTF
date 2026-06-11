@@ -334,12 +334,9 @@ function [F2,V2]=subDivideFaces(F,V,n)
     if(size(F,2)==3)
         if(nargin<3 || n==2)
             E=unique(sort([F(:,1:2);F(:,2:3);F(:,[3 1])],2),'rows');
-            Ef=string(E(:,1))+","+string(E(:,2));
-            Er=string(E(:,2))+","+string(E(:,1));
-            Fe=[string(F(:,1))+","+string(F(:,2)) string(F(:,2))+","+string(F(:,3)) string(F(:,3))+","+string(F(:,1))];
-            [~,Fef]=ismember(Fe,Ef);
-            [~,Fer]=ismember(Fe,Er);
-            Fe=Fef+Fer;
+            [~,Fef]=ismember(reshape(permute(cat(3,F,circshift(F,-1,2)),[3 2 1]),2,numel(F))',E,"rows");
+            [~,Fer]=ismember(reshape(permute(cat(3,F,circshift(F,-1,2)),[3 2 1]),2,numel(F))',flip(E,2),"rows");
+            Fe=reshape(Fef+Fer,size(F'))';
             N=size(V,1);
             V2=permute(mean(reshape(V(E',:)',size(V,2),2,[]),2),[3 1 2]);
             base=[1 4 6;4 2 5;6 5 3;5 6 4];
@@ -353,12 +350,9 @@ function [F2,V2]=subDivideFaces(F,V,n)
         else
             nV=size(V,1);
             E=unique(sort([F(:,1:2);F(:,2:3);F(:,[3 1])],2),'rows');
-            Ef=string(E(:,1))+","+string(E(:,2));
-            Er=string(E(:,2))+","+string(E(:,1));
-            Fe=[string(F(:,1))+","+string(F(:,2)) string(F(:,2))+","+string(F(:,3)) string(F(:,3))+","+string(F(:,1))];
-            [~,Fef]=ismember(Fe,Ef);
-            [~,Fer]=ismember(Fe,Er);
-            Fe=Fef-Fer;
+            [~,Fef]=ismember(reshape(permute(cat(3,F,circshift(F,-1,2)),[3 2 1]),2,numel(F))',E,"rows");
+            [~,Fer]=ismember(reshape(permute(cat(3,F,circshift(F,-1,2)),[3 2 1]),2,numel(F))',flip(E,2),"rows");
+            Fe=reshape(Fef-Fer,size(F'))';
             alpha=(1:n-1)/n;
 
             ax=cross(permute(V(E(:,1),:),[2 3 1]),permute(V(E(:,2),:),[2 3 1]),1);
@@ -426,12 +420,9 @@ function [F2,V2]=subDivideFaces(F,V,n)
     elseif(size(F,2)==4)
         nV=size(V,1);
         E=unique(sort([F(:,1:2);F(:,2:3);F(:,[3 4]);F(:,[4 1])],2),'rows');
-        Ef=string(E(:,1))+","+string(E(:,2));
-        Er=string(E(:,2))+","+string(E(:,1));
-        Fe=[string(F(:,1))+","+string(F(:,2)) string(F(:,2))+","+string(F(:,3)) string(F(:,3))+","+string(F(:,4)) string(F(:,4))+","+string(F(:,1))];
-        [~,Fef]=ismember(Fe,Ef);
-        [~,Fer]=ismember(Fe,Er);
-        Fe=Fef-Fer;
+        [~,Fef]=ismember(reshape(permute(cat(3,F,circshift(F,-1,2)),[3 2 1]),2,numel(F))',E,"rows");
+        [~,Fer]=ismember(reshape(permute(cat(3,F,circshift(F,-1,2)),[3 2 1]),2,numel(F))',flip(E,2),"rows");
+        Fe=reshape(Fef-Fer,size(F'))';
         alpha=(1:n-1)/n;
 
         ax=cross(permute(V(E(:,1),:),[2 3 1]),permute(V(E(:,2),:),[2 3 1]),1);

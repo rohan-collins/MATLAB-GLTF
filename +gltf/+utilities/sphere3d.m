@@ -5,11 +5,11 @@ function [F,V,N,UV,T,B]=sphere3d(varargin)
     % vertex normals.
     %
     % [F,V,N]=SPHERE3D('polyhedron',POLYHEDRON) returns a sphere by
-    % subdividing the faces of the given POLYHEDRON into N^2 parts.
-    % POLYHEDRON must be one of "tetrahedron", "octahedron", "icosahedron",
-    % "cube" or (equivalently) "hexahedron". The latter two return
-    % (possibly non-coplanar) quadrilateral surfaces by subdividing square
-    % faces of the cube.
+    % subdividing the faces of the given POLYHEDRON. POLYHEDRON must be one
+    % of "tetrahedron", "octahedron", "icosahedron", "cube" or
+    % (equivalently) "hexahedron". The latter two return (possibly
+    % non-coplanar) quadrilateral surfaces by subdividing square faces of
+    % the cube.
     %
     % [F,V,N]=SPHERE3D('resolution',N) returns a sphere by subdividing the
     % faces of the polyhedron into N^2 parts.
@@ -323,195 +323,9 @@ end
 function [F,V]=uniformsphere(N,symbol)
     if(nargin<2)
         [V,~,F]=gltf.utilities.polytope(3,5);
-        [F,V]=subDivideFaces(F,V,N);
+        [F,V]=gltf.utilities.subDivideFaces(F,V,'resolution',N,'spherical',true);
     else
         [V,~,F]=gltf.utilities.polytope(symbol);
-        [F,V]=subDivideFaces(F,V,N);
-    end
-end
-
-function [F2,V2]=subDivideFaces(F,V,n)
-    if(size(F,2)==3)
-        if(nargin<3 || n==2)
-            E=unique(sort([F(:,1:2);F(:,2:3);F(:,[3 1])],2),'rows');
-            [~,Fef]=ismember(reshape(permute(cat(3,F,circshift(F,-1,2)),[3 2 1]),2,numel(F))',E,"rows");
-            [~,Fer]=ismember(reshape(permute(cat(3,F,circshift(F,-1,2)),[3 2 1]),2,numel(F))',flip(E,2),"rows");
-            Fe=reshape(Fef+Fer,size(F'))';
-            N=size(V,1);
-            V2=permute(mean(reshape(V(E',:)',size(V,2),2,[]),2),[3 1 2]);
-            base=[1 4 6;4 2 5;6 5 3;5 6 4];
-            F2=nan(size(F,1)*4,3);
-            for i=1:size(Fe,1)
-                Ftemp=[F(i,:) N+abs(Fe(i,:))];
-                F2((i-1)*4+1:i*4,:)=Ftemp(base);
-            end
-            V2=[V;V2];
-            V2=V2./vecnorm(V2,2,2);
-        else
-            nV=size(V,1);
-            E=unique(sort([F(:,1:2);F(:,2:3);F(:,[3 1])],2),'rows');
-            [~,Fef]=ismember(reshape(permute(cat(3,F,circshift(F,-1,2)),[3 2 1]),2,numel(F))',E,"rows");
-            [~,Fer]=ismember(reshape(permute(cat(3,F,circshift(F,-1,2)),[3 2 1]),2,numel(F))',flip(E,2),"rows");
-            Fe=reshape(Fef-Fer,size(F'))';
-            alpha=(1:n-1)/n;
-
-            ax=cross(permute(V(E(:,1),:),[2 3 1]),permute(V(E(:,2),:),[2 3 1]),1);
-            th=atan2(vecnorm(ax,2,1),dot(permute(V(E(:,1),:),[2 3 1]),permute(V(E(:,2),:),[2 3 1]),1)).*alpha;
-            ax=ax./vecnorm(ax,2,1);
-            u=ax.*permute(ax,[2 1 3]);
-            ucross=[zeros(1,1,size(E,1)) -ax(3,:,:) ax(2,:,:);ax(3,:,:) zeros(1,1,size(E,1)) -ax(1,:,:);-ax(2,:,:) ax(1,:,:) zeros(1,1,size(E,1))];
-            Ve=nan(size(V,2),n-1,size(E,1));
-            for i=1:size(E,1)
-                for j=1:n-1
-                    R=cos(th(1,j,i))*eye(size(V,2))+sin(th(1,j,i))*ucross(:,:,i)+(1-cos(th(1,j,i)))*u(:,:,i);
-                    Ve(:,j,i)=R*permute(V(E(i,1),:),[2 3 1]);
-                end
-            end
-            Ve=reshape(Ve,size(V,2),(n-1)*size(E,1))';
-            nVe=size(E,1)*(n-1);
-
-            [lambda1,lambda2]=meshgrid(0:n);
-            lambda=[lambda1(:) lambda2(:) n-lambda1(:)-lambda2(:)];
-            lambda=lambda(all(and(lambda>0,lambda<n),2),[3 2 1])/n;
-            p1=permute(V(F(:,1),:),[2 3 1]);
-            p2=permute(V(F(:,2),:),[2 3 1]);
-            p3=permute(V(F(:,3),:),[2 3 1]);
-            S=2*atan(dot(p1,cross(p2,p3,1),1)./(1+dot(p1,p2,1)+dot(p2,p3,1)+dot(p3,p1,1)));
-            S(:,:,1+dot(p1,p2,1)+dot(p2,p3,1)+dot(p3,p1,1)<eps)=pi;
-            Vf=nan(size(V,2),size(lambda,1),size(F,1));
-            for i=1:size(F,1)
-                for j=1:size(lambda,1)
-                    A=[cross(p2(:,1,i),p3(:,1,i),1)-tan(S(:,:,i).*lambda(j,1)/2)*(p2(:,1,i)+p3(:,1,i)) cross(p3(:,1,i),p1(:,1,i),1)-tan(S(:,:,i).*lambda(j,2)/2)*(p3(:,1,i)+p1(:,1,i)) cross(p1(:,1,i),p2(:,1,i),1)-tan(S(:,:,i).*lambda(j,3)/2)*(p1(:,1,i)+p2(:,1,i))]';
-                    k=[tan(S(:,:,i).*lambda(j,1)/2)*(1+dot(p2(:,1,i),p3(:,1,i),1));tan(S(:,:,i).*lambda(j,2)/2)*(1+dot(p3(:,1,i),p1(:,1,i),1));tan(S(:,:,i).*lambda(j,3)/2)*(1+dot(p1(:,1,i),p2(:,1,i),1))];
-                    Vf(:,j,i)=A\k;
-                end
-            end
-            Vf=reshape(Vf,size(V,2),size(lambda,1)*size(F,1))';
-            Fun=@(n)cell2mat(cellfun(@(i)[1:i 2:i;2:i+1 i+3:2*i+1;i+2:2*i+1 i+2:2*i]+(n+i+3)*(n-i)/2,num2cell(n:-1:1),'UniformOutput',false));
-            Fbase=Fun(n)';
-            Fref=zeros(1,(n-2)*(n-1)/2);
-            for m=1:n-2
-                Fref((m-1)*n-(m-1)*(m+2)/2+1:m*n-m*(m+3)/2)=m*(n+1)-m*(m-1)/2+(2:n-m);
-            end
-            F2=zeros(size(F,1)*n^2,3);
-            Ftemp=zeros(1,(n+1)*(n+2)/2);
-            for f=1:size(Fe,1)
-                Ftemp([1 n+1 (n+1)*(n+2)/2])=F(f,:);
-                if(Fe(f,1)>0)
-                    Ftemp(2:n)=nV+((Fe(f,1)-1)*(n-1)+1:Fe(f,1)*(n-1));
-                else
-                    Ftemp(2:n)=nV+(-Fe(f,1)*(n-1):-1:(-Fe(f,1)-1)*(n-1)+1);
-                end
-                if(Fe(f,2)>0)
-                    Ftemp((2:n).*(2*n-(2:n)+3)/2)=nV+((Fe(f,2)-1)*(n-1)+1:Fe(f,2)*(n-1));
-                else
-                    Ftemp((2:n).*(2*n-(2:n)+3)/2)=nV+(-Fe(f,2)*(n-1):-1:(-Fe(f,2)-1)*(n-1)+1);
-                end
-                if(Fe(f,3)>0)
-                    Ftemp((1:n-1)*n-((2:n).^2-5*(2:n)+2)/2)=nV+(Fe(f,3)*(n-1):-1:(Fe(f,3)-1)*(n-1)+1);
-                else
-                    Ftemp((1:n-1)*n-((2:n).^2-5*(2:n)+2)/2)=nV+((-Fe(f,3)-1)*(n-1)+1:-Fe(f,3)*(n-1));
-                end
-                Ftemp(Fref)=nV+nVe+((f-1)*(n-1)*(n-2)/2+1:f*(n-1)*(n-2)/2);
-                F2((f-1)*n^2+1:f*n^2,:)=Ftemp(Fbase);
-            end
-            V2=[V;Ve;Vf];
-        end
-    elseif(size(F,2)==4)
-        nV=size(V,1);
-        E=unique(sort([F(:,1:2);F(:,2:3);F(:,[3 4]);F(:,[4 1])],2),'rows');
-        [~,Fef]=ismember(reshape(permute(cat(3,F,circshift(F,-1,2)),[3 2 1]),2,numel(F))',E,"rows");
-        [~,Fer]=ismember(reshape(permute(cat(3,F,circshift(F,-1,2)),[3 2 1]),2,numel(F))',flip(E,2),"rows");
-        Fe=reshape(Fef-Fer,size(F'))';
-        alpha=(1:n-1)/n;
-
-        ax=cross(permute(V(E(:,1),:),[2 3 1]),permute(V(E(:,2),:),[2 3 1]),1);
-        th=atan2(vecnorm(ax,2,1),dot(permute(V(E(:,1),:),[2 3 1]),permute(V(E(:,2),:),[2 3 1]),1)).*alpha;
-        ax=ax./vecnorm(ax,2,1);
-        u=ax.*permute(ax,[2 1 3]);
-        ucross=[zeros(1,1,size(E,1)) -ax(3,:,:) ax(2,:,:);ax(3,:,:) zeros(1,1,size(E,1)) -ax(1,:,:);-ax(2,:,:) ax(1,:,:) zeros(1,1,size(E,1))];
-        Ve=nan(size(V,2),n-1,size(E,1));
-        for i=1:size(E,1)
-            for j=1:n-1
-                R=cos(th(1,j,i))*eye(size(V,2))+sin(th(1,j,i))*ucross(:,:,i)+(1-cos(th(1,j,i)))*u(:,:,i);
-                Ve(:,j,i)=R*permute(V(E(i,1),:),[2 3 1]);
-            end
-        end
-
-        Vf=nan(3,n-1,n-1,size(F,1));
-        for f=1:size(F,1)
-            for j=1:n-1
-                if(Fe(f,4)<0)
-                    v21=Ve(:,j,-Fe(f,4));
-                else
-                    v21=Ve(:,n-j,Fe(f,4));
-                end
-                if(Fe(f,2)<0)
-                    v22=Ve(:,n-j,-Fe(f,2));
-                else
-                    v22=Ve(:,j,Fe(f,2));
-                end
-                n2=cross(v21,v22,1);
-                n2=n2/vecnorm(n2,2,1);
-                for i=1:n-1
-                    if(Fe(f,1)<0)
-                        v11=Ve(:,n-i,-Fe(f,1));
-                    else
-                        v11=Ve(:,i,Fe(f,1));
-                    end
-                    if(Fe(f,3)<0)
-                        v12=Ve(:,i,-Fe(f,3));
-                    else
-                        v12=Ve(:,n-i,Fe(f,3));
-                    end
-                    n1=cross(v11,v12,1);
-                    n1=n1/vecnorm(n1,2,1);
-                    nt=cross(n1,n2,1);
-                    nt=nt/vecnorm(nt,2,1);
-                    if(any(dot(repmat(nt,1,2),[v11 v21],1)<dot([v12 v22],[v11 v21],1)))
-                        nt=-nt;
-                    end
-                    Vf(:,i,j,f)=nt;
-                end
-            end
-        end
-
-        Ve=reshape(Ve,size(V,2),(n-1)*size(E,1))';
-        nVe=size(E,1)*(n-1);
-        Vf=reshape(Vf,size(V,2),(n-1)^2*size(F,1))';
-
-        Fbase=reshape([1:n;2:n+1;n+3:2*n+2;n+2:2*n+1]+(n+1)*permute(0:n-1,[1 3 2]),4,n^2)';
-        Fref=reshape((2:n)'+(n+1)*(1:n-1),(n-1)^2,1);
-        F2=zeros(size(F,1)*n^2,4);
-        Ftemp=zeros(1,(n+1)^2);
-        for f=1:size(Fe,1)
-            Ftemp([1 n+1 (n+1)^2 n*(n+1)+1])=F(f,:);
-            if(Fe(f,1)>0)
-                Ftemp(2:n)=nV+((Fe(f,1)-1)*(n-1)+1:Fe(f,1)*(n-1));
-            else
-                Ftemp(2:n)=nV+(-Fe(f,1)*(n-1):-1:(-Fe(f,1)-1)*(n-1)+1);
-            end
-            if(Fe(f,2)>0)
-                Ftemp((n+1)*(2:n))=nV+((Fe(f,2)-1)*(n-1)+1:Fe(f,2)*(n-1));
-            else
-                Ftemp((n+1)*(2:n))=nV+(-Fe(f,2)*(n-1):-1:(-Fe(f,2)-1)*(n-1)+1);
-            end
-            if(Fe(f,3)>0)
-                Ftemp((n+1)^2-1:-1:(n+1)*n+2)=nV+((Fe(f,3)-1)*(n-1)+1:Fe(f,3)*(n-1));
-            else
-                Ftemp((n+1)^2-1:-1:(n+1)*n+2)=nV+(-Fe(f,3)*(n-1):-1:(-Fe(f,3)-1)*(n-1)+1);
-            end
-            if(Fe(f,4)>0)
-                Ftemp((n+1)*(n-1:-1:1)+1)=nV+((Fe(f,4)-1)*(n-1)+1:Fe(f,4)*(n-1));
-            else
-                Ftemp((n+1)*(n-1:-1:1)+1)=nV+(-Fe(f,4)*(n-1):-1:(-Fe(f,4)-1)*(n-1)+1);
-            end
-            Ftemp(Fref)=nV+nVe+(f-1)*(n-1)^2+(1:(n-1)^2);
-            F2((f-1)*n^2+1:f*n^2,:)=Ftemp(Fbase);
-        end
-        V2=[V;Ve;Vf];    
-    else
-        F2=F;
-        V2=V;
+        [F,V]=gltf.utilities.subDivideFaces(F,V,'resolution',N,'spherical',true);
     end
 end

@@ -173,10 +173,13 @@ function [obj,ax_node]=addAxes(obj,varargin)
         colour=string(char(88:90)')+"Color";
         scale=string(char(88:90)')+"Scale";
         ruler=string(char(88:90)')+"Ruler";
+        axl=string(char(88:90)')+"Axis";
 
         ax_hticklabel=cell(3,1);
         ax_htick_loc=cell(3,1);
+        ax_label=cell(3,1);
         for i=1:3
+            ax_label{i}=string(ax_h.(axislabel(i)).String);
             if(string(ax_h.(scale(i)))=="log")
                 % logX=true;
                 ax_htick_loc{i}=unique([ax_h.(tick(i)) ax_h.(ruler(i)).MinorTickValues],"sorted");
@@ -188,6 +191,11 @@ function [obj,ax_node]=addAxes(obj,varargin)
                 % logX=false;
                 ax_htick_loc{i}=ax_h.(tick(i));
                 ax_hticklabel{i}=string(ax_h.(ticklabel(i)));
+                axexp=ax_h.(axl(i)).Exponent;
+                if(axexp~=0)
+                    expstr=replace(string(axexp),["0" "1" "2" "3" "4" "5" "6" "7" "8" "9" "-"],["⁰" "¹" "²" "³" "⁴" "⁵" "⁶" "⁷" "⁸" "⁹" "⁻"]);
+                    ax_label{i}="×10"+expstr+" "+ax_label{i};
+                end
             end
         end
 
@@ -517,8 +525,8 @@ function [obj,ax_node]=addAxes(obj,varargin)
             rot=ax_h.(ticklabelrotation(i))*pi/180;
             R=[cos(rot) sin(rot) 0;-sin(rot) cos(rot) 0;0 0 1];
             J=numel(tempstr);
-            if(strlength(string(ax_h.(axislabel(i)).String))>0)
-                [axlabelsF{i},axlabelsV{i}]=gltf.utilities.text2FV(string(ax_h.(axislabel(i)).String),fontFile);
+            if(strlength(ax_label{i})>0)
+                [axlabelsF{i},axlabelsV{i}]=gltf.utilities.text2FV(ax_label{i},fontFile);
                 axlabelsV{i}(:,1)=axlabelsV{i}(:,1)-(max(axlabelsV{i}(:,1))+min(axlabelsV{i}(:,1)))/2;
                 VYmax=max(VYmax,max(axlabelsV{i}(:,2)));
                 VYmin=min(VYmin,min(axlabelsV{i}(:,2)));
@@ -548,7 +556,7 @@ function [obj,ax_node]=addAxes(obj,varargin)
         forward_axis=[0 0 1]*base_rotation';
         for i=1:3
             if(needed_axes(i))
-                if(strlength(string(ax_h.(axislabel(i)).String))>0)
+                if(strlength(ax_label{i})>0)
                     axlabelsV{i}(:,2)=axlabelsV{i}(:,2)-VYcentre;
                     axlabelsV{i}=axlabelsV{i}/VYrange*line_h;
                     if(abs(up_axis(i)))

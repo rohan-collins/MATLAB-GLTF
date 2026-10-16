@@ -240,10 +240,10 @@ function [obj,ax_node]=addAxes(obj,varargin)
                 if(skeleton)
                     Js=zeros(size(Vg1,1),4);
                     Ws=[ones(size(Vg1,1),1) zeros(size(Vg1,1),3)];
-                    yzmesh=obj.addMesh(Vg1.*s*base_rotation,'indices',Eg1,'mode',"LINES",'material',gridlines_mat,'WEIGHTS',Ws,'JOINTS',Js);
+                    yzmesh=obj.addMesh(Vg1*base_rotation,'indices',Eg1,'mode',"LINES",'material',gridlines_mat,'WEIGHTS',Ws,'JOINTS',Js);
                     Js=zeros(size(Vg2,1),4);
                     Ws=[ones(size(Vg2,1),1) zeros(size(Vg2,1),3)];
-                    obj.addPrimitiveToMesh(yzmesh,Vg2.*s*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat,'WEIGHTS',Ws,'JOINTS',Js);
+                    obj.addPrimitiveToMesh(yzmesh,Vg2*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat,'WEIGHTS',Ws,'JOINTS',Js);
                     if(ismember("0yz",gridIds))
                         gridlinesNodes(1)=obj.addNode('addToScene',false);
                         skin_idx=obj.addSkin(gridlinesNodes(1),'inverseBindMatrices',reshape(eye(4),16,1)');
@@ -255,8 +255,8 @@ function [obj,ax_node]=addAxes(obj,varargin)
                         obj.addNode('mesh',yzmesh,'skin',skin_idx,'children',gridlinesNodes(2));
                     end
                 else
-                    yzmesh=obj.addMesh(Vg1.*s*base_rotation,'indices',Eg1,'mode',"LINES",'material',gridlines_mat);
-                    obj.addPrimitiveToMesh(yzmesh,Vg2.*s*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat);
+                    yzmesh=obj.addMesh(Vg1*base_rotation,'indices',Eg1,'mode',"LINES",'material',gridlines_mat);
+                    obj.addPrimitiveToMesh(yzmesh,Vg2*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat);
                     if(ismember("0yz",gridIds))
                         gridlinesNodes(1)=obj.addNode('mesh',yzmesh,'addToScene',false);
                     end
@@ -277,10 +277,10 @@ function [obj,ax_node]=addAxes(obj,varargin)
                 if(skeleton)
                     Js=zeros(size(Vg1,1),4);
                     Ws=[ones(size(Vg1,1),1) zeros(size(Vg1,1),3)];
-                    xzmesh=obj.addMesh(Vg1.*s*base_rotation,'indices',Eg1,'mode',"LINES",'material',gridlines_mat,'WEIGHTS',Ws,'JOINTS',Js);
+                    xzmesh=obj.addMesh(Vg1*base_rotation,'indices',Eg1,'mode',"LINES",'material',gridlines_mat,'WEIGHTS',Ws,'JOINTS',Js);
                     Js=zeros(size(Vg2,1),4);
                     Ws=[ones(size(Vg2,1),1) zeros(size(Vg2,1),3)];
-                    obj.addPrimitiveToMesh(xzmesh,Vg2.*s*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat,'WEIGHTS',Ws,'JOINTS',Js);
+                    obj.addPrimitiveToMesh(xzmesh,Vg2*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat,'WEIGHTS',Ws,'JOINTS',Js);
                     if(ismember("x0z",gridIds))
                         gridlinesNodes(3)=obj.addNode('addToScene',false);
                         skin_idx=obj.addSkin(gridlinesNodes(3),'inverseBindMatrices',reshape(eye(4),16,1)');
@@ -292,8 +292,8 @@ function [obj,ax_node]=addAxes(obj,varargin)
                         obj.addNode('mesh',xzmesh,'skin',skin_idx,'children',gridlinesNodes(4));
                     end
                 else
-                    xzmesh=obj.addMesh(Vg1.*s*base_rotation,'indices',Eg1,'mode',"LINES",'material',gridlines_mat);
-                    obj.addPrimitiveToMesh(xzmesh,Vg2.*s*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat);
+                    xzmesh=obj.addMesh(Vg1*base_rotation,'indices',Eg1,'mode',"LINES",'material',gridlines_mat);
+                    obj.addPrimitiveToMesh(xzmesh,Vg2*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat);
                     if(ismember("x0z",gridIds))
                         gridlinesNodes(3)=obj.addNode('mesh',xzmesh,'addToScene',false);
                     end
@@ -314,10 +314,10 @@ function [obj,ax_node]=addAxes(obj,varargin)
                 if(skeleton)
                     Js=zeros(size(Vg1,1),4);
                     Ws=[ones(size(Vg1,1),1) zeros(size(Vg1,1),3)];
-                    xymesh=obj.addMesh(Vg1.*s*base_rotation,'indices',Eg1,'mode',"LINES",'material',gridlines_mat,'WEIGHTS',Ws,'JOINTS',Js);
+                    xymesh=obj.addMesh(Vg1*base_rotation,'indices',Eg1,'mode',"LINES",'material',gridlines_mat,'WEIGHTS',Ws,'JOINTS',Js);
                     Js=zeros(size(Vg2,1),4);
                     Ws=[ones(size(Vg2,1),1) zeros(size(Vg2,1),3)];
-                    obj.addPrimitiveToMesh(xymesh,Vg2.*s*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat,'WEIGHTS',Ws,'JOINTS',Js);
+                    obj.addPrimitiveToMesh(xymesh,Vg2*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat,'WEIGHTS',Ws,'JOINTS',Js);
                     if(ismember("xy0",gridIds))
                         gridlinesNodes(5)=obj.addNode('addToScene',false);
                         skin_idx=obj.addSkin(gridlinesNodes(5),'inverseBindMatrices',reshape(eye(4),16,1)');
@@ -329,8 +329,8 @@ function [obj,ax_node]=addAxes(obj,varargin)
                         obj.addNode('mesh',xymesh,'skin',skin_idx,'children',gridlinesNodes(6));
                     end
                 else
-                    xymesh=obj.addMesh(Vg1.*s*base_rotation,'indices',Eg1,'mode',"LINES",'material',gridlines_mat);
-                    obj.addPrimitiveToMesh(xymesh,Vg2.*s*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat);
+                    xymesh=obj.addMesh(Vg1*base_rotation,'indices',Eg1,'mode',"LINES",'material',gridlines_mat);
+                    obj.addPrimitiveToMesh(xymesh,Vg2*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat);
                     if(ismember("xy0",gridIds))
                         gridlinesNodes(5)=obj.addNode('mesh',xymesh,'addToScene',false);
                     end
@@ -355,20 +355,20 @@ function [obj,ax_node]=addAxes(obj,varargin)
                 if(skeleton)
                     Js=zeros(size(Vg1,1),4);
                     Ws=[ones(size(Vg1,1),1) zeros(size(Vg1,1),3)];
-                    xyzmesh=obj.addMesh(Vg1.*s*base_rotation,'indices',Eg1,'mode',"LINES",'material',gridlines_mat,'WEIGHTS',Ws,'JOINTS',Js);
+                    xyzmesh=obj.addMesh(Vg1*base_rotation,'indices',Eg1,'mode',"LINES",'material',gridlines_mat,'WEIGHTS',Ws,'JOINTS',Js);
                     Js=zeros(size(Vg2,1),4);
                     Ws=[ones(size(Vg2,1),1) zeros(size(Vg2,1),3)];
-                    obj.addPrimitiveToMesh(xyzmesh,Vg2.*s*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat,'WEIGHTS',Ws,'JOINTS',Js);
+                    obj.addPrimitiveToMesh(xyzmesh,Vg2*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat,'WEIGHTS',Ws,'JOINTS',Js);
                     Js=zeros(size(Vg3,1),4);
                     Ws=[ones(size(Vg3,1),1) zeros(size(Vg2,1),3)];
-                    obj.addPrimitiveToMesh(xyzmesh,Vg3.*s*base_rotation,'indices',Eg3,'mode',"LINES",'material',gridlines_mat,'WEIGHTS',Ws,'JOINTS',Js);
+                    obj.addPrimitiveToMesh(xyzmesh,Vg3*base_rotation,'indices',Eg3,'mode',"LINES",'material',gridlines_mat,'WEIGHTS',Ws,'JOINTS',Js);
                     gridlinesNodes(7)=obj.addNode('addToScene',false);
                     skin_idx=obj.addSkin(gridlinesNodes(7),'inverseBindMatrices',reshape(eye(4),16,1)');
                     obj.addNode('mesh',xyzmesh,'skin',skin_idx,'children',gridlinesNodes(7));
                 else
-                    xyzmesh=obj.addMesh(Vg1.*s*base_rotation,'indices',Eg1,'mode',"LINES",'material',gridlines_mat);
-                    obj.addPrimitiveToMesh(xyzmesh,Vg2.*s*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat);
-                    obj.addPrimitiveToMesh(xyzmesh,Vg3.*s*base_rotation,'indices',Eg3,'mode',"LINES",'material',gridlines_mat);
+                    xyzmesh=obj.addMesh(Vg1*base_rotation,'indices',Eg1,'mode',"LINES",'material',gridlines_mat);
+                    obj.addPrimitiveToMesh(xyzmesh,Vg2*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat);
+                    obj.addPrimitiveToMesh(xyzmesh,Vg3*base_rotation,'indices',Eg3,'mode',"LINES",'material',gridlines_mat);
                     gridlinesNodes(7)=obj.addNode('mesh',xyzmesh,'addToScene',false);
                 end
             end

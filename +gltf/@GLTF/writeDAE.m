@@ -92,14 +92,6 @@ function writeDAE(obj,filename,varargin)
     end
     dae.appendChild(library_visual_scenes);
     dae.appendChild(library_geometries);
-
-    if(isprop(obj,'skins'))
-        for skin_id=1:numel(obj.skins)
-            controller=documentNode.createElement("controller");
-            controller.setAttribute("id","skin_"+string(skin_id));
-
-        end
-    end
     dae.appendChild(library_controllers);
 
     if(isprop(obj,'images'))
@@ -194,7 +186,7 @@ function writeDAE(obj,filename,varargin)
                     input_data=obj.getAccessor(obj.animations{animation_id}.samplers{sampler_id}.input);
                     output_data=obj.getAccessor(obj.animations{animation_id}.samplers{sampler_id}.output);
                     if(isfield(obj.animations{animation_id}.samplers{sampler_id},'interpolation'))
-                        interp_data=obj.getAccessor(obj.animations{1}.samplers{sampler_id}.interpolation);
+                        interp_data=obj.getAccessor(obj.animations{animation_id}.samplers{sampler_id}.interpolation);
                     else
                         interp_data="LINEAR";
                     end
@@ -297,7 +289,7 @@ function writeDAE(obj,filename,varargin)
                     input_data=obj.getAccessor(obj.animations{animation_id}.samplers{sampler_id}.input);
                     output_data=obj.getAccessor(obj.animations{animation_id}.samplers{sampler_id}.output);
                     if(isfield(obj.animations{animation_id}.samplers{sampler_id},'interpolation'))
-                        interp_data=obj.animations{1}.samplers{sampler_id}.interpolation;
+                        interp_data=obj.animations{animation_id}.samplers{sampler_id}.interpolation;
                     else
                         interp_data="LINEAR";
                     end

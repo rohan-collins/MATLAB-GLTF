@@ -44,7 +44,7 @@ function sampler_idx=addTextureSampler(obj,varargin)
     filter_str_values=["NEAREST","LINEAR","NEAREST_MIPMAP_NEAREST","LINEAR_MIPMAP_NEAREST","NEAREST_MIPMAP_LINEAR","LINEAR_MIPMAP_LINEAR"];
     filter_num_values=[     9728,    9729,                    9984,                   9985,                   9986,                  9987];
     wrap_str_values=["CLAMP_TO_EDGE","MIRRORED_REPEAT","REPEAT"];
-    wrap_num_values=[          33071,            33071,   10497];
+    wrap_num_values=[          33071,            33648,   10497];
     ips=inputParser;
     ips.addParameter('magFilter',missing,@(x)gltf.GLTF.validateString(x,filter_str_values));
     ips.addParameter('minFilter',missing,@(x)gltf.GLTF.validateString(x,filter_str_values));

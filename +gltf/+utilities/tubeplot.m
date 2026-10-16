@@ -211,7 +211,6 @@ function varargout=tubeplot(curve,varargin)
             else
                 F=reshape(mod([1:m;[2:m 1];m+1:2*m;[2:m 1];[m+2:2*m m+1];m+1:2*m]+reshape((0:n-1)*m,1,1,[])-1,m*n)+1,3,[])';
             end
-%             F=reshape(mod([1:m;[2:m 1];m+1:2*m;[2:m 1];[m+2:2*m m+1];m+1:2*m]+reshape((0:n-1)*m,1,1,[])-1,m*n)+1,3,[])';
             if(useCData)
                 C=reshape(repmat(permute(c(1:end-1,:),[2 3 1]),1,m,1),size(c,2),[])';
             else

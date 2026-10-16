@@ -126,15 +126,6 @@ function [obj,ax_node]=addAxes(obj,varargin)
         if(isempty(ax_h))
             ax_h=gca;
         end
-        if(and(plotAspect,dataAspect))
-            s=pbaspect(ax_h)./daspect(ax_h);
-        elseif(plotAspect)
-            s=pbaspect(ax_h);
-        elseif(dataAspect)
-            s=1./daspect(ax_h);
-        else
-            s=ones(1,3);
-        end
         line_h=parameters.letterHeight*scaleFactor;
         tick_l=parameters.tickLength*scaleFactor;
         ticklabel_l=parameters.tickLabelDistance*scaleFactor;
@@ -199,7 +190,18 @@ function [obj,ax_node]=addAxes(obj,varargin)
             end
         end
 
-        Vbox=V.*diff(ax)+ax(1,:);
+        axisSpan=diff(ax,1,1);
+        if(plotAspect)
+            pb=pbaspect(ax_h);
+            s=pb./axisSpan;
+        elseif(dataAspect)
+            d=daspect(ax_h);
+            s=1./d;
+        else
+            s=ones(1,3);
+        end
+
+        Vbox=V.*axisSpan.*s;
 
         colourfactors=nan(6,3);
         for i=1:3
@@ -229,9 +231,11 @@ function [obj,ax_node]=addAxes(obj,varargin)
             if(any(ismember(["0yz","1yz"],gridIds)))
                 [A,B]=meshgrid(ax_htick_loc{2},ax(:,3));
                 Vg1=[zeros(numel(ax_htick_loc{2})*2,1) A(:) B(:)];
+                Vg1(:,2:3)=(Vg1(:,2:3)-ax(1,2:3)).*s(2:3);
                 Eg1=reshape(1:numel(ax_htick_loc{2})*2,2,numel(ax_htick_loc{2}))';
                 [A,B]=meshgrid(ax_htick_loc{3},ax(:,2));
                 Vg2=[zeros(numel(ax_htick_loc{3})*2,1) B(:) A(:)];
+                Vg2(:,2:3)=(Vg2(:,2:3)-ax(1,2:3)).*s(2:3);
                 Eg2=reshape(1:numel(ax_htick_loc{3})*2,2,numel(ax_htick_loc{3}))';
                 if(skeleton)
                     Js=zeros(size(Vg1,1),4);
@@ -241,12 +245,12 @@ function [obj,ax_node]=addAxes(obj,varargin)
                     Ws=[ones(size(Vg2,1),1) zeros(size(Vg2,1),3)];
                     obj.addPrimitiveToMesh(yzmesh,Vg2.*s*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat,'WEIGHTS',Ws,'JOINTS',Js);
                     if(ismember("0yz",gridIds))
-                        gridlinesNodes(1)=obj.addNode('translation',[1 0 0]*ax(1,1).*s*base_rotation,'addToScene',false);
+                        gridlinesNodes(1)=obj.addNode('addToScene',false);
                         skin_idx=obj.addSkin(gridlinesNodes(1),'inverseBindMatrices',reshape(eye(4),16,1)');
                         obj.addNode('mesh',yzmesh,'skin',skin_idx,'children',gridlinesNodes(1));
                     end
                     if(ismember("1yz",gridIds))
-                        gridlinesNodes(2)=obj.addNode('translation',[1 0 0]*ax(2,1).*s*base_rotation,'addToScene',false);
+                        gridlinesNodes(2)=obj.addNode('translation',[axisSpan(1)*s(1) 0 0]*base_rotation,'addToScene',false);
                         skin_idx=obj.addSkin(gridlinesNodes(2),'inverseBindMatrices',reshape(eye(4),16,1)');
                         obj.addNode('mesh',yzmesh,'skin',skin_idx,'children',gridlinesNodes(2));
                     end
@@ -254,19 +258,21 @@ function [obj,ax_node]=addAxes(obj,varargin)
                     yzmesh=obj.addMesh(Vg1.*s*base_rotation,'indices',Eg1,'mode',"LINES",'material',gridlines_mat);
                     obj.addPrimitiveToMesh(yzmesh,Vg2.*s*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat);
                     if(ismember("0yz",gridIds))
-                        gridlinesNodes(1)=obj.addNode('mesh',yzmesh,'translation',[1 0 0]*ax(1,1).*s*base_rotation,'addToScene',false);
+                        gridlinesNodes(1)=obj.addNode('mesh',yzmesh,'addToScene',false);
                     end
                     if(ismember("1yz",gridIds))
-                        gridlinesNodes(2)=obj.addNode('mesh',yzmesh,'translation',[1 0 0]*ax(2,1).*s*base_rotation,'addToScene',false);
+                        gridlinesNodes(2)=obj.addNode('mesh',yzmesh,'translation',[axisSpan(1)*s(1) 0 0]*base_rotation,'addToScene',false);
                     end
                 end
             end
             if(any(ismember(["x0z","x1z"],gridIds)))
                 [A,B]=meshgrid(ax_htick_loc{3},ax(:,1));
                 Vg1=[B(:) zeros(numel(ax_htick_loc{3})*2,1) A(:)];
+                Vg1(:,[1 3])=(Vg1(:,[1 3])-ax(1,[1 3])).*s([1 3]);
                 Eg1=reshape(1:numel(ax_htick_loc{3})*2,2,numel(ax_htick_loc{3}))';
                 [A,B]=meshgrid(ax_htick_loc{1},ax(:,3));
                 Vg2=[A(:) zeros(numel(ax_htick_loc{1})*2,1) B(:)];
+                Vg2(:,[1 3])=(Vg2(:,[1 3])-ax(1,[1 3])).*s([1 3]);
                 Eg2=reshape(1:numel(ax_htick_loc{1})*2,2,numel(ax_htick_loc{1}))';
                 if(skeleton)
                     Js=zeros(size(Vg1,1),4);
@@ -275,13 +281,13 @@ function [obj,ax_node]=addAxes(obj,varargin)
                     Js=zeros(size(Vg2,1),4);
                     Ws=[ones(size(Vg2,1),1) zeros(size(Vg2,1),3)];
                     obj.addPrimitiveToMesh(xzmesh,Vg2.*s*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat,'WEIGHTS',Ws,'JOINTS',Js);
-                    if(ismember("0yz",gridIds))
-                        gridlinesNodes(3)=obj.addNode('translation',[0 1 0]*ax(1,1).*s*base_rotation,'addToScene',false);
+                    if(ismember("x0z",gridIds))
+                        gridlinesNodes(3)=obj.addNode('addToScene',false);
                         skin_idx=obj.addSkin(gridlinesNodes(3),'inverseBindMatrices',reshape(eye(4),16,1)');
                         obj.addNode('mesh',xzmesh,'skin',skin_idx,'children',gridlinesNodes(3));
                     end
-                    if(ismember("1yz",gridIds))
-                        gridlinesNodes(4)=obj.addNode('translation',[0 1 0]*ax(2,1).*s*base_rotation,'addToScene',false);
+                    if(ismember("x1z",gridIds))
+                        gridlinesNodes(4)=obj.addNode('translation',[0 axisSpan(2)*s(2) 0]*base_rotation,'addToScene',false);
                         skin_idx=obj.addSkin(gridlinesNodes(4),'inverseBindMatrices',reshape(eye(4),16,1)');
                         obj.addNode('mesh',xzmesh,'skin',skin_idx,'children',gridlinesNodes(4));
                     end
@@ -289,19 +295,21 @@ function [obj,ax_node]=addAxes(obj,varargin)
                     xzmesh=obj.addMesh(Vg1.*s*base_rotation,'indices',Eg1,'mode',"LINES",'material',gridlines_mat);
                     obj.addPrimitiveToMesh(xzmesh,Vg2.*s*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat);
                     if(ismember("x0z",gridIds))
-                        gridlinesNodes(3)=obj.addNode('mesh',xzmesh,'translation',[0 1 0]*ax(1,2).*s*base_rotation,'addToScene',false);
+                        gridlinesNodes(3)=obj.addNode('mesh',xzmesh,'addToScene',false);
                     end
                     if(ismember("x1z",gridIds))
-                        gridlinesNodes(4)=obj.addNode('mesh',xzmesh,'translation',[0 1 0]*ax(2,2).*s*base_rotation,'addToScene',false);
+                        gridlinesNodes(4)=obj.addNode('mesh',xzmesh,'translation',[0 axisSpan(2)*s(2) 0]*base_rotation,'addToScene',false);
                     end
                 end
             end
             if(any(ismember(["xy0","xy1"],gridIds)))
                 [A,B]=meshgrid(ax_htick_loc{1},ax(:,2));
                 Vg1=[A(:) B(:) zeros(numel(ax_htick_loc{1})*2,1)];
+                Vg1(:,1:2)=(Vg1(:,1:2)-ax(1,1:2)).*s(1:2);
                 Eg1=reshape(1:numel(ax_htick_loc{1})*2,2,numel(ax_htick_loc{1}))';
                 [A,B]=meshgrid(ax_htick_loc{2},ax(:,1));
                 Vg2=[B(:) A(:) zeros(numel(ax_htick_loc{2})*2,1)];
+                Vg2(:,1:2)=(Vg2(:,1:2)-ax(1,1:2)).*s(1:2);
                 Eg2=reshape(1:numel(ax_htick_loc{2})*2,2,numel(ax_htick_loc{2}))';
                 if(skeleton)
                     Js=zeros(size(Vg1,1),4);
@@ -310,13 +318,13 @@ function [obj,ax_node]=addAxes(obj,varargin)
                     Js=zeros(size(Vg2,1),4);
                     Ws=[ones(size(Vg2,1),1) zeros(size(Vg2,1),3)];
                     obj.addPrimitiveToMesh(xymesh,Vg2.*s*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat,'WEIGHTS',Ws,'JOINTS',Js);
-                    if(ismember("0yz",gridIds))
-                        gridlinesNodes(5)=obj.addNode('translation',[0 1 0]*ax(1,1).*s*base_rotation,'addToScene',false);
+                    if(ismember("xy0",gridIds))
+                        gridlinesNodes(5)=obj.addNode('addToScene',false);
                         skin_idx=obj.addSkin(gridlinesNodes(5),'inverseBindMatrices',reshape(eye(4),16,1)');
                         obj.addNode('mesh',xymesh,'skin',skin_idx,'children',gridlinesNodes(5));
                     end
-                    if(ismember("1yz",gridIds))
-                        gridlinesNodes(6)=obj.addNode(translation',[0 1 0]*ax(2,1).*s*base_rotation,'addToScene',false);
+                    if(ismember("xy1",gridIds))
+                        gridlinesNodes(6)=obj.addNode('translation',[0 0 axisSpan(3)*s(3)]*base_rotation,'addToScene',false);
                         skin_idx=obj.addSkin(gridlinesNodes(6),'inverseBindMatrices',reshape(eye(4),16,1)');
                         obj.addNode('mesh',xymesh,'skin',skin_idx,'children',gridlinesNodes(6));
                     end
@@ -324,22 +332,25 @@ function [obj,ax_node]=addAxes(obj,varargin)
                     xymesh=obj.addMesh(Vg1.*s*base_rotation,'indices',Eg1,'mode',"LINES",'material',gridlines_mat);
                     obj.addPrimitiveToMesh(xymesh,Vg2.*s*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat);
                     if(ismember("xy0",gridIds))
-                        gridlinesNodes(5)=obj.addNode('mesh',xymesh,'translation',[0 0 1]*ax(1,3).*s*base_rotation,'addToScene',false);
+                        gridlinesNodes(5)=obj.addNode('mesh',xymesh,'addToScene',false);
                     end
                     if(ismember("xy1",gridIds))
-                        gridlinesNodes(6)=obj.addNode('mesh',xymesh,'translation',[0 0 1]*ax(2,3).*s*base_rotation,'addToScene',false);
+                        gridlinesNodes(6)=obj.addNode('mesh',xymesh,'translation',[0 0 axisSpan(3)*s(3)]*base_rotation,'addToScene',false);
                     end
                 end
             end
             if(ismember("xyz",gridIds))
                 [C,A,B]=meshgrid(ax_htick_loc{3},ax(:,1),ax_htick_loc{2});
                 Vg1=[A(:) B(:) C(:)];
+                Vg1=(Vg1-ax(1,:)).*s;
                 Eg1=reshape(1:2*numel(ax_htick_loc{2})*numel(ax_htick_loc{3}),2,numel(ax_htick_loc{2})*numel(ax_htick_loc{3}))';
                 [A,B,C]=meshgrid(ax_htick_loc{1},ax(:,2),ax_htick_loc{3});
                 Vg2=[A(:) B(:) C(:)];
+                Vg2=(Vg2-ax(1,:)).*s;
                 Eg2=reshape(1:2*numel(ax_htick_loc{1})*numel(ax_htick_loc{3}),2,numel(ax_htick_loc{1})*numel(ax_htick_loc{3}))';
                 [B,C,A]=meshgrid(ax_htick_loc{2},ax(:,3),ax_htick_loc{1});
                 Vg3=[A(:) B(:) C(:)];
+                Vg3=(Vg3-ax(1,:)).*s;
                 Eg3=reshape(1:2*numel(ax_htick_loc{1})*numel(ax_htick_loc{2}),2,numel(ax_htick_loc{1})*numel(ax_htick_loc{2}))';
                 if(skeleton)
                     Js=zeros(size(Vg1,1),4);
@@ -371,7 +382,7 @@ function [obj,ax_node]=addAxes(obj,varargin)
             backPlaneNodes=nan(1,6);
             if(ismember("0yz",backPlanes))
                 [Vbox1,~,ic]=unique(Fbox(1:2,:));
-                Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5)*2.*diff(ax)*plane_delta;
+                Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5).*2.*axisSpan.*s.*plane_delta;
                 F1=reshape(ic,2,3);
                 if(det(base_rotation)<0)
                     F1=F1(:,[1 3 2]);
@@ -379,17 +390,17 @@ function [obj,ax_node]=addAxes(obj,varargin)
                 if(skeleton)
                     Js=zeros(size(Vbox_i,1),4);
                     Ws=[ones(size(Vbox_i,1),1) zeros(size(Vbox_i,1),3)];
-                    mesh=obj.addMesh(Vbox_i.*s*base_rotation,'indices',F1,'normals',true,'material',backplane_mat,'WEIGHTS',Ws,'JOINTS',Js);
+                    mesh=obj.addMesh(Vbox_i*base_rotation,'indices',F1,'normals',true,'material',backplane_mat,'WEIGHTS',Ws,'JOINTS',Js);
                     backPlaneNodes(1)=obj.addNode('addToScene',false);
                     skin_idx=obj.addSkin(backPlaneNodes(1),'inverseBindMatrices',reshape(eye(4),16,1)');
                     obj.addNode('mesh',mesh,'skin',skin_idx,'children',backPlaneNodes(1));
                 else
-                    backPlaneNodes(1)=obj.addNode('mesh',obj.addMesh(Vbox_i.*s*base_rotation,'indices',F1,'normals',true,'material',backplane_mat),'addToScene',false);
+                    backPlaneNodes(1)=obj.addNode('mesh',obj.addMesh(Vbox_i*base_rotation,'indices',F1,'normals',true,'material',backplane_mat),'addToScene',false);
                 end
             end
             if(ismember("1yz",backPlanes))
                 [Vbox1,~,ic]=unique(Fbox(3:4,:));
-                Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5)*2.*diff(ax)*plane_delta;
+                Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5).*2.*axisSpan.*s.*plane_delta;
                 F1=reshape(ic,2,3);
                 if(det(base_rotation)<0)
                     F1=F1(:,[1 3 2]);
@@ -397,17 +408,17 @@ function [obj,ax_node]=addAxes(obj,varargin)
                 if(skeleton)
                     Js=zeros(size(Vbox_i,1),4);
                     Ws=[ones(size(Vbox_i,1),1) zeros(size(Vbox_i,1),3)];
-                    mesh=obj.addMesh(Vbox_i.*s*base_rotation,'indices',F1,'normals',true,'material',backplane_mat,'WEIGHTS',Ws,'JOINTS',Js);
+                    mesh=obj.addMesh(Vbox_i*base_rotation,'indices',F1,'normals',true,'material',backplane_mat,'WEIGHTS',Ws,'JOINTS',Js);
                     backPlaneNodes(2)=obj.addNode('addToScene',false);
                     skin_idx=obj.addSkin(backPlaneNodes(2),'inverseBindMatrices',reshape(eye(4),16,1)');
                     obj.addNode('mesh',mesh,'skin',skin_idx,'children',backPlaneNodes(2));
                 else
-                    backPlaneNodes(2)=obj.addNode('mesh',obj.addMesh(Vbox_i.*s*base_rotation,'indices',F1,'normals',true,'material',backplane_mat),'addToScene',false);
+                    backPlaneNodes(2)=obj.addNode('mesh',obj.addMesh(Vbox_i*base_rotation,'indices',F1,'normals',true,'material',backplane_mat),'addToScene',false);
                 end
             end
             if(ismember("x0z",backPlanes))
                 [Vbox1,~,ic]=unique(Fbox(5:6,:));
-                Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5)*2.*diff(ax)*plane_delta;
+                Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5).*2.*axisSpan.*s.*plane_delta;
                 F1=reshape(ic,2,3);
                 if(det(base_rotation)<0)
                     F1=F1(:,[1 3 2]);
@@ -415,17 +426,17 @@ function [obj,ax_node]=addAxes(obj,varargin)
                 if(skeleton)
                     Js=zeros(size(Vbox_i,1),4);
                     Ws=[ones(size(Vbox_i,1),1) zeros(size(Vbox_i,1),3)];
-                    mesh=obj.addMesh(Vbox_i.*s*base_rotation,'indices',F1,'normals',true,'material',backplane_mat,'WEIGHTS',Ws,'JOINTS',Js);
+                    mesh=obj.addMesh(Vbox_i*base_rotation,'indices',F1,'normals',true,'material',backplane_mat,'WEIGHTS',Ws,'JOINTS',Js);
                     backPlaneNodes(3)=obj.addNode('addToScene',false);
                     skin_idx=obj.addSkin(backPlaneNodes(3),'inverseBindMatrices',reshape(eye(4),16,1)');
                     obj.addNode('mesh',mesh,'skin',skin_idx,'children',backPlaneNodes(3));
                 else
-                    backPlaneNodes(3)=obj.addNode('mesh',obj.addMesh(Vbox_i.*s*base_rotation,'indices',F1,'normals',true,'material',backplane_mat),'addToScene',false);
+                    backPlaneNodes(3)=obj.addNode('mesh',obj.addMesh(Vbox_i*base_rotation,'indices',F1,'normals',true,'material',backplane_mat),'addToScene',false);
                 end
             end
             if(ismember("x1z",backPlanes))
                 [Vbox1,~,ic]=unique(Fbox(7:8,:));
-                Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5)*2.*diff(ax)*plane_delta;
+                Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5).*2.*axisSpan.*s.*plane_delta;
                 F1=reshape(ic,2,3);
                 if(det(base_rotation)<0)
                     F1=F1(:,[1 3 2]);
@@ -433,17 +444,17 @@ function [obj,ax_node]=addAxes(obj,varargin)
                 if(skeleton)
                     Js=zeros(size(Vbox_i,1),4);
                     Ws=[ones(size(Vbox_i,1),1) zeros(size(Vbox_i,1),3)];
-                    mesh=obj.addMesh(Vbox_i.*s*base_rotation,'indices',F1,'normals',true,'material',backplane_mat,'WEIGHTS',Ws,'JOINTS',Js);
+                    mesh=obj.addMesh(Vbox_i*base_rotation,'indices',F1,'normals',true,'material',backplane_mat,'WEIGHTS',Ws,'JOINTS',Js);
                     backPlaneNodes(4)=obj.addNode('addToScene',false);
                     skin_idx=obj.addSkin(backPlaneNodes(4),'inverseBindMatrices',reshape(eye(4),16,1)');
                     obj.addNode('mesh',mesh,'skin',skin_idx,'children',backPlaneNodes(4));
                 else
-                    backPlaneNodes(4)=obj.addNode('mesh',obj.addMesh(Vbox_i.*s*base_rotation,'indices',F1,'normals',true,'material',backplane_mat),'addToScene',false);
+                    backPlaneNodes(4)=obj.addNode('mesh',obj.addMesh(Vbox_i*base_rotation,'indices',F1,'normals',true,'material',backplane_mat),'addToScene',false);
                 end
             end
             if(ismember("xy0",backPlanes))
                 [Vbox1,~,ic]=unique(Fbox(9:10,:));
-                Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5)*2.*diff(ax)*plane_delta;
+                Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5).*2.*axisSpan.*s.*plane_delta;
                 F1=reshape(ic,2,3);
                 if(det(base_rotation)<0)
                     F1=F1(:,[1 3 2]);
@@ -451,17 +462,17 @@ function [obj,ax_node]=addAxes(obj,varargin)
                 if(skeleton)
                     Js=zeros(size(Vbox_i,1),4);
                     Ws=[ones(size(Vbox_i,1),1) zeros(size(Vbox_i,1),3)];
-                    mesh=obj.addMesh(Vbox_i.*s*base_rotation,'indices',F1,'normals',true,'material',backplane_mat,'WEIGHTS',Ws,'JOINTS',Js);
+                    mesh=obj.addMesh(Vbox_i*base_rotation,'indices',F1,'normals',true,'material',backplane_mat,'WEIGHTS',Ws,'JOINTS',Js);
                     backPlaneNodes(5)=obj.addNode('addToScene',false);
                     skin_idx=obj.addSkin(backPlaneNodes(5),'inverseBindMatrices',reshape(eye(4),16,1)');
                     obj.addNode('mesh',mesh,'skin',skin_idx,'children',backPlaneNodes(5));
                 else
-                    backPlaneNodes(5)=obj.addNode('mesh',obj.addMesh(Vbox_i.*s*base_rotation,'indices',F1,'normals',true,'material',backplane_mat),'addToScene',false);
+                    backPlaneNodes(5)=obj.addNode('mesh',obj.addMesh(Vbox_i*base_rotation,'indices',F1,'normals',true,'material',backplane_mat),'addToScene',false);
                 end
             end
             if(ismember("xy1",backPlanes))
                 [Vbox1,~,ic]=unique(Fbox(11:12,:));
-                Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5)*2.*diff(ax)*plane_delta;
+                Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5).*2.*axisSpan.*s.*plane_delta;
                 F1=reshape(ic,2,3);
                 if(det(base_rotation)<0)
                     F1=F1(:,[1 3 2]);
@@ -469,12 +480,12 @@ function [obj,ax_node]=addAxes(obj,varargin)
                 if(skeleton)
                     Js=zeros(size(Vbox_i,1),4);
                     Ws=[ones(size(Vbox_i,1),1) zeros(size(Vbox_i,1),3)];
-                    mesh=obj.addMesh(Vbox_i.*s*base_rotation,'indices',F1,'normals',true,'material',backplane_mat,'WEIGHTS',Ws,'JOINTS',Js);
+                    mesh=obj.addMesh(Vbox_i*base_rotation,'indices',F1,'normals',true,'material',backplane_mat,'WEIGHTS',Ws,'JOINTS',Js);
                     backPlaneNodes(6)=obj.addNode('addToScene',false);
                     skin_idx=obj.addSkin(backPlaneNodes(6),'inverseBindMatrices',reshape(eye(4),16,1)');
                     obj.addNode('mesh',mesh,'skin',skin_idx,'children',backPlaneNodes(6));
                 else
-                    backPlaneNodes(6)=obj.addNode('mesh',obj.addMesh(Vbox_i.*s*base_rotation,'indices',F1,'normals',true,'material',backplane_mat),'addToScene',false);
+                    backPlaneNodes(6)=obj.addNode('mesh',obj.addMesh(Vbox_i*base_rotation,'indices',F1,'normals',true,'material',backplane_mat),'addToScene',false);
                 end
             end
         else
@@ -505,12 +516,12 @@ function [obj,ax_node]=addAxes(obj,varargin)
             if(skeleton)
                 Js=zeros(size(Vbox_i,1),4);
                 Ws=[ones(size(Vbox_i,1),1) zeros(size(Vbox_i,1),3)];
-                mesh=obj.addMesh(Vbox_i.*s*base_rotation,'indices',E1,'mode',"LINES",'material',mat(m),'WEIGHTS',Ws,'JOINTS',Js);
+                mesh=obj.addMesh(Vbox_i*base_rotation,'indices',E1,'mode',"LINES",'material',mat(m),'WEIGHTS',Ws,'JOINTS',Js);
                 box_nodes(m)=obj.addNode('addToScene',false);
                 skin_idx=obj.addSkin(box_nodes(m),'inverseBindMatrices',reshape(eye(4),16,1)');
                 box_nodes2(m)=obj.addNode('mesh',mesh,'skin',skin_idx,'children',box_nodes(m));
             else
-                box_nodes(m)=obj.addNode('mesh',obj.addMesh(Vbox_i.*s*base_rotation,'indices',E1,'mode',"LINES",'material',mat(m)),'addToScene',false);
+                box_nodes(m)=obj.addNode('mesh',obj.addMesh(Vbox_i*base_rotation,'indices',E1,'mode',"LINES",'material',mat(m)),'addToScene',false);
             end
         end
 
@@ -651,11 +662,11 @@ function [obj,ax_node]=addAxes(obj,varargin)
                 end
                 tick_loc=ax_htick_loc{direction(i,:)};
                 J=numel(tick_loc);
-                tickV{i}=repmat([zeros(1,3);tick_dir(i,:)],numel(tick_loc),1)*tick_l+(s.*ax(1,:)+s.*diff(ax).*double(tick_dir(i,:)>0));
-                tickV{i}(:,direction(i,:))=reshape(repmat(tick_loc,2,1),[],1)*s(direction(i,:));
+                tickV{i}=repmat([zeros(1,3);tick_dir(i,:)],numel(tick_loc),1)*tick_l+s.*axisSpan.*double(tick_dir(i,:)>0);
+                tickV{i}(:,direction(i,:))=(reshape(repmat(tick_loc,2,1),[],1)-ax(1,direction(i,:))).*s(direction(i,:));
                 tickE{i}=reshape(1:2*numel(tick_loc),2,[])';
                 if(strlength(string(ax_h.(axislabel(direction(i,:))).String))>0)
-                    trans=tick_dir(i,:)*axlabel_l+s.*ax(1,:)+s.*diff(ax).*(double(tick_dir(i,:)>0)+direction(i,:)/2);
+                    trans=tick_dir(i,:)*axlabel_ls.*axisSpan.*(double(tick_dir(i,:)>0)+direction(i,:)/2);
                     if(skeleton)
                         axislabel_node(i)=obj.addNode('translation',trans*base_rotation,'rotation',rot,'addToScene',false);
                         skin_idx=obj.addSkin(axislabel_node(i),'inverseBindMatrices',reshape(eye(4),16,1)');
@@ -664,9 +675,9 @@ function [obj,ax_node]=addAxes(obj,varargin)
                         axislabel_node(i)=obj.addNode('mesh',axlabel_mesh{direction(i,:)},'translation',trans*base_rotation,'rotation',rot,'addToScene',false);
                     end
                 end
-                trans=tick_dir(i,:)*ticklabel_l+(s.*ax(1,:)+s.*diff(ax).*double(tick_dir(i,:)>0));
+                trans=tick_dir(i,:)*ticklabel_l+s.*axisSpan.*double(tick_dir(i,:)>0);
                 trans=repmat(trans,J,1);
-                trans(:,direction(i,:))=tick_loc'*s(direction(i,:));
+                trans(:,direction(i,:))=(tick_loc'-ax(1,direction(i,:))).*s(direction(i,:));
                 J=numel(ticklabelsV{direction(i,:)});
                 ticklabel_node{i}=nan(1,J);
                 for j=1:J
@@ -720,10 +731,10 @@ function valid=validateAxisIds(input,possibilities)
     %
     valid=all(ismember(input,possibilities));
     if(~valid)
-        strings2="""" + possibilities + """";
-        strings2(end)="or " + strings2(end);
-        out="one of """ + join(strings2, ", ");
-        error("It must be " + out + ".");
+        strings2=""""+possibilities+"""";
+        strings2(end)="or "+strings2(end);
+        out="one of """+join(strings2, ", ");
+        error("It must be "+out+".");
     end
 end
 

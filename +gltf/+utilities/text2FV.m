@@ -73,7 +73,7 @@ function groupPaths=readSVG(text,N)
             try
                 defIDs=cellfun(@(x)string(x{1}),test);
             catch
-                defIDs=repmat(string,size(test));
+                defIDs=strings(size(test));
                 defIDs(~cellfun(@isempty,test))=cellfun(@(x)string(x),test(~cellfun(@isempty,test)),'UniformOutput',false);
             end
         end

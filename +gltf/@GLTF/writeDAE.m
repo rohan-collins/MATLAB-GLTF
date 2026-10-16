@@ -502,7 +502,7 @@ function writeDAE(obj,filename,varargin)
                     output_data=obj.getAccessor(obj.animations{animation_id}.samplers{sampler_id}.output);
                     output_data=reshape(output_data,[],size(input_data,1))';
                     if(isfield(obj.animations{animation_id}.samplers{sampler_id},'interpolation'))
-                        interp_data=obj.getAccessor(obj.animations{1}.samplers{sampler_id}.interpolation);
+                        interp_data=obj.getAccessor(obj.animations{animation_id}.samplers{sampler_id}.interpolation);
                     else
                         interp_data="LINEAR";
                     end

@@ -360,7 +360,7 @@ function [obj,ax_node]=addAxes(obj,varargin)
                     Ws=[ones(size(Vg2,1),1) zeros(size(Vg2,1),3)];
                     obj.addPrimitiveToMesh(xyzmesh,Vg2*base_rotation,'indices',Eg2,'mode',"LINES",'material',gridlines_mat,'WEIGHTS',Ws,'JOINTS',Js);
                     Js=zeros(size(Vg3,1),4);
-                    Ws=[ones(size(Vg3,1),1) zeros(size(Vg2,1),3)];
+                    Ws=[ones(size(Vg3,1),1) zeros(size(Vg3,1),3)];
                     obj.addPrimitiveToMesh(xyzmesh,Vg3*base_rotation,'indices',Eg3,'mode',"LINES",'material',gridlines_mat,'WEIGHTS',Ws,'JOINTS',Js);
                     gridlinesNodes(7)=obj.addNode('addToScene',false);
                     skin_idx=obj.addSkin(gridlinesNodes(7),'inverseBindMatrices',reshape(eye(4),16,1)');
@@ -666,7 +666,7 @@ function [obj,ax_node]=addAxes(obj,varargin)
                 tickV{i}(:,direction(i,:))=(reshape(repmat(tick_loc,2,1),[],1)-ax(1,direction(i,:))).*s(direction(i,:));
                 tickE{i}=reshape(1:2*numel(tick_loc),2,[])';
                 if(strlength(string(ax_h.(axislabel(direction(i,:))).String))>0)
-                    trans=tick_dir(i,:)*axlabel_l.*axisSpan.*(double(tick_dir(i,:)>0)+direction(i,:)/2);
+                    trans=tick_dir(i,:)*axlabel_l+s.*axisSpan.*(double(tick_dir(i,:)>0)+direction(i,:)/2);
                     if(skeleton)
                         axislabel_node(i)=obj.addNode('translation',trans*base_rotation,'rotation',rot,'addToScene',false);
                         skin_idx=obj.addSkin(axislabel_node(i),'inverseBindMatrices',reshape(eye(4),16,1)');

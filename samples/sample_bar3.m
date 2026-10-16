@@ -19,6 +19,8 @@
 load count.dat
 Z=count(1:10,:);
 s=bar3(Z);
+daspect(daspect);
+pbaspect(pbaspect);
 % Default colours are based on index using default colormap.
 C=parula(size(Z,2));
 ax=gca;
@@ -75,10 +77,10 @@ for i=1:3
     E2=unique(E2,'rows');
     % Scale vertices based on data aspect ratio make the 3D Object look as
     % much like the MATLAB plot as possible.
-    V=V./daspect;
+    Vax=gltf.utilities.transformForAxes(V,'axis',s(i).Parent);
     % Rotate the vertices so that, as for bar plots in MATLAB, Y-axis is to
     % the right and X axis is to the back.
-    V=V*[1 0 0;0 0 1;0 1 0];
+    Vax=Vax*[1 0 0;0 0 1;0 1 0];
     % Since the axis system is left handed, we need to flip the triangles
     % so that they face outwards again.
     F=F(:,[1 3 2]);
@@ -86,15 +88,14 @@ for i=1:3
     face_material(i)=obj.addMaterial('baseColorFactor',C(i,:)); %#ok<SAGROW>
     % Add a mesh with the vertices, faces, and colours. Use the face colour
     % material.
-    mesh_idx=obj.addMesh(V,'indices',F,'material',face_material(i));
+    mesh_idx=obj.addMesh(Vax,'indices',F,'material',face_material(i));
     % Add a second primitive to the same mesh with vertices and edges. Use
     % mode "LINES" and the edge colour material.
-    obj.addPrimitiveToMesh(mesh_idx,V,'indices',E2,'mode',"LINES",'material',edge_material);
+    obj.addPrimitiveToMesh(mesh_idx,Vax,'indices',E2,'mode',"LINES",'material',edge_material);
     % Instantiate the mesh in a node.
     obj.addNode('mesh',mesh_idx);
 end
 % Add axes as seen in the figure.
-% obj=gltf.utilities.addAxes(obj,'baseRotation',[1 0 0;0 0 1;0 1 0],'axisIds',["x10";"0y0";"00z"],'scaleFactor',5,'axis',s(1).Parent,'fontFile',"ARIALUNI_1.svg",'plotAspect',false,'dataAspect',true);
-obj=gltf.utilities.addAxes(obj,'baseRotation',[1 0 0;0 0 1;0 1 0],'axis',s(1).Parent,'axisIds',["x10";"0y0";"00z"],'gridIds',["xy0","x0z","1yz"],'backPlanes',["xy0","x0z","1yz"],'scaleFactor',5,'fontFile',"ARIALUNI_1.svg",'plotAspect',false,'dataAspect',true);
+obj=gltf.utilities.addAxes(obj,'baseRotation',[1 0 0;0 0 1;0 1 0],'axis',s(1).Parent,'axisIds',["x10";"0y0";"00z"],'gridIds',["xy0","x0z","1yz"],'backPlanes',["xy0","x0z","1yz"],'fontFile',"ARIALUNI_1.svg");
 % Write the GLTF file.
 obj.writeGLTF("bar3.gltf");

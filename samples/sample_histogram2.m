@@ -27,6 +27,8 @@ Y=h.YBinEdges;
 Z=h.BinCounts;
 % We will need the X and Y widths as well.
 binWidth=h.BinWidth;
+daspect(daspect);
+pbaspect(pbaspect);
 ax=gca;
 ax.XColor=ones(1,3);
 ax.YColor=ones(1,3);
@@ -93,7 +95,7 @@ E=ic(E);
 
 % Scale vertices based on data aspect ratio and plot aspect ratio to make
 % the 3D Object look as much like the MATLAB plot as possible.
-V=V./daspect.*pbaspect;
+V=gltf.utilities.transformForAxes(V,'axis',h.Parent);
 % Rotate the vertices since we are more used to Z-axis being "up" and
 % Y-axis being "back".
 V=V*[0 0 1;1 0 0;0 1 0];
@@ -132,6 +134,6 @@ obj.meshes{mesh_idx+1}.primitives{2}.material=edge_idx;
 % Instantiate the mesh in a node.
 obj.addNode('mesh',mesh_idx);
 % Add axes as seen in the figure.
-obj=gltf.utilities.addAxes(obj,'baseRotation',[0 0 1;1 0 0;0 1 0],'axisIds',["x00";"0y0";"01z"],'gridIds',["xy0","x1z","1yz"],'backPlanes',["xy0","x1z","1yz"],'scaleFactor',5,'axis',h.Parent,'fontFile',"ARIALUNI_1.svg",'plotAspect',true,'dataAspect',true);
+obj=gltf.utilities.addAxes(obj,'baseRotation',[0 0 1;1 0 0;0 1 0],'axisIds',["x00";"0y0";"01z"],'gridIds',["xy0","x1z","1yz"],'backPlanes',["xy0","x1z","1yz"],'axis',h.Parent,'fontFile',"ARIALUNI_1.svg");
 % Write the GLTF file.
 obj.writeGLTF("histogram2.gltf");

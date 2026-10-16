@@ -20,6 +20,8 @@ X=linspace(-5,5,60);
 Y=cos(X);
 Z=X.^2;
 s=stem3(X,Y,Z);
+daspect(daspect);
+pbaspect(pbaspect);
 ax=gca;
 ax.XColor=ones(1,3);
 ax.YColor=ones(1,3);
@@ -37,7 +39,7 @@ C=s.Color;
 T=[X;Y;Z]';
 % Scale positions based on data aspect ratio and plot aspect ratio to make
 % the 3D Object look as much like the MATLAB plot as possible.
-T=T./daspect.*pbaspect;
+T=gltf.utilities.transformForAxes(T,'axis',s.Parent);
 % Rotate the positions since we are more used to Z-axis being "up" and
 % Y-axis being "back".
 T=T*[0 0 1;1 0 0;0 1 0];
@@ -51,7 +53,7 @@ mesh_idx=obj.addMesh(V,'indices',F,'material',material_idx);
 % For each point in the plot.
 for i=1:numel(Z)
     % Instantiate the mesh in a node with the translation.
-    obj.addNode('mesh',mesh_idx,'translation',T(i,:),'scale',0.03*ones(1,3));
+    obj.addNode('mesh',mesh_idx,'translation',T(i,:),'scale',0.01*ones(1,3));
     % To draw the stem, we need a line from the XZ plane to the point.
     % First duplicate the vertex.
     Vstem=repmat(T(i,:),2,1);
@@ -63,6 +65,6 @@ for i=1:numel(Z)
     obj.addNode('mesh',obj.addMesh(Vstem,'mode',"LINES",'material',material_idx));
 end
 % Add axes as seen in the figure.
-obj=gltf.utilities.addAxes(obj,'baseRotation',[0 0 1;1 0 0;0 1 0],'axisIds',["x00";"0y0";"01z"],'gridIds',["xy0","x1z","1yz"],'backPlanes',["xy0","x1z","1yz"],'scaleFactor',1.5,'axis',s.Parent,'fontFile',"ARIALUNI_1.svg",'plotAspect',true,'dataAspect',true);
+obj=gltf.utilities.addAxes(obj,'baseRotation',[0 0 1;1 0 0;0 1 0],'axisIds',["x00";"0y0";"01z"],'gridIds',["xy0","x1z","1yz"],'backPlanes',["xy0","x1z","1yz"],'axis',s.Parent,'fontFile',"ARIALUNI_1.svg");
 % Write the GLTF file.
 obj.writeGLTF("stem3.gltf");

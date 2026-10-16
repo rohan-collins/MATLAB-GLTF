@@ -22,6 +22,8 @@ y=-3:0.5:3;
 Z=Y.^2-X.^2;
 [U,V,W]=surfnorm(Z);
 s=quiver3(Z,U,V,W);
+daspect(daspect);
+pbaspect(pbaspect);
 ax=gca;
 ax.XColor=ones(1,3);
 ax.YColor=ones(1,3);
@@ -51,7 +53,7 @@ V_arrow=[0 0 0;0 0 1;-0.0165*headsize 0.0165*headsize 1-(1-0.934)*headsize;0.016
 E_arrow=[1 2;3 2;4 2];
 % Scale vertices based on data aspect ratio and plot aspect ratio to make
 % the 3D Object look as much like the MATLAB plot as possible.
-V_arrow=V_arrow./daspect.*pbaspect;
+V_arrow=V_arrow*0.1;
 % Rotate the vertices since we are more used to Z-axis being "up" and
 % Y-axis being "back".
 V_arrow=V_arrow*[0 0 1;1 0 0;0 1 0];
@@ -63,8 +65,8 @@ T=[X(:) Y(:) Z(:)];
 S=[U(:) V(:) W(:)];
 % Scale transforms based on data aspect ratio and plot aspect ratio to make
 % the 3D Object look as much like the MATLAB plot as possible.
-T=T./daspect.*pbaspect;
-S=S./daspect.*pbaspect;
+T=gltf.utilitiestransformForAxes(T,'axis',s.Parent);
+[~,S]=gltf.utilitiestransformForAxes([],S,'axis',s.Parent);
 % Rotate the transforms since we are more used to Z-axis being "up" and
 % Y-axis being "back".
 T=T*[0 0 1;1 0 0;0 1 0];
@@ -95,6 +97,6 @@ rotation=[sin(rotation_angle/2).*rotation_axis cos(rotation_angle/2)];
 % node. It also improves rendering efficiency.
 obj.addNode('mesh',mesh_idx,'instancingTranslation',T,'instancingRotation',rotation,'scale',s.AutoScaleFactor*ones(1,3));
 % Add axes as seen in the figure.
-obj=gltf.utilities.addAxes(obj,'baseRotation',[0 0 1;1 0 0;0 1 0],'axisIds',["x00";"0y0";"01z"],'gridIds',["xy0","x1z","1yz"],'backPlanes',["xy0","x1z","1yz"],'scaleFactor',10,'axis',s.Parent,'fontFile',"ARIALUNI_1.svg",'plotAspect',true,'dataAspect',true);
+obj=gltf.utilitiesaddAxes(obj,'baseRotation',[0 0 1;1 0 0;0 1 0],'axisIds',["x00";"0y0";"01z"],'gridIds',["xy0","x1z","1yz"],'backPlanes',["xy0","x1z","1yz"],'axis',s.Parent,'fontFile',"ARIALUNI_1.svg");
 % Write the GLTF file.
 obj.writeGLTF("quiver3.gltf");

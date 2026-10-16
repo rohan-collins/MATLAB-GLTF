@@ -20,6 +20,8 @@ z=linspace(0,4*pi,250);
 x=2*cos(z)+rand(1,250);
 y=2*sin(z)+rand(1,250);
 s=scatter3(x,y,z,'filled');
+daspect(daspect);
+pbaspect(pbaspect);
 ax=gca;
 ax.XColor=ones(1,3);
 ax.YColor=ones(1,3);
@@ -31,18 +33,21 @@ grid on;
 
 % Generate a sphere to use for each point.
 [F,V]=gltf.utilities.sphere3d('Resolution',5);
-% Scale the spheres
-V=0.05*V;
 % Get the color of the plot
 C=s.CData;
 % Calculate the position of each point in the plot
 T=[x;y;z]';
 % Scale positions based on data aspect ratio and plot aspect ratio to make
 % the 3D Object look as much like the MATLAB plot as possible.
-T=T./daspect.*pbaspect;
+T=gltf.utilities.transformForAxes(T,'axis',s.Parent);
 % Rotate the positions since we are more used to Z-axis being "up" and
 % Y-axis being "back".
 T=T*[0 0 1;1 0 0;0 1 0];
+if(isscalar(s.SizeData))
+    S=repmat(s.SizeData/36*0.01,size(T));
+else
+    S=repmat(reshape(s.SizeData,[],1)/36*0.01,1,3);
+end
 
 % Create the GLTF object.
 obj=gltf.GLTF();
@@ -55,8 +60,8 @@ mesh_idx=obj.addMesh(V,'indices',F,'material',material_idx);
 % spheres. We could add one node per sphere, but that increases the file
 % size (due to requiring translation and rotation matrices to be specified
 % in text per node. It also improves rendering efficiency.
-obj.addNode('mesh',mesh_idx,'instancingTranslation',T);
+obj.addNode('mesh',mesh_idx,'instancingTranslation',T,'instancingScale',S);
 % Add axes as seen in the figure.
-obj=gltf.utilities.addAxes(obj,'baseRotation',[0 0 1;1 0 0;0 1 0],'axisIds',["x00";"0y0";"01z"],'gridIds',["xy0","x1z","1yz"],'backPlanes',["xy0","x1z","1yz"],'scaleFactor',5,'axis',s.Parent,'fontFile',"ARIALUNI_1.svg",'plotAspect',true,'dataAspect',true);
+obj=gltf.utilities.addAxes(obj,'baseRotation',[0 0 1;1 0 0;0 1 0],'axisIds',["x00";"0y0";"01z"],'gridIds',["xy0","x1z","1yz"],'backPlanes',["xy0","x1z","1yz"],'axis',s.Parent,'fontFile',"ARIALUNI_1.svg");
 % Write the GLTF file.
 obj.writeGLTF("scatter3.gltf");

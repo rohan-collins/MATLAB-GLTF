@@ -63,7 +63,9 @@ function varargout=transformForAxes(V,varargin)
         if(any(logAxes))
             Vax(:,logAxes)=log10(V(:,logAxes));
         end
-        Vax=(Vax-axisMin).*s;
+        if(~isempty(V))
+            Vax=(Vax-axisMin).*s;
+        end
         Nax=N;
         if(~isempty(N))
             Nax=Nax./vecnorm(Nax,2,2);

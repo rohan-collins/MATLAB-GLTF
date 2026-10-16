@@ -53,6 +53,18 @@ function [obj,ax_node]=addAxes(obj,varargin)
     % ADDAXES(...,'baseRotation',baseRotation) specifies the base rotation
     % matrix to use for the axes cube.
     %
+    % ADDAXES(...,'letterHeight',letterHeight) specifies the height of the
+    % text for a unit cube.
+    %
+    % ADDAXES(...,'tickLength',tickLength) specifies the length of the
+    % ticks for a unit cube.
+    %
+    % ADDAXES(...,'tickLabelDistance',tickLabelDistance) specifies the
+    % distance of the tick label from the axis for a unit cube.
+    %
+    % ADDAXES(...,'axisLabelDistance',axisLabelDistance) specifies the
+    % distance of the axis label from the axis for a unit cube.
+    %
     % © Copyright 2014-2026 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
@@ -82,6 +94,10 @@ function [obj,ax_node]=addAxes(obj,varargin)
         ips.addParameter('skeleton',false,@islogical);
         ips.addParameter('backPlanes',[],@(x) validateAxisIds(x,grid_id(1:6)));
         ips.addParameter('fontFile',"ARIALUNI_1.svg",@(x) or(isstring(x),isstruct(x)));
+        ips.addParameter('letterHeight',0.04,@isnumeric);
+        ips.addParameter('tickLength',0.03,@isnumeric);
+        ips.addParameter('tickLabelDistance',0.05,@isnumeric);
+        ips.addParameter('axisLabelDistance',0.09,@isnumeric);
         ips.parse(varargin{:});
         parameters=ips.Results;
         plane_delta=1e-4;
@@ -95,10 +111,10 @@ function [obj,ax_node]=addAxes(obj,varargin)
         if(isempty(ax_h))
             ax_h=gca;
         end
-        line_h=0.04;
-        tick_l=0.03;
-        ticklabel_l=0.05;
-        axlabel_l=0.09;
+        line_h=parameters.letterHeight;
+        tick_l=parameters.tickLength;
+        ticklabel_l=parameters.tickLabelDistance;
+        axlabel_l=parameters.axisLabelDistance;
         axisIds=parameters.axisIds(:);
         gridIds=parameters.gridIds;
         backPlanes=parameters.backPlanes;
@@ -216,7 +232,7 @@ function [obj,ax_node]=addAxes(obj,varargin)
                         obj.addNode('mesh',yzmesh,'skin',skin_idx,'children',gridlinesNodes(1));
                     end
                     if(ismember("1yz",gridIds))
-                        gridlinesNodes(2)=obj.addNode('translation',[axisSpan(1)*s(1) 0 0]*base_rotation,'addToScene',false);
+                        gridlinesNodes(2)=obj.addNode('translation',[pb(1) 0 0]*base_rotation,'addToScene',false);
                         skin_idx=obj.addSkin(gridlinesNodes(2),'inverseBindMatrices',reshape(eye(4),16,1)');
                         obj.addNode('mesh',yzmesh,'skin',skin_idx,'children',gridlinesNodes(2));
                     end
@@ -227,7 +243,7 @@ function [obj,ax_node]=addAxes(obj,varargin)
                         gridlinesNodes(1)=obj.addNode('mesh',yzmesh,'addToScene',false);
                     end
                     if(ismember("1yz",gridIds))
-                        gridlinesNodes(2)=obj.addNode('mesh',yzmesh,'translation',[axisSpan(1)*s(1) 0 0]*base_rotation,'addToScene',false);
+                        gridlinesNodes(2)=obj.addNode('mesh',yzmesh,'translation',[pb(1) 0 0]*base_rotation,'addToScene',false);
                     end
                 end
             end
@@ -255,7 +271,7 @@ function [obj,ax_node]=addAxes(obj,varargin)
                         obj.addNode('mesh',xzmesh,'skin',skin_idx,'children',gridlinesNodes(3));
                     end
                     if(ismember("x1z",gridIds))
-                        gridlinesNodes(4)=obj.addNode('translation',[0 axisSpan(2)*s(2) 0]*base_rotation,'addToScene',false);
+                        gridlinesNodes(4)=obj.addNode('translation',[0 pb(2) 0]*base_rotation,'addToScene',false);
                         skin_idx=obj.addSkin(gridlinesNodes(4),'inverseBindMatrices',reshape(eye(4),16,1)');
                         obj.addNode('mesh',xzmesh,'skin',skin_idx,'children',gridlinesNodes(4));
                     end
@@ -266,7 +282,7 @@ function [obj,ax_node]=addAxes(obj,varargin)
                         gridlinesNodes(3)=obj.addNode('mesh',xzmesh,'addToScene',false);
                     end
                     if(ismember("x1z",gridIds))
-                        gridlinesNodes(4)=obj.addNode('mesh',xzmesh,'translation',[0 axisSpan(2)*s(2) 0]*base_rotation,'addToScene',false);
+                        gridlinesNodes(4)=obj.addNode('mesh',xzmesh,'translation',[0 pb(2) 0]*base_rotation,'addToScene',false);
                     end
                 end
             end
@@ -294,7 +310,7 @@ function [obj,ax_node]=addAxes(obj,varargin)
                         obj.addNode('mesh',xymesh,'skin',skin_idx,'children',gridlinesNodes(5));
                     end
                     if(ismember("xy1",gridIds))
-                        gridlinesNodes(6)=obj.addNode('translation',[0 0 axisSpan(3)*s(3)]*base_rotation,'addToScene',false);
+                        gridlinesNodes(6)=obj.addNode('translation',[0 0 pb(3)]*base_rotation,'addToScene',false);
                         skin_idx=obj.addSkin(gridlinesNodes(6),'inverseBindMatrices',reshape(eye(4),16,1)');
                         obj.addNode('mesh',xymesh,'skin',skin_idx,'children',gridlinesNodes(6));
                     end
@@ -305,7 +321,7 @@ function [obj,ax_node]=addAxes(obj,varargin)
                         gridlinesNodes(5)=obj.addNode('mesh',xymesh,'addToScene',false);
                     end
                     if(ismember("xy1",gridIds))
-                        gridlinesNodes(6)=obj.addNode('mesh',xymesh,'translation',[0 0 axisSpan(3)*s(3)]*base_rotation,'addToScene',false);
+                        gridlinesNodes(6)=obj.addNode('mesh',xymesh,'translation',[0 0 pb(3)]*base_rotation,'addToScene',false);
                     end
                 end
             end
@@ -355,7 +371,7 @@ function [obj,ax_node]=addAxes(obj,varargin)
             backPlaneNodes=nan(1,6);
             if(ismember("0yz",backPlanes))
                 [Vbox1,~,ic]=unique(Fbox(1:2,:));
-                Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5).*2.*axisSpan.*s.*plane_delta;
+                Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5).*2.*pb.*plane_delta;
                 F1=reshape(ic,2,3);
                 if(det(base_rotation)<0)
                     F1=F1(:,[1 3 2]);
@@ -373,7 +389,7 @@ function [obj,ax_node]=addAxes(obj,varargin)
             end
             if(ismember("1yz",backPlanes))
                 [Vbox1,~,ic]=unique(Fbox(3:4,:));
-                Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5).*2.*axisSpan.*s.*plane_delta;
+                Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5).*2.*pb.*plane_delta;
                 F1=reshape(ic,2,3);
                 if(det(base_rotation)<0)
                     F1=F1(:,[1 3 2]);
@@ -391,7 +407,7 @@ function [obj,ax_node]=addAxes(obj,varargin)
             end
             if(ismember("x0z",backPlanes))
                 [Vbox1,~,ic]=unique(Fbox(5:6,:));
-                Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5).*2.*axisSpan.*s.*plane_delta;
+                Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5).*2.*pb.*plane_delta;
                 F1=reshape(ic,2,3);
                 if(det(base_rotation)<0)
                     F1=F1(:,[1 3 2]);
@@ -409,7 +425,7 @@ function [obj,ax_node]=addAxes(obj,varargin)
             end
             if(ismember("x1z",backPlanes))
                 [Vbox1,~,ic]=unique(Fbox(7:8,:));
-                Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5).*2.*axisSpan.*s.*plane_delta;
+                Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5).*2.*pb.*plane_delta;
                 F1=reshape(ic,2,3);
                 if(det(base_rotation)<0)
                     F1=F1(:,[1 3 2]);
@@ -427,7 +443,7 @@ function [obj,ax_node]=addAxes(obj,varargin)
             end
             if(ismember("xy0",backPlanes))
                 [Vbox1,~,ic]=unique(Fbox(9:10,:));
-                Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5).*2.*axisSpan.*s.*plane_delta;
+                Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5).*2.*pb.*plane_delta;
                 F1=reshape(ic,2,3);
                 if(det(base_rotation)<0)
                     F1=F1(:,[1 3 2]);
@@ -445,7 +461,7 @@ function [obj,ax_node]=addAxes(obj,varargin)
             end
             if(ismember("xy1",backPlanes))
                 [Vbox1,~,ic]=unique(Fbox(11:12,:));
-                Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5).*2.*axisSpan.*s.*plane_delta;
+                Vbox_i=Vbox(Vbox1,:)+(V(Vbox1,:)-0.5).*2.*pb.*plane_delta;
                 F1=reshape(ic,2,3);
                 if(det(base_rotation)<0)
                     F1=F1(:,[1 3 2]);
@@ -635,11 +651,11 @@ function [obj,ax_node]=addAxes(obj,varargin)
                 end
                 tick_loc=ax_htick_loc{direction(i,:)};
                 J=numel(tick_loc);
-                tickV{i}=repmat([zeros(1,3);tick_dir(i,:)],numel(tick_loc),1)*tick_l+s.*axisSpan.*double(tick_dir(i,:)>0);
+                tickV{i}=repmat([zeros(1,3);tick_dir(i,:)],numel(tick_loc),1)*tick_l+pb.*double(tick_dir(i,:)>0);
                 tickV{i}(:,direction(i,:))=(reshape(repmat(tick_loc,2,1),[],1)-ax(1,direction(i,:))).*s(direction(i,:));
                 tickE{i}=reshape(1:2*numel(tick_loc),2,[])';
                 if(strlength(string(ax_h.(axislabel(direction(i,:))).String))>0)
-                    trans=tick_dir(i,:)*axlabel_l+s.*axisSpan.*(double(tick_dir(i,:)>0)+direction(i,:)/2);
+                    trans=tick_dir(i,:)*axlabel_l+pb.*(double(tick_dir(i,:)>0)+direction(i,:)/2);
                     if(skeleton)
                         axislabel_node(i)=obj.addNode('translation',trans*base_rotation,'rotation',rot,'addToScene',false);
                         skin_idx=obj.addSkin(axislabel_node(i),'inverseBindMatrices',reshape(eye(4),16,1)');
@@ -648,7 +664,7 @@ function [obj,ax_node]=addAxes(obj,varargin)
                         axislabel_node(i)=obj.addNode('mesh',axlabel_mesh{direction(i,:)},'translation',trans*base_rotation,'rotation',rot,'addToScene',false);
                     end
                 end
-                trans=tick_dir(i,:)*ticklabel_l+s.*axisSpan.*double(tick_dir(i,:)>0);
+                trans=tick_dir(i,:)*ticklabel_l+pb.*double(tick_dir(i,:)>0);
                 trans=repmat(trans,J,1);
                 trans(:,direction(i,:))=(tick_loc'-ax(1,direction(i,:))).*s(direction(i,:));
                 J=numel(ticklabelsV{direction(i,:)});

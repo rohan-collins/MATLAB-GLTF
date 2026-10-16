@@ -53,27 +53,6 @@ function [obj,ax_node]=addAxes(obj,varargin)
     % ADDAXES(...,'baseRotation',baseRotation) specifies the base rotation
     % matrix to use for the axes cube.
     %
-    % ADDAXES(...,'plotAspect',false) prevents scaling the axis using
-    % MATLAB plotbox aspect.
-    %
-    % ADDAXES(...,'dataAspect',false) prevents scaling the axis using
-    % MATLAB data aspect.
-    %
-    % ADDAXES(...,'scaleFactor',scaleFactor) scales the tick lengths, text
-    % size, and distances between them by a single factor.
-    %
-    % ADDAXES(...,'letterHeight',letterHeight) specifies the height of the
-    % text for a unit cube.
-    %
-    % ADDAXES(...,'tickLength',tickLength) specifies the length of the
-    % ticks for a unit cube.
-    %
-    % ADDAXES(...,'tickLabelDistance',tickLabelDistance) specifies the
-    % distance of the tick label from the axis for a unit cube.
-    %
-    % ADDAXES(...,'axisLabelDistance',axisLabelDistance) specifies the
-    % distance of the axis label from the axis for a unit cube.
-    %
     % © Copyright 2014-2026 Rohan Chabukswar.
     %
     % This file is part of MATLAB GLTF.
@@ -96,15 +75,8 @@ function [obj,ax_node]=addAxes(obj,varargin)
         grid_id=["xy0","xy1","x0z","x1z","0yz","1yz","xyz"];
         ips=inputParser;
         ips.StructExpand=false;
-        ips.addParameter('axis',[],@(x) isa(x,'matlab.graphics.axis.Axes'));
+        ips.addParameter('axis',[],@(x)isa(x,'matlab.graphics.axis.Axes'));
         ips.addParameter('baseRotation',eye(3),@(x) and(isnumeric(x),and(ismatrix(x),all(size(x)==[3 3]))));
-        ips.addParameter('plotAspect',false,@islogical);
-        ips.addParameter('dataAspect',false,@islogical);
-        ips.addParameter('scaleFactor',1,@isnumeric);
-        ips.addParameter('letterHeight',0.04,@isnumeric);
-        ips.addParameter('tickLength',0.03,@isnumeric);
-        ips.addParameter('tickLabelDistance',0.05,@isnumeric);
-        ips.addParameter('axisLabelDistance',0.09,@isnumeric);
         ips.addParameter('axisIds',ax_id,@(x) validateAxisIds(x,ax_id));
         ips.addParameter('gridIds',[],@(x) validateAxisIds(x,grid_id));
         ips.addParameter('skeleton',false,@islogical);
@@ -114,9 +86,6 @@ function [obj,ax_node]=addAxes(obj,varargin)
         parameters=ips.Results;
         plane_delta=1e-4;
 
-        scaleFactor=parameters.scaleFactor;
-        plotAspect=parameters.plotAspect;
-        dataAspect=parameters.dataAspect;
         fontFile=parameters.fontFile;
         if(isstring(fontFile))
             fontFile=gltf.utilities.readFontFile(fontFile);
@@ -126,10 +95,10 @@ function [obj,ax_node]=addAxes(obj,varargin)
         if(isempty(ax_h))
             ax_h=gca;
         end
-        line_h=parameters.letterHeight*scaleFactor;
-        tick_l=parameters.tickLength*scaleFactor;
-        ticklabel_l=parameters.tickLabelDistance*scaleFactor;
-        axlabel_l=parameters.axisLabelDistance*scaleFactor;
+        line_h=0.04;
+        tick_l=0.03;
+        ticklabel_l=0.05;
+        axlabel_l=0.09;
         axisIds=parameters.axisIds(:);
         gridIds=parameters.gridIds;
         backPlanes=parameters.backPlanes;
@@ -190,18 +159,13 @@ function [obj,ax_node]=addAxes(obj,varargin)
             end
         end
 
+        logAxes=string({ax_h.XScale,ax_h.YScale,ax_h.ZScale})=="log";
         axisSpan=diff(ax,1,1);
-        if(plotAspect)
-            pb=pbaspect(ax_h);
-            s=pb./axisSpan;
-        elseif(dataAspect)
-            d=daspect(ax_h);
-            s=1./d;
-        else
-            s=ones(1,3);
-        end
-
-        Vbox=V.*axisSpan.*s;
+        pb=pbaspect(ax_h);
+        s=pb./axisSpan;
+        VboxData=ax(1,:)+V.*axisSpan;
+        VboxData(:,logAxes)=10.^VboxData(:,logAxes);
+        Vbox=gltf.utilities.transformForAxes(VboxData,'axis',ax_h);
 
         colourfactors=nan(6,3);
         for i=1:3
@@ -229,14 +193,16 @@ function [obj,ax_node]=addAxes(obj,varargin)
             end
             gridlinesNodes=nan(1,7);
             if(any(ismember(["0yz","1yz"],gridIds)))
-                [A,B]=meshgrid(ax_htick_loc{2},ax(:,3));
-                Vg1=[zeros(numel(ax_htick_loc{2})*2,1) A(:) B(:)];
-                Vg1(:,2:3)=(Vg1(:,2:3)-ax(1,2:3)).*s(2:3);
-                Eg1=reshape(1:numel(ax_htick_loc{2})*2,2,numel(ax_htick_loc{2}))';
-                [A,B]=meshgrid(ax_htick_loc{3},ax(:,2));
-                Vg2=[zeros(numel(ax_htick_loc{3})*2,1) B(:) A(:)];
-                Vg2(:,2:3)=(Vg2(:,2:3)-ax(1,2:3)).*s(2:3);
-                Eg2=reshape(1:numel(ax_htick_loc{3})*2,2,numel(ax_htick_loc{3}))';
+            [A,B]=meshgrid(ax_htick_loc{2},ax(:,3));
+            Vg1=[repmat(ax(1,1),numel(ax_htick_loc{2})*2,1) A(:) B(:)];
+            Vg1(:,logAxes)=10.^Vg1(:,logAxes);
+            Vg1=gltf.utilities.transformForAxes(Vg1,'axis',ax_h);
+            Eg1=reshape(1:numel(ax_htick_loc{2})*2,2,numel(ax_htick_loc{2}))';
+            [A,B]=meshgrid(ax_htick_loc{3},ax(:,2));
+            Vg2=[repmat(ax(1,1),numel(ax_htick_loc{3})*2,1) B(:) A(:)];
+            Vg2(:,logAxes)=10.^Vg2(:,logAxes);
+            Vg2=gltf.utilities.transformForAxes(Vg2,'axis',ax_h);
+            Eg2=reshape(1:numel(ax_htick_loc{3})*2,2,numel(ax_htick_loc{3}))';
                 if(skeleton)
                     Js=zeros(size(Vg1,1),4);
                     Ws=[ones(size(Vg1,1),1) zeros(size(Vg1,1),3)];
@@ -267,12 +233,14 @@ function [obj,ax_node]=addAxes(obj,varargin)
             end
             if(any(ismember(["x0z","x1z"],gridIds)))
                 [A,B]=meshgrid(ax_htick_loc{3},ax(:,1));
-                Vg1=[B(:) zeros(numel(ax_htick_loc{3})*2,1) A(:)];
-                Vg1(:,[1 3])=(Vg1(:,[1 3])-ax(1,[1 3])).*s([1 3]);
+                Vg1=[B(:) repmat(ax(1,2),numel(ax_htick_loc{3})*2,1) A(:)];
+                Vg1(:,logAxes)=10.^Vg1(:,logAxes);
+                Vg1=gltf.utilities.transformForAxes(Vg1,'axis',ax_h);
                 Eg1=reshape(1:numel(ax_htick_loc{3})*2,2,numel(ax_htick_loc{3}))';
                 [A,B]=meshgrid(ax_htick_loc{1},ax(:,3));
-                Vg2=[A(:) zeros(numel(ax_htick_loc{1})*2,1) B(:)];
-                Vg2(:,[1 3])=(Vg2(:,[1 3])-ax(1,[1 3])).*s([1 3]);
+                Vg2=[A(:) repmat(ax(1,2),numel(ax_htick_loc{1})*2,1) B(:)];
+                Vg2(:,logAxes)=10.^Vg2(:,logAxes);
+                Vg2=gltf.utilities.transformForAxes(Vg2,'axis',ax_h);
                 Eg2=reshape(1:numel(ax_htick_loc{1})*2,2,numel(ax_htick_loc{1}))';
                 if(skeleton)
                     Js=zeros(size(Vg1,1),4);
@@ -304,12 +272,14 @@ function [obj,ax_node]=addAxes(obj,varargin)
             end
             if(any(ismember(["xy0","xy1"],gridIds)))
                 [A,B]=meshgrid(ax_htick_loc{1},ax(:,2));
-                Vg1=[A(:) B(:) zeros(numel(ax_htick_loc{1})*2,1)];
-                Vg1(:,1:2)=(Vg1(:,1:2)-ax(1,1:2)).*s(1:2);
+                Vg1=[A(:) B(:) repmat(ax(1,3),numel(ax_htick_loc{1})*2,1)];
+                Vg1(:,logAxes)=10.^Vg1(:,logAxes);
+                Vg1=gltf.utilities.transformForAxes(Vg1,'axis',ax_h);
                 Eg1=reshape(1:numel(ax_htick_loc{1})*2,2,numel(ax_htick_loc{1}))';
                 [A,B]=meshgrid(ax_htick_loc{2},ax(:,1));
-                Vg2=[B(:) A(:) zeros(numel(ax_htick_loc{2})*2,1)];
-                Vg2(:,1:2)=(Vg2(:,1:2)-ax(1,1:2)).*s(1:2);
+                Vg2=[B(:) A(:) repmat(ax(1,3),numel(ax_htick_loc{2})*2,1)];
+                Vg2(:,logAxes)=10.^Vg2(:,logAxes);
+                Vg2=gltf.utilities.transformForAxes(Vg2,'axis',ax_h);
                 Eg2=reshape(1:numel(ax_htick_loc{2})*2,2,numel(ax_htick_loc{2}))';
                 if(skeleton)
                     Js=zeros(size(Vg1,1),4);
@@ -342,15 +312,18 @@ function [obj,ax_node]=addAxes(obj,varargin)
             if(ismember("xyz",gridIds))
                 [C,A,B]=meshgrid(ax_htick_loc{3},ax(:,1),ax_htick_loc{2});
                 Vg1=[A(:) B(:) C(:)];
-                Vg1=(Vg1-ax(1,:)).*s;
+                Vg1(:,logAxes)=10.^Vg1(:,logAxes);
+                Vg1=gltf.utilities.transformForAxes(Vg1,'axis',ax_h);
                 Eg1=reshape(1:2*numel(ax_htick_loc{2})*numel(ax_htick_loc{3}),2,numel(ax_htick_loc{2})*numel(ax_htick_loc{3}))';
                 [A,B,C]=meshgrid(ax_htick_loc{1},ax(:,2),ax_htick_loc{3});
                 Vg2=[A(:) B(:) C(:)];
-                Vg2=(Vg2-ax(1,:)).*s;
+                Vg2(:,logAxes)=10.^Vg2(:,logAxes);
+                Vg2=gltf.utilities.transformForAxes(Vg2,'axis',ax_h);
                 Eg2=reshape(1:2*numel(ax_htick_loc{1})*numel(ax_htick_loc{3}),2,numel(ax_htick_loc{1})*numel(ax_htick_loc{3}))';
                 [B,C,A]=meshgrid(ax_htick_loc{2},ax(:,3),ax_htick_loc{1});
                 Vg3=[A(:) B(:) C(:)];
-                Vg3=(Vg3-ax(1,:)).*s;
+                Vg3(:,logAxes)=10.^Vg3(:,logAxes);
+                Vg3=gltf.utilities.transformForAxes(Vg3,'axis',ax_h);
                 Eg3=reshape(1:2*numel(ax_htick_loc{1})*numel(ax_htick_loc{2}),2,numel(ax_htick_loc{1})*numel(ax_htick_loc{2}))';
                 if(skeleton)
                     Js=zeros(size(Vg1,1),4);

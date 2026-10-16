@@ -305,7 +305,7 @@ function writeOBJ(obj,filename,varargin)
                         matcell{m}=[matcell{m};"Ks"+sprintf(" %0-9.7f",repmat(obj.materials{mat}.pbrMetallicRoughness.metallicFactor,1,3))];
                     end
                     if(isfield(obj.materials{mat}.pbrMetallicRoughness,'roughnessFactor'))
-                        matcell{m}=[matcell{m};"Ns"+sprintf(" %0-9.7f",repmat(obj.materials{mat}.pbrMetallicRoughness.metallicFactor,1,3))];
+                        matcell{m}=[matcell{m};"Ns"+sprintf(" %0-9.7f",repmat(obj.materials{mat}.pbrMetallicRoughness.roughnessFactor,1,3))];
                     end
                     if(isfield(obj.materials{mat},'alphaMode') && obj.materials{mat}.alphaMode~="OPAQUE" && isfield(obj.materials{mat}.pbrMetallicRoughness,'baseColorFactor'))
                         matcell{m}=[matcell{m};"d"+sprintf(" %0-9.7f",obj.materials{mat}.pbrMetallicRoughness.baseColorFactor(4))];

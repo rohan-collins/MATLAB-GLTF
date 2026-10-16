@@ -76,7 +76,7 @@ function obj=plus(obj1,obj2)
             if(isfield(obj2.materials{i},'occlusionTexture'))
                 obj2.materials{i}.occlusionTexture.index=obj2.materials{i}.occlusionTexture.index+n_textures;
             end
-            if(isfield(obj2.materials{i},'baseColorTexture'))
+            if(isfield(obj2.materials{i},'emissiveTexture'))
                 obj2.materials{i}.emissiveTexture.index=obj2.materials{i}.emissiveTexture.index+n_textures;
             end
         end

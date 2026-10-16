@@ -183,10 +183,10 @@ function [node,library_geometries,library_controllers,node_list]=getMeshNode(obj
         subnode.appendChild(instance_geometry);
 
         geometry=documentNode.createElement("geometry");
-        geometry.setAttribute("id","geometry_"+string(mesh_idx)+"_"+string(primitive_idx))
+        geometry.setAttribute("id","geometry_"+string(mesh_idx)+"_"+string(primitive_idx));
         mesh=documentNode.createElement("mesh");
         source=documentNode.createElement("source");
-        source.setAttribute("id","source_position_"+string(mesh_idx)+"_"+string(primitive_idx))
+        source.setAttribute("id","source_position_"+string(mesh_idx)+"_"+string(primitive_idx));
         float_array=documentNode.createElement("float_array");
         float_array.setAttribute("id","position_array_"+string(mesh_idx)+"_"+string(primitive_idx));
         float_array.setAttribute("count",string(numel(vertex_data)));
@@ -215,7 +215,7 @@ function [node,library_geometries,library_controllers,node_list]=getMeshNode(obj
 
         if(~isempty(normals_data))
             source=documentNode.createElement("source");
-            source.setAttribute("id","source_normal_"+string(mesh_idx)+"_"+string(primitive_idx))
+            source.setAttribute("id","source_normal_"+string(mesh_idx)+"_"+string(primitive_idx));
             float_array=documentNode.createElement("float_array");
             float_array.setAttribute("id","normal_array_"+string(mesh_idx)+"_"+string(primitive_idx));
             float_array.setAttribute("count",string(numel(normals_data)));
@@ -245,7 +245,7 @@ function [node,library_geometries,library_controllers,node_list]=getMeshNode(obj
 
         if(~isempty(tangents_data))
             source=documentNode.createElement("source");
-            source.setAttribute("id","source_tangent_"+string(mesh_idx)+"_"+string(primitive_idx))
+            source.setAttribute("id","source_tangent_"+string(mesh_idx)+"_"+string(primitive_idx));
             float_array=documentNode.createElement("float_array");
             float_array.setAttribute("id","tangent_array_"+string(mesh_idx)+"_"+string(primitive_idx));
             float_array.setAttribute("count",string(numel(tangents_data)));
@@ -275,7 +275,7 @@ function [node,library_geometries,library_controllers,node_list]=getMeshNode(obj
 
         if(~isempty(binormals_data))
             source=documentNode.createElement("source");
-            source.setAttribute("id","source_binormal_"+string(mesh_idx)+"_"+string(primitive_idx))
+            source.setAttribute("id","source_binormal_"+string(mesh_idx)+"_"+string(primitive_idx));
             float_array=documentNode.createElement("float_array");
             float_array.setAttribute("id","binormal_array_"+string(mesh_idx)+"_"+string(primitive_idx));
             float_array.setAttribute("count",string(numel(binormals_data)));
@@ -305,7 +305,7 @@ function [node,library_geometries,library_controllers,node_list]=getMeshNode(obj
 
         if(isfield(obj.meshes{mesh_idx}.primitives{primitive_idx}.attributes,'TEXCOORD_0'))
             source=documentNode.createElement("source");
-            source.setAttribute("id","source_texture_"+string(mesh_idx)+"_"+string(primitive_idx))
+            source.setAttribute("id","source_texture_"+string(mesh_idx)+"_"+string(primitive_idx));
             float_array=documentNode.createElement("float_array");
             float_array.setAttribute("id","texture_array_"+string(mesh_idx)+"_"+string(primitive_idx));
             float_array.setAttribute("count",string(numel(uv_data)));
@@ -331,7 +331,7 @@ function [node,library_geometries,library_controllers,node_list]=getMeshNode(obj
 
         if(isfield(obj.meshes{mesh_idx}.primitives{primitive_idx}.attributes,'COLOR_0'))
             source=documentNode.createElement("source");
-            source.setAttribute("id","source_color_"+string(mesh_idx)+"_"+string(primitive_idx))
+            source.setAttribute("id","source_color_"+string(mesh_idx)+"_"+string(primitive_idx));
             float_array=documentNode.createElement("float_array");
             float_array.setAttribute("id","color_array_"+string(mesh_idx)+"_"+string(primitive_idx));
             float_array.setAttribute("count",string(numel(c_data)));
@@ -340,7 +340,7 @@ function [node,library_geometries,library_controllers,node_list]=getMeshNode(obj
             technique_common=documentNode.createElement("technique_common");
             accessor=documentNode.createElement("accessor");
             accessor.setAttribute("count",string(size(c_data,1)));
-            accessor.setAttribute("source","#c_array_"+string(mesh_idx)+"_"+string(primitive_idx));
+            accessor.setAttribute("source","#color_array_"+string(mesh_idx)+"_"+string(primitive_idx));
             accessor.setAttribute("stride",string(size(c_data,2)));
             param=documentNode.createElement("param");
             param.setAttribute("name","R");

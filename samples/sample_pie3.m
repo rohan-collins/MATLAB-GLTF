@@ -30,6 +30,9 @@ edge_idx=obj.addMaterial('baseColorFactor',s(1).EdgeColor);
 text_idx=obj.addMaterial('baseColorFactor',ones(1,3));
 % Read fonts
 fontFile=gltf.utilities.readFontFile("ARIALUNI_1.svg");
+% Rotate the transforms since we are more used to Z-axis being "up", X-axis
+% being "right", and Y-axis being "back".
+base_rot=[1 0 0;0 0 -1;0 1 0];
 for i=1:numel(x)
     % Each slice of pie generates 4 objects. The first and third are patch
     % objects that have all the vertices we need. The second is a surface
@@ -45,7 +48,7 @@ for i=1:numel(x)
     V=[s(p1).Vertices(1:N,:);s(p2).Vertices(1:N,:)];
     % Rotate the vertices since we are more used to Z-axis being "up" and
     % Y-axis being "back".
-    V=V*[0 0 1;1 0 0;0 1 0];
+    V=V*base_rot;
     % Generate the top and bottom triangles. We do this by taking the tip
     % (vertex 1) and sets of consecutive vertices. Repeat this for the
     % bottom, but change the order (to have the face normal point
@@ -111,7 +114,7 @@ for i=1:numel(x)
     Vt=Vt+[0 -0.75-expl z+1e-3];
     % Rotate the vertices since we are more used to Z-axis being "up" and
     % Y-axis being "back".
-    Vt=Vt*[0 0 1;1 0 0;0 1 0];
+    Vt=Vt*base_rot;
     % Add as a new mesh as a new node, with text material, and the rotation
     % previously calculated.
     obj.addNode('mesh',obj.addMesh(Vt,'indices',Ft,'material',text_idx),'rotation',q);

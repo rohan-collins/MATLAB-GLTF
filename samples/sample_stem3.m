@@ -22,6 +22,9 @@ Z=X.^2;
 s=stem3(X,Y,Z);
 daspect(daspect);
 pbaspect(pbaspect);
+xlabel("X");
+ylabel("Y");
+zlabel("Z");
 ax=gca;
 ax.XColor=ones(1,3);
 ax.YColor=ones(1,3);
@@ -40,9 +43,10 @@ T=[X;Y;Z]';
 % Scale positions based on data aspect ratio and plot aspect ratio to make
 % the 3D Object look as much like the MATLAB plot as possible.
 T=gltf.utilities.transformForAxes(T,'axis',s.Parent);
-% Rotate the positions since we are more used to Z-axis being "up" and
-% Y-axis being "back".
-T=T*[0 0 1;1 0 0;0 1 0];
+% Rotate the transforms since we are more used to Z-axis being "up", X-axis
+% being "right", and Y-axis being "back".
+base_rot=[1 0 0;0 0 -1;0 1 0];
+T=T*base_rot;
 
 % Create the GLTF object.
 obj=gltf.GLTF();
@@ -65,6 +69,6 @@ for i=1:numel(Z)
     obj.addNode('mesh',obj.addMesh(Vstem,'mode',"LINES",'material',material_idx));
 end
 % Add axes as seen in the figure.
-obj=gltf.utilities.addAxes(obj,'baseRotation',[0 0 1;1 0 0;0 1 0],'axisIds',["x00";"0y0";"01z"],'gridIds',["xy0","x1z","1yz"],'backPlanes',["xy0","x1z","1yz"],'axis',s.Parent,'fontFile',"ARIALUNI_1.svg");
+obj=gltf.utilities.addAxes(obj,'baseRotation',base_rot,'axisIds',["x00";"0y0";"01z"],'gridIds',["xy0","x1z","1yz"],'backPlanes',["xy0","x1z","1yz"],'axis',s.Parent,'fontFile',"ARIALUNI_1.svg");
 % Write the GLTF file.
 obj.writeGLTF("stem3.gltf");

@@ -17,12 +17,16 @@
 %
 % bar3 sample from MATLAB Documentation.
 load count.dat
-Z=count(1:10,:);
-s=bar3(Z);
+z=count(1:10,:);
+s=bar3(z);
 daspect(daspect);
 pbaspect(pbaspect);
+yticklabels(string(1:10)+":00");
+xlabel("Intersection");
+ylabel("Hours");
+zlabel("Vehicle Count");
 % Default colours are based on index using default colormap.
-C=parula(size(Z,2));
+C=parula(size(z,2));
 ax=gca;
 ax.XColor=ones(1,3);
 ax.YColor=ones(1,3);
@@ -38,6 +42,9 @@ obj=gltf.GLTF();
 edge_colour=s(1).EdgeColor;
 % Add a common material for the edges.
 edge_material=obj.addMaterial('baseColorFactor',edge_colour);
+% Rotate the vertices so that, as for bar plots in MATLAB, Y-axis is to
+% the right and X axis is to the back.
+base_rot=[0 0 -1;-1 0 0;0 1 0];
 % For each surface in the plot
 for i=1:3
     % Get the faces, vertices, and the corresponding colours.
@@ -79,8 +86,8 @@ for i=1:3
     % much like the MATLAB plot as possible.
     Vax=gltf.utilities.transformForAxes(V,'axis',s(i).Parent);
     % Rotate the vertices so that, as for bar plots in MATLAB, Y-axis is to
-    % the right and X axis is to the back.
-    Vax=Vax*[1 0 0;0 0 1;0 1 0];
+    % the back and X axis is to the right.
+    Vax=Vax*base_rot;
     % Since the axis system is left handed, we need to flip the triangles
     % so that they face outwards again.
     F=F(:,[1 3 2]);
@@ -96,6 +103,6 @@ for i=1:3
     obj.addNode('mesh',mesh_idx);
 end
 % Add axes as seen in the figure.
-obj=gltf.utilities.addAxes(obj,'baseRotation',[1 0 0;0 0 1;0 1 0],'axis',s(1).Parent,'axisIds',["x10";"0y0";"00z"],'gridIds',["xy0","x0z","1yz"],'backPlanes',["xy0","x0z","1yz"],'fontFile',"ARIALUNI_1.svg");
+obj=gltf.utilities.addAxes(obj,'baseRotation',base_rot,'axis',s(1).Parent,'axisIds',["x10";"0y0";"00z"],'gridIds',["xy0","x0z","1yz"],'backPlanes',["xy0","x0z","1yz"],'fontFile',"ARIALUNI_1.svg");
 % Write the GLTF file.
 obj.writeGLTF("bar3.gltf");

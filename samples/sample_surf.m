@@ -23,6 +23,9 @@ CO(:,:,3)=ones(25).*linspace(0,1,25);
 s=surf(X,Y,Z,CO);
 daspect(daspect);
 pbaspect(pbaspect);
+xlabel("X");
+ylabel("Y");
+zlabel("Z");
 ax=gca;
 ax.XColor=ones(1,3);
 ax.YColor=ones(1,3);
@@ -38,6 +41,9 @@ grid on;
 % Get the rectangular faces that MATLAB would use. We will use these to
 % create edges.
 [E,~]=surf2patch(X,Y,Z);
+% Get the normals. This will make the surface render smoothly.
+[Nx,Ny,Nz]=surfnorm(X,Y,Z);
+N=[Nx(:) Ny(:) Nz(:)];
 % Create the list of edges. For example, for Face 1 2 3 4, edges are 1-2,
 % 2-3, 3-4, and 4-1.
 E=reshape(E(:,[1 2 2 3 3 4 4 1])',2,[])';
@@ -48,19 +54,21 @@ E=sort(E,2); %#ok<UDIM>
 E=unique(E,'rows');
 % Scale vertices based on data aspect ratio and plot aspect ratio to make
 % the 3D Object look as much like the MATLAB plot as possible.
-V=gltf.utilities.transformForAxes(V,'axis',s.Parent);
-% Rotate the vertices since we are more used to Z-axis being "up" and
-% Y-axis being "back".
-V=V*[0 0 1;1 0 0;0 1 0];
+[V,N]=gltf.utilities.transformForAxes(V,N,'axis',s.Parent);
+% Rotate the transforms since we are more used to Z-axis being "up", X-axis
+% being "right", and Y-axis being "back".
+base_rot=[1 0 0;0 0 -1;0 1 0];
+V=V*base_rot;
+N=N*base_rot;
 
 % Create the GLTF object.
 obj=gltf.GLTF();
 % Add a white material which will act as the "base coat" over which the
-% vertex colours will be painted. There is no real need to do this, except
-% that we want the material to be visible from both sides.
+% vertex colours will be painted, because we want the material to be
+% visible from both sides.
 white_idx=obj.addMaterial('baseColorFactor',ones(1,3),'doubleSided',true);
 % Add a mesh with the vertices, faces, and colours. Use the white material.
-mesh_idx=obj.addMesh(V,'indices',F,'COLOR',C,'material',white_idx);
+mesh_idx=obj.addMesh(V,'indices',F,'NORMAL',N,'COLOR',C,'material',white_idx);
 % Get the edge colour.
 C=s.EdgeColor;
 % Add the material which we will use to display edges.
@@ -71,6 +79,6 @@ obj.addPrimitiveToMesh(mesh_idx,V,'indices',E,'mode',"LINES",'material',edge_col
 % Instantiate the mesh in a node.
 obj.addNode('mesh',mesh_idx);
 % Add axes as seen in the figure.
-obj=gltf.utilities.addAxes(obj,'baseRotation',[0 0 1;1 0 0;0 1 0],'axisIds',["x00";"0y0";"01z"],'gridIds',["xy0","x1z","1yz"],'backPlanes',["xy0","x1z","1yz"],'axis',s.Parent,'fontFile',"ARIALUNI_1.svg");
+obj=gltf.utilities.addAxes(obj,'baseRotation',base_rot,'axisIds',["x00";"0y0";"01z"],'gridIds',["xy0","x1z","1yz"],'backPlanes',["xy0","x1z","1yz"],'axis',s.Parent,'fontFile',"ARIALUNI_1.svg");
 % Write the GLTF file.
 obj.writeGLTF("surf.gltf");

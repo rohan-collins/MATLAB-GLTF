@@ -19,8 +19,9 @@
 load carbig;
 X=[MPG,Weight];
 hist3(X,{0:10:50 2000:500:5000},'CDataMode','auto','FaceColor','interp');
-xlabel('MPG');
-ylabel('Weight');
+xlabel("MPG");
+ylabel("Weight");
+zlabel("Count");
 daspect(daspect);
 pbaspect(pbaspect);
 ax=gca;
@@ -105,9 +106,10 @@ E=E(vecnorm(V(E(:,2),:)-V(E(:,1),:),2,2)>0,:);
 % Scale vertices based on data aspect ratio and plot aspect ratio to make
 % the 3D Object look as much like the MATLAB plot as possible.
 V=gltf.utilities.transformForAxes(V,'axis',ax);
-% Rotate the vertices since we are more used to Z-axis being "up" and
-% Y-axis being "back".
-V=V*[0 0 1;1 0 0;0 1 0];
+% Rotate the transforms since we are more used to Z-axis being "up", X-axis
+% being "right", and Y-axis being "back".
+base_rot=[1 0 0;0 0 -1;0 1 0];
+V=V*base_rot;
 
 % Get the base colour for the bars.
 C1=ones(1,3);
@@ -143,6 +145,6 @@ obj.meshes{mesh_idx+1}.primitives{2}.material=edge_idx;
 % Instantiate the mesh in a node.
 obj.addNode('mesh',mesh_idx);
 % Add axes as seen in the figure.
-obj=gltf.utilities.addAxes(obj,'baseRotation',[0 0 1;1 0 0;0 1 0],'axis',ax,'axisIds',["x00";"0y0";"01z"],'gridIds',["xy0","x1z","1yz"],'backPlanes',["xy0","x1z","1yz"],'fontFile',"ARIALUNI_1.svg");
+obj=gltf.utilities.addAxes(obj,'baseRotation',base_rot,'axis',ax,'axisIds',["x00";"0y0";"01z"],'gridIds',["xy0","x1z","1yz"],'backPlanes',["xy0","x1z","1yz"],'fontFile',"ARIALUNI_1.svg");
 % Write the GLTF file.
 obj.writeGLTF("hist3.gltf");

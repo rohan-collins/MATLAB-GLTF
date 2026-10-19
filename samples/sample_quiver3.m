@@ -65,12 +65,12 @@ T=[X(:) Y(:) Z(:)];
 S=[U(:) V(:) W(:)];
 % Scale transforms based on data aspect ratio and plot aspect ratio to make
 % the 3D Object look as much like the MATLAB plot as possible.
-T=gltf.utilitiestransformForAxes(T,'axis',s.Parent);
-[~,S]=gltf.utilitiestransformForAxes([],S,'axis',s.Parent);
-% Rotate the transforms since we are more used to Z-axis being "up" and
-% Y-axis being "back".
-T=T*[0 0 1;1 0 0;0 1 0];
-S=S*[0 0 1;1 0 0;0 1 0];
+[T,S]=gltf.utilities.transformForAxes(T,S,'axis',s.Parent);
+% Rotate the transforms since we are more used to Z-axis being "up", X-axis
+% being "right", and Y-axis being "back".
+base_rot=[1 0 0;0 0 -1;0 1 0];
+T=T*base_rot;
+S=S*base_rot;
 % Find the axis of rotation between the default arrow direction (+Y) and
 % the vector direction.
 rotation_axis=cross(repmat([0 1 0],numel(Z),1),S./vecnorm(S,2,2),2);
@@ -97,6 +97,6 @@ rotation=[sin(rotation_angle/2).*rotation_axis cos(rotation_angle/2)];
 % node. It also improves rendering efficiency.
 obj.addNode('mesh',mesh_idx,'instancingTranslation',T,'instancingRotation',rotation,'scale',s.AutoScaleFactor*ones(1,3));
 % Add axes as seen in the figure.
-obj=gltf.utilitiesaddAxes(obj,'baseRotation',[0 0 1;1 0 0;0 1 0],'axisIds',["x00";"0y0";"01z"],'gridIds',["xy0","x1z","1yz"],'backPlanes',["xy0","x1z","1yz"],'axis',s.Parent,'fontFile',"ARIALUNI_1.svg");
+obj=gltf.utilities.addAxes(obj,'baseRotation',base_rot,'axisIds',["x00";"0y0";"01z"],'gridIds',["xy0","x1z","1yz"],'backPlanes',["xy0","x1z","1yz"],'axis',s.Parent,'fontFile',"ARIALUNI_1.svg");
 % Write the GLTF file.
 obj.writeGLTF("quiver3.gltf");

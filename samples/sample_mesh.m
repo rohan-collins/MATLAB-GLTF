@@ -17,11 +17,14 @@
 %
 % mesh sample from MATLAB Documentation.
 [X,Y]=meshgrid(-8:.5:8);
-R=sqrt(X.^2 + Y.^2) + eps;
+R=sqrt(X.^2+Y.^2)+eps;
 Z=sin(R)./R;
 m=mesh(X,Y,Z);
 daspect(daspect);
 pbaspect(pbaspect);
+xlabel("X");
+ylabel("Y");
+zlabel("Z");
 ax=gca;
 ax.XColor=ones(1,3);
 ax.YColor=ones(1,3);
@@ -40,8 +43,11 @@ E=sort(E,2); %#ok<UDIM>
 % This enables us to discard duplicate edges.
 E=unique(E,'rows');
 % Get the triangular faces. We will use this to prevent the mesh from being
-% see-through by adding a double-sided black surface.
+% see-through by adding a double-sided white surface.
 [F,~,~]=surf2patch(X,Y,Z,'triangles');
+% Get the normals. This will make the white surface render smoothly.
+[Nx,Ny,Nz]=surfnorm(X,Y,Z);
+N=[Nx(:) Ny(:) Nz(:)];
 % The colours are based on the height, i.e., the Z value. So we first scale
 % the Z value to be between 0 and 1.
 C0=(V(:,3)-min(V(:,3)))./(max(V(:,3))-min(V(:,3)));
@@ -51,23 +57,25 @@ cmap=colormap;
 C=interp1(linspace(0,1,size(cmap,1))',cmap,C0);
 % Scale vertices based on data aspect ratio and plot aspect ratio to make
 % the 3D Object look as much like the MATLAB plot as possible.
-V=gltf.utilities.transformForAxes(V,'axis',m.Parent);
-% Rotate the vertices since we are more used to Z-axis being "up" and
-% Y-axis being "back".
-V=V*[0 0 1;1 0 0;0 1 0];
+[V,N]=gltf.utilities.transformForAxes(V,N,'axis',m.Parent);
+% Rotate the transforms since we are more used to Z-axis being "up", X-axis
+% being "right", and Y-axis being "back".
+base_rot=[1 0 0;0 0 -1;0 1 0];
+V=V*base_rot;
+N=N*base_rot;
 
 % Create the GLTF object.
 obj=gltf.GLTF();
 % Add a white material which will prevent the mesh from being see-through.
 white_idx=obj.addMaterial('baseColorFactor',ones(1,3),'doubleSided',true);
 % Add a mesh with the vertices and faces. Use the black material.
-mesh_idx=obj.addMesh(V,'indices',F,'material',white_idx);
+mesh_idx=obj.addMesh(V,'indices',F,'NORMAL',N,'material',white_idx);
 % Add a second primitive to the same mesh with vertices, edges, and
 % colours. Use mode "LINES".
 obj.addPrimitiveToMesh(mesh_idx,V,'indices',E,'COLOR',C,'mode',"LINES");
 % Instantiate the mesh in a node.
 obj.addNode('mesh',mesh_idx);
 % Add axes as seen in the figure.
-obj=gltf.utilities.addAxes(obj,'baseRotation',[0 0 1;1 0 0;0 1 0],'axisIds',["x00";"0y0";"01z"],'gridIds',["xy0","x1z","1yz"],'backPlanes',["xy0","x1z","1yz"],'axis',m.Parent,'fontFile',"ARIALUNI_1.svg");
+obj=gltf.utilities.addAxes(obj,'baseRotation',base_rot,'axisIds',["x00";"0y0";"01z"],'gridIds',["xy0","x1z","1yz"],'backPlanes',["xy0","x1z","1yz"],'axis',m.Parent,'fontFile',"ARIALUNI_1.svg");
 % Write the GLTF file.
 obj.writeGLTF("mesh.gltf");

@@ -21,6 +21,9 @@ Z=X.^2+Y.^2;
 [M,s]=contour3(X,Y,Z,50);
 daspect(daspect);
 pbaspect(pbaspect);
+xlabel("X");
+ylabel("Y");
+zlabel("Z");
 ax=gca;
 ax.XColor=ones(1,3);
 ax.YColor=ones(1,3);
@@ -41,6 +44,9 @@ for i=1:numel(clist)
     % Add the material of the line color.
     mat(i)=obj.addMaterial('baseColorFactor',C(i,:)); %#ok<SAGROW>
 end
+% Rotate the transforms since we are more used to Z-axis being "up", X-axis
+% being "right", and Y-axis being "back".
+base_rot=[1 0 0;0 0 -1;0 1 0];
 % The way the contour matrix is structured, we need to go through it
 % contour-by-contour. Refer to CONTOUR3 for details.
 while(size(M,2)>0)
@@ -63,7 +69,7 @@ while(size(M,2)>0)
     V=gltf.utilities.transformForAxes(V,'axis',s.Parent);
     % Rotate the vertices since we are more used to Z-axis being "up" and
     % Y-axis being "back".
-    V=V*[0 0 1;1 0 0;0 1 0];
+    V=V*base_rot;
     % Each edge is just one vertex, 1 through N-1, connected to the next
     % vertex, 2 through N.
     E=[1:N-1;2:N]';
@@ -74,6 +80,6 @@ while(size(M,2)>0)
     M=M(:,N+2:end);
 end
 % Add axes as seen in the figure.
-obj=gltf.utilities.addAxes(obj,'baseRotation',[0 0 1;1 0 0;0 1 0],'axisIds',["x00";"0y0";"01z"],'gridIds',["xy0";"x1z";"1yz"],'backPlanes',["xy0";"x1z";"1yz"],'axis',s.Parent,'fontFile',"ARIALUNI_1.svg");
+obj=gltf.utilities.addAxes(obj,'baseRotation',base_rot,'axisIds',["x00";"0y0";"01z"],'gridIds',["xy0";"x1z";"1yz"],'backPlanes',["xy0";"x1z";"1yz"],'axis',s.Parent,'fontFile',"ARIALUNI_1.svg");
 % Write the GLTF file.
 obj.writeGLTF("contour3.gltf");

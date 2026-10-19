@@ -5,8 +5,12 @@ function varargout=transformForAxes(V,varargin)
     % Vax=TRANSFORMFORAXES(V) returns the vertices V transformed to look
     % visually the same as the MATLAB axis.
     %
-    % [Vax,Nax]=TRANSFORMFORAXES(V,N) returns the vertices V and normals
+    % [Vax,Nax]=TRANSFORMFORAXES(V,N) returns the vertices V and normals N
     % transformed to look visually the same as the MATLAB axis.
+    %
+    % [Vax,Nax,Dax]=TRANSFORMFORAXES(V,N,D) returns the vertices V, normals
+    % N, and displacements D transformed to look visually the same as the
+    % MATLAB axis.
     %
     % TRANSFORMFORAXES(...,'axis',axis) specifies the axis object to use
     % instead of the current one.
@@ -30,11 +34,19 @@ function varargout=transformForAxes(V,varargin)
     %
     if(nargin>0)
         N=[];
+        D=[];
         if(nargin>1)
             firstarg=varargin{1};
             if(isnumeric(firstarg))
                 N=firstarg;
                 varargin=varargin(2:end);
+                if(nargin>2)
+                    secondarg=varargin{1};
+                    if(isnumeric(secondarg))
+                        D=secondarg;
+                        varargin=varargin(2:end);
+                    end
+                end
             end
             ips=inputParser;
             ips.StructExpand=false;
@@ -75,7 +87,14 @@ function varargout=transformForAxes(V,varargin)
             Nax=Nax./s;
             Nax=Nax./vecnorm(Nax,2,2);
         end
-        out={Vax,Nax};
+        Dax=D;
+        if(~isempty(D))
+            for k=find(logAxes)
+                Dax(:,k)=Dax(:,k)./V(:,k)/log(10);
+            end
+            Dax=Dax.*s;
+        end
+        out={Vax,Nax,Dax};
         varargout=out(1:nargout);
     end
 end

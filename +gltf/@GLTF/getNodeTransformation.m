@@ -57,7 +57,7 @@ function mat=getNodeTransformation(obj,node_idx)
     else
         mat=eye(4);
         if(isfield(obj.nodes{node_idx+1},'scale'))
-            mat=diag([obj.nodes{node_idx+1}.scale' 1])*mat;
+            mat=diag([obj.nodes{node_idx+1}.scale 1])*mat;
         end
         if(isfield(obj.nodes{node_idx+1},'rotation'))
             mat=[gltf.GLTF.Q2PreR(obj.nodes{node_idx+1}.rotation) [0;0;0];0 0 0 1]*mat;

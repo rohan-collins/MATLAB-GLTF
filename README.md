@@ -2,7 +2,7 @@
 
 GLTF for MATLAB is a MATLAB class to export 3D graphs and other content into the GL Transmission Format (glTF).
 
-Last updated: October 16, 2026.
+Last updated: October 19, 2026.
 
 > © Copyright 2014-2026 Rohan Chabukswar.
 >

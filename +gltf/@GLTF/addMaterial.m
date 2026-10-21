@@ -1371,7 +1371,7 @@ function material_idx=addMaterial(obj,varargin)
         else
             iorstruct=struct();
         end
-        material.extensions.KHR_materials_ior=struct('KHR_materials_ior',iorstruct);
+        material.extensions.KHR_materials_ior=iorstruct;
     end
     if(or(~isnan(thicknessTextureIdx),or(or(~isempty(thicknessFactor),~ismissing(thicknessTexture)),or(~isempty(attenuationDistance),~isempty(attenuationColor)))))
         obj.addExtension("KHR_materials_transmission");
